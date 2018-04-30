@@ -1,27 +1,40 @@
-.. recordskeeper documentation master file, created by
-   sphinx-quickstart on Thu Apr 26 12:44:58 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. recordskeeper documentation master file
+RecordsKeeper Python SDK
+========================
 
-Welcome to recordskeeper's documentation!
-=========================================
+Python libraries for recordskeeper. The RecordsKeeper Python SDK provides access to the python libraries of `RecordsKeeper <https://github.com/RecordsKeeper/recordskeeper-core>`_.
 
-Python libraries for recordskeeper
 
+Installation
+------------
+
+Install from `PyPI <https://pypi.python.org/pypi>`_ using `pip <http://www.pip-installer.org/en/latest/>`_, a
+package manager for Python.
+
+.. code-block:: bash
+
+    pip install recordskeeper
+
+Compatibility
+-------------
+
+The SDK has been tested with Python 2.7.
+
+
+Libraries
+---------
+
+:ref:`genIndex`,
+:ref:`modindex`,
+:ref:`search`
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents: 
-
+   :caption: Libraries: 
+ 
    stream
    block
    transaction
    wallet
 
-Libraries
-=========
 
-* :ref:`Stream`
-* :ref:`Block`
-* :ref:`Transaction`
-* :ref:`Wallet`

@@ -61,7 +61,7 @@ Stream Class
 
 Stream class to call stream related functions like publish, retrieve, verifyWithAddress and verifyWithKey functions which are used to publish data into the stream, retrieve data from the stream and verify data against address and key from the stream. 
 
-1. Publish
+**1. Publish item into the stream**
 
 You have to pass these four arguments to the publish function call:
 
@@ -84,7 +84,7 @@ The **data.hex()** will convert the data into a hex value
 It will return a transaction id of the published data, use this information to retrieve the particular data from the stream.
 
 
-2. Retrieve an existing item from a particular stream
+**2. Retrieve an existing item from a particular stream**
 
 You have to pass these two arguments to the retrieve function call:
 
@@ -101,7 +101,7 @@ You have to pass these two arguments to the retrieve function call:
 It will return the item's details like publisher address, key value, confirmations, hexdata and transaction id.
 
 
-3. Verify an item against a particular publisher address
+**3. Verify an item against a particular publisher address**
 
 You have to pass these two arguments to the verifyWithAddress function call:
 
@@ -122,7 +122,7 @@ You have to pass these two arguments to the verifyWithAddress function call:
 
 It will return the key value, hexdata, raw data and transaction id of the published item.
 
-4. Verify an item against a particular key value
+**4. Verify an item against a particular key value**
 
 You have to pass these two arguments to the verifyWithKey function call:
 

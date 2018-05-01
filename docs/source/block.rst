@@ -61,10 +61,13 @@ Block Class
 
 Block class is used to call block related functions like blockinfo which is used to collect block details like block's hash value, size, nonce, transaction ids, transaction count, and miner address of the block for which you have made the query.
 
+**1. Block info to retrieve block's information**
 
 You have to pass these block height as the argument to the blockinfo function call:
 
 * Block height: height of the block of which you want to collect info
+
+blockinfo() function is used to collect block's information by passing blockheight to the blockinfo function call
 
 .. code-block:: python
 

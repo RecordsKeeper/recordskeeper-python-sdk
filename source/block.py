@@ -30,8 +30,6 @@ chain = cfg['testnet']['chain']
 class Block:
 
 	
-	block_height = input("enter block height:")  							#variable to store the height of the block
-	
 	"""function to get a particular block"""
 
 	def blockinfo(block_height):											#blockinfo function definition
@@ -53,7 +51,13 @@ class Block:
 		size = response_json[0]['result']['size']							#variable returns block's size
 		nonce = response_json[0]['result']['nonce']							#variable returns block's nonce
 		blockHash = response_json[0]['result']['hash']						#variable returns blockhash
-		
+		prevblock = response_json[0]['result']['previousblockhash']			#variable returns prevblockhash
+		nextblock = response_json[0]['result']['nextblockhash']				#variable returns nextblockhash
+		merkleroot = response_json[0]['result']['merkleroot']				#variable returns merkleroot
+		blocktime = response_json[0]['result']['time']						#variable returns blocktime
+		difficulty = response_json[0]['result']['difficulty']				#variable returns difficulty
+
+
 		tx = []																#list to store transaction ids
 
 		
@@ -63,15 +67,7 @@ class Block:
 			
 
 
-		return  tx_count, tx, miner, size, nonce, blockHash;
+		return  tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty;
 
 	
-	tx_count, tx, miner, size, nonce, blockHash = blockinfo(block_height)	#call to blockinfo function 
-
-	
-	print("Block miner's address: ",miner)									#print block's miner
-	print("Block size: ",size)												#print block's size
-	print("Nonce: ",nonce)													#print block's nonce
-	print("Block Hash: ",blockHash)											#print block's hash
-	print("Block Transactions count: ",tx_count)							#print block's transaction count
-	print("Block Transactions: ",tx)										#print block's transactions
+	#tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty = blockinfo(block_height)		#call to blockinfo function 

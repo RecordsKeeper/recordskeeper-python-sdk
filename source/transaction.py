@@ -1,7 +1,8 @@
 """Library to work with RecordsKeeper transactions.
 
-   You can send, retrieve and verify transactions by using transaction class.
-   You just have to pass parameters to invoke the pre-defined functions."""
+   You can send transaction, create raw transaction, sign raw transaction, send raw transaction, send signed transaction,
+   retrieve transaction information and calculate transaction's fees by using transaction class. You just have to pass
+   parameters to invoke the pre-defined functions."""
 
 """ import requests, json, HTTPBasicAuth, yaml, sys and binascii packages"""
 
@@ -11,6 +12,7 @@ from requests.auth import HTTPBasicAuth
 import yaml
 import sys
 import binascii
+
 
 """ Entry point for accessing Transaction class resources.
 
@@ -24,17 +26,14 @@ user = cfg['testnet']['rkuser']
 password = cfg['testnet']['passwd']
 chain = cfg['testnet']['chain']
 
-#Transaction class to access stream related functions
+
+#Transaction class to access transaction related functions
 class Transaction:
 	 
 	"""function to send transaction on RecordsKeeper Blockchain"""
 
-	sender_address = input("Enter Sender Address: ") 				 #variable to store sender's address
-	reciever_address = input("Enter Reciever Address: ")			 #variable to store reciever's address
-	amount = float(input("Enter amount to send: "))					 #variable to store amount to be transferred
-
-
 	def sendTransaction(sender_address, reciever_address, amount):		#sendTransaction function definition
+		
 		headers = { 'content-type': 'application/json'}
 
 
@@ -48,23 +47,17 @@ class Transaction:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
+		txid = response_json[0]['result']
 		
-		return response_json[0]['result']				# return transaction id
+		return txid;								#return transaction id
 
 	
-	txid = sendTransaction(sender_address, reciever_address, amount)	#call to function sendTransaction
+	#txid = sendTransaction(sender_address, reciever_address, float(amount))	#call to function sendTransaction
 
-	
-	print ("Transaction id: ",txid)									#prints transaction id of sent transaction
 
 	"""function to create transaction hex on RecordsKeeper Blockchain"""
 
-	sender_address = input("Enter sender's address: ")					#sender's address
-	reciever_address = input("Enter reciever's address: ")				#reciever's address
-	amount = float(input('Enter amount: '))								#amount to transfer
-	
-
-	def createRawTransaction(sender_address, reciever_address, amount):		#createRawTransaction function definition
+	def createRawTransaction(sender_address, reciever_address, amount):		#createRawTransaction() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -80,22 +73,17 @@ class Transaction:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
+		txhex = response_json[0]['result']
 		
-		return response_json[0]['result']							# return transaction hex of raw transaction
+		return txhex						# return transaction hex of raw transaction
 
 	
-	tx_hex = createRawTransaction(sender_address, reciever_address, amount)	#call to function createRawTransaction
-
-	
-	print ("Raw transaction hex is: ",tx_hex)						#prints transaction hex of raw transaction
+	#tx_hex = createRawTransaction(sender_address, reciever_address, float(amount))	#call to function createRawTransaction
 
 
 	"""function to sign transaction on RecordsKeeper Blockchain"""
 
-	txHex = input("Enter transaction hex: ")							#transaction Hex of raw transaction
-	private_key = input("Enter private key: ")
-
-	def signRawTransaction(txHex, private_key):							#signRawTransaction function definition		
+	def signRawTransaction(txHex, private_key):							#signRawTransaction() function definition		
 
 		headers = { 'content-type': 'application/json'}
 
@@ -110,19 +98,17 @@ class Transaction:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		return response_json[0]['result']['hex']	
+		signedHex = response_json[0]['result']['hex']
+		
+		return signedHex
 
-	signed_hex = signRawTransaction(txHex, private_key)				#call to function signRawTransaction
-
-	
-	print ("Signed transaction hex is: ",signed_hex)					#prints signed hex of raw transaction
+	#signed_hex = signRawTransaction(txHex, private_key)				#call to function signRawTransaction
 
 
 	"""function to send raw transaction on RecordsKeeper Blockchain"""
 
-	signed_txHex = input("Enter signed transaction hex: ")
+	def sendRawTransaction(signed_txHex):				#sendRawTransaction function definition
 
-	def sendRawTransaction(signed_txHex):
 		headers = { 'content-type': 'application/json'}
 
 
@@ -137,22 +123,16 @@ class Transaction:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		return response_json[0]['result']	
+		txn = response_json[0]['result']	
+		
+		return txn
 
-	tx_id = sendRawTransaction(signed_txHex)					#call to function sendRawTransaction
-
-	
-	print ("Transaction id is: ",tx_id)								#prints transaction id of transaction
+	#tx_id = sendRawTransaction(signed_txHex)					#call to function sendRawTransaction
 
 	"""function to send signed transaction on RecordsKeeper Blockchain"""
 
-	def sendSignedTransaction():									#sendSignedTransaction function definition
+	def sendSignedTransaction(sender_address, reciever_address, amount, private_key):									#sendSignedTransaction function definition
 
-		sender_address = input("Enter sender's address: ")
-		reciever_address = input("Enter reciever's address: ")
-		amount = float(input('Enter amount: '))
-		private_key = input("Enter private key: ")
-		
 
 		def createRawTransaction(sender_address, reciever_address, amount):
 			headers = { 'content-type': 'application/json'}
@@ -168,14 +148,14 @@ class Transaction:
 			
 			response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 			response_json = response.json()
-
-			
+		
 			return response_json[0]['result']				
 
 		
-		txHex = createRawTransaction(sender_address, reciever_address, amount)	
+		txHex = createRawTransaction(sender_address, reciever_address, float(amount))	
 		
 		def signRawTransaction(txHex, private_key):
+
 			headers = { 'content-type': 'application/json'}
 
 
@@ -213,20 +193,16 @@ class Transaction:
 			return response_json[0]['result']	
 
 		tx_id = sendRawTransaction(signed_tx_hex)						
-		
+
 		return tx_id;												
 
-	transaction_id = sendSignedTransaction()						#call to sendSigned Transaction
-
-	print(transaction_id)											#returns tx_id of sendSigned Transaction
+	#transaction_id = sendSignedTransaction(sender_address, reciever_address, amount, private_key)	#call to sendSigned Transaction
 
 
 	"""function to retrieve transaction on RecordsKeeper Blockchain"""
 
-	tx_id = input("Enter Transaction id to retrieve information: ")			#tx_id of transaction to retrieve
-
-
-	def retrieveTransaction(tx_id):											#retrieveTransaction function definition
+	def retrieveTransaction(tx_id):						#retrieveTransaction function definition
+		
 		headers = { 'content-type': 'application/json'}
 
 
@@ -247,51 +223,34 @@ class Transaction:
 
 		return sent_data, sent_amount, reciever_address;					#returns data from retrieved transaction
 
-	sent_data, sent_amount, reciever_address = retrieveTransaction(tx_id)	#call to function retrieveTransaction
-
-	
-	print ("Data sent in retrieved transaction: ", sent_data)						#prints sent data
-	print ("Amount sent in retrieved transaction: ", sent_amount)					#prints sent amount
-	print ("Reciever's address of the retrieved transaction: ", reciever_address)	#prints reciever's address	
+	#sent_data, sent_amount, reciever_address = retrieveTransaction(tx_id)	#call to function retrieveTransaction
 
 
+	"""function to calculate transaction's fee on RecordsKeeper Blockchain"""
 
-	"""function to verify transaction on RecordsKeeper Blockchain"""
+	def getFee(address, tx_id):					#getFee() function definition
 
-	address = input("Enter sender's address: ")							#sender's address of transaction to verify
-	tx_id = input("Enter Transaction id to verify information: ")		#tx_id of transaction to verify
-
-
-	def verifyTransaction(address, tx_id):					#verifyTransaction function definition
 		headers = { 'content-type': 'application/json'}
 
-
 		payload = [
+
 		         { "method": "getaddresstransaction",
 		          "params": [address, tx_id, True],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
 		          }]
+
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 		
 		sent_amount = response_json[0]['result']['vout'][0]['amount']
-		reciever_address = response_json[0]['result']['addresses']
-		data = response_json[0]['result']['data']
+
 		balance_amount = response_json[0]['result']['balance']['amount']
 
 		fees = (abs(balance_amount) - sent_amount)
 
-		return data, sent_amount, reciever_address, fees;				#returns data from verified transaction
+		return fees;				#returns fees
 
 	
-	data, sent_amount, reciever_address, fees = verifyTransaction(address, tx_id)	#call to function sendSignedTransaction
-
-	
-	print ("Data sent in verified transaction: ", data)							#prints data of verified transaction
-	print ("Amount sent in verified transaction: ", sent_amount)				#prints amount sent in verified transaction
-	print ("Fees of verified transaction: ", fees)								#prints fees of verified transaction
-	print ("Reciever's address of verified transaction: ", reciever_address)	#prints reciever's address of verofoed transaction
-
-		
+	#Fees = getFee(address, tx_id)	#call to function getFee()

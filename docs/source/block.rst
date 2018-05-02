@@ -18,6 +18,8 @@ Import these python libraries first to get started with the functionality.
     import json
     from requests.auth import HTTPBasicAuth
     import yaml
+    import sys
+    import binascii
 
 
 Create Connection

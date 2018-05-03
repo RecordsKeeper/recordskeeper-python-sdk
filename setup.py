@@ -12,7 +12,7 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 requires = []
 
 setup(
-      name='python-rklib',
+      name='pyrklib',
       version='0.0.1',
       description='RecordsKeeper Pyhton library',
       long_description=README,
@@ -25,5 +25,5 @@ setup(
       packages=find_packages(),
       zip_safe=False,
       install_requires=requires,
-      test_suite="test"
+      test_suite="tests"
      )

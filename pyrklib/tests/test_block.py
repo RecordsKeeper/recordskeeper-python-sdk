@@ -1,7 +1,7 @@
 import unittest
 import yaml
-import sys
-sys.path.insert(0, '/path/to/pythonsdk/scripts/stream.py')
+import pyrklib
+from pyrklib.address import Address
 
 import stream
 

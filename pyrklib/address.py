@@ -146,3 +146,26 @@ class Address:
 #	permissionCheck = checkifMineAllowed(address)	#checkifMineAllowed() function call
 	
 	
+	"""function to check node address balance on RecordsKeeper Blockchain"""
+
+
+	def checkBalance(address):					#checkBalance() function definition
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "getaddressbalances",
+		      "params": [address],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		balance = response_json[0]['result'][0]['qty']
+
+		return balance;							#returns balance of a particular node address
+
+#	address_balance = checkBalance(address)		#checkBalance() function call
+	

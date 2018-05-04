@@ -32,8 +32,10 @@ Libraries
    :maxdepth: 2
    :caption: Libraries: 
  
-   stream
+   address
    block
+   blockchain
+   stream
    transaction
    wallet
 

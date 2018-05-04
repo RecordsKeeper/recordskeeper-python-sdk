@@ -4,8 +4,9 @@ Transaction Class Usage
 
 Library to work with RecordsKeeper transactions.
 
-You can send, retrieve and verify transactions and transaction information by using transaction class.
-You just have to pass parameters to invoke the pre-defined functions.
+You can send transaction, create raw transaction, sign raw transaction, send raw transaction, send signed transaction,
+retrieve transaction information and calculate transaction's fees by using transaction class. You just have to pass
+parameters to invoke the pre-defined functions.
 
 Libraries
 ---------
@@ -184,25 +185,21 @@ retrieveTransaction() function is used to retrieve transaction's information by 
 It will return the sent data, sent amount and reciever's address of the retrieved transaction.
 
 
-**7. Verify a transaction from the Blockchain**
+**7. Calculate a particular transaction's fee on RecordsKeeper Blockchain**
 
-You have to pass these two arguments to the verifyTransaction function call:
+You have to pass these two arguments to the getFee function call:
 
-* Transaction id of the transaction you want to verify
+* Transaction id of the transaction you want to calculate fee for
 * Sender's address
 
-verifyTransaction() function is used to verify transaction's information by passing transaction id and sender's address to the function.
+getFee() function is used to calculate transaction's fee by passing transaction id and sender's address to the function.
 
 .. code-block:: python
 
-    verifyTransaction(address, tx_id)
-    data, sent_amount, reciever_address, fees = verifyTransaction(address, tx_id)
+    getFee(address, tx_id)
+    Fees = getFee(address, tx_id)
 
-    print (data)                    #prints data of verified transaction
-    print (sent_amount)             #prints amount sent in verified transaction
-    print (fees)                    #prints fees consumed in the verified transaction
-    print (reciever_address)        #prints reciever's address of verified transaction
-
-
-It will return the data, sent amount, reciever's address and the fees consumed in the verified transaction.
+    print (Fees)                    #prints fees consumed in the verified transaction
+    
+It will return the fees consumed in the transaction.
 

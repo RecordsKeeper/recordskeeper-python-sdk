@@ -18,8 +18,8 @@ Import these python libraries first to get started with the functionality.
     import json
     from requests.auth import HTTPBasicAuth
     import yaml
-    import sys
     import binascii
+    import sys
 
 
 Create Connection
@@ -61,9 +61,9 @@ Stream Class
 
 .. class:: Stream
 
-Stream class to call stream related functions like publish, retrieve, verifyWithAddress and verifyWithKey functions which are used to publish data into the stream, retrieve data from the stream and verify data against address and key from the stream. 
+Stream class to call stream related functions like publish, retrievewithtxid, retrieveWithAddress, retrieveWithKey and verify data functions which are used to publish data into the stream, retrieve data from the stream and verify data from the stream. 
 
-**1. Publish item into the stream**
+**1. Publish**
 
 You have to pass these four arguments to the publish function call:
 
@@ -86,7 +86,7 @@ The **data.hex()** will convert the data into a hex value
 It will return a transaction id of the published data, use this information to retrieve the particular data from the stream.
 
 
-**2. Retrieve an existing item from a particular stream**
+**2. Retrieve an existing item from a particular stream against a transaction id**
 
 You have to pass these two arguments to the retrieve function call:
 
@@ -98,12 +98,12 @@ You have to pass these two arguments to the retrieve function call:
     retrieve(stream, txid)  # call retrieve function with stream and txid as the required parameters
     result = retrieve(stream, txid) 
   
-    print result # prints info of the transaction 
+    print result    #prints info of the transaction 
 
 It will return the item's details like publisher address, key value, confirmations, hexdata and transaction id.
 
 
-**3. Verify an item against a particular publisher address**
+**3. Retrieve an item against a particular publisher address**
 
 You have to pass these two arguments to the verifyWithAddress function call:
 
@@ -124,7 +124,7 @@ You have to pass these two arguments to the verifyWithAddress function call:
 
 It will return the key value, hexdata, raw data and transaction id of the published item.
 
-**4. Verify an item against a particular key value**
+**4. Retrieve an item against a particular key value**
 
 You have to pass these two arguments to the verifyWithKey function call:
 
@@ -145,3 +145,19 @@ You have to pass these two arguments to the verifyWithKey function call:
 
 It will return the key value, hexdata, raw data and transaction id of the published item.
 
+**5. Verify an item on a particular stream of RecordsKeeper Blockchain**
+
+You have to pass these three arguments to the verifyWithKey function call:
+
+* Stream name: which you want to access
+* Data: against which you want to make a query
+* Count: count of items which will be queried
+
+.. code-block:: python
+
+    verifyData(stream, data, count)
+    result = verifyData(stream, data, count)
+
+    print result     #prints if verification is successful or not
+
+It will return the result if verification is successful or not.

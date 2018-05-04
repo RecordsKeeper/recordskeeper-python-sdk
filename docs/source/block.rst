@@ -19,7 +19,6 @@ Import these python libraries first to get started with the functionality.
     from requests.auth import HTTPBasicAuth
     import yaml
     import sys
-    import binascii
 
 
 Create Connection
@@ -61,20 +60,19 @@ Block Class
 
 .. class:: Block
 
-Block class is used to call block related functions like blockinfo which is used to collect block details like block's hash value, size, nonce, transaction ids, transaction count, and miner address of the block for which you have made the query.
+**1. Block info to retrieve block information**
 
-**1. Block info to retrieve block's information**
+Block class is used to call block related function like blockinfo which is used to retrieve block details like block's hash value, size, nonce, transaction ids, transaction count, miner address, previous block hash, next block hash, merkleroot, blocktime and difficulty of the block for which you have made the query.
+
 
 You have to pass these block height as the argument to the blockinfo function call:
 
 * Block height: height of the block of which you want to collect info
 
-blockinfo() function is used to collect block's information by passing blockheight to the blockinfo function call
-
 .. code-block:: python
 
     blockinfo(block_height)
-    tx_count, tx, miner, size, nonce, blockHash = blockinfo(block_height)       
+    tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty = blockinfo(block_height)
 
     print tx_count      # prints transaction count of the block
     print tx            # prints transaction ids of the block
@@ -82,7 +80,12 @@ blockinfo() function is used to collect block's information by passing blockheig
     print blockHash     # prints hash value of the block
     print nonce         # prints nonce of the block
     print miner         # prints miner's address of the block
+    print nextblock     # prints next block's hash
+    print prevblock     # prints previous block's hash
+    print merkleroot    # prints merkle root of the block
+    print blocktime     # prints time at which block is mined
+    print difficulty    # prints difficulty of the block
 
-It will return transaction ids, transaction count, nonce, size, hash value and miner address of the block.
+It will return transaction ids, transaction count, nonce, size, hash value, previous block's hash value, next block hash value, merkle root, difficulty, blocktime and miner address of the block.
 
 

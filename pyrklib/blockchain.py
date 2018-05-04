@@ -1,6 +1,7 @@
 """Library to work with RecordsKeeper Blockchain.
 
-   You can send, retrieve and verify transactions by using transaction class.
+   You can retrieve blockchain information, node's information, node's balance, node's permissions, pending transaction details
+   by using Blockchain class.
    You just have to pass parameters to invoke the pre-defined functions."""
 
 """ import requests, json, HTTPBasicAuth, yaml, sys and binascii packages"""
@@ -47,10 +48,9 @@ class Blockchain:
 		result = response_json[0]['result']
 			
 		# add all those params here
-		return result;										#returns chain params
+		return result;										#returns chain parameters
 
 	#chain = getChainInfo()				 #call to function getChainInfo()	
-
 
 
 	"""function to retrieve node's information on RecordsKeeper Blockchain"""
@@ -73,8 +73,9 @@ class Blockchain:
 		node_balance = response_json[0]['result']['balance']
 		synced_blocks = response_json[0]['result']['blocks']
 		node_address = response_json[0]['result']['nodeaddress']
+		difficulty = response_json[0]['result']['difficulty']
 
-		return node_balance, synced_blocks, node_address;			#returns node details
+		return node_balance, synced_blocks, node_address, difficulty;			#returns node details
 
 	#node = getNodeInfo(public_address)		#getNodeInfo() function call
 
@@ -125,7 +126,7 @@ class Blockchain:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 			
-		tx_count = response_json[0]['result']['size']		#store tx count
+		tx_count = response_json[0]['result']['size']		#store pending tx count
 
 		headers = { 'content-type': 'application/json'}
 
@@ -145,61 +146,33 @@ class Blockchain:
 		for i in range(0, tx_count):
 			tx.append(response_json2[0]['result'])
 		
-		return tx_count, tx;					#returns tx and tx count
+		return tx_count, tx;					#returns pending tx and tx count
 
-	#signedmessage = signMessage(private_key, message)							#getPrivateKey() function call
+	#pendingtx = getpendingTransactions()		#getpendingTransactions() function call
 
 
-	# """function to verify message on RecordsKeeper Blockchain"""
+	"""function to check node's total balance """
 
-	# def verifyMessage(address, signedMessage, message):
+	def checkNodeBalance():							#checkNodeBalance() function definition
 
-	# 	headers = { 'content-type': 'application/json'}
+		headers = { 'content-type': 'application/json'}
 
-	# 	payload = [
-	# 	 	{ "method": "verifymessage",
-	# 	      "params": [address, signedMessage, message],
-	# 	      "jsonrpc": "2.0",
-	# 	      "id": "curltext",
-	# 	      "chain_name": chain
-	# 	    }]
-
-	# 	response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-	# 	response_json = response.json()
+		payload = [
+		 	{ "method": "getmultibalances",
+		      "params": [],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
 			
-	# 	verifiedMessage = response_json[0]['result']
+		balance = response_json[0]['result']['total'][0]['qty']
 
-	# 	if verifiedMessage is True:
-	# 		validity = "Yes, message is verified"
-	# 	else:
-	# 		validity = "No, signedMessage is not correct"
+		return balance;							#returns balance of complete node
 
-	# 	return validity;												#returns private key
+	#node_balance = checkNodeBalance()		#checkNodeBalance() function call
 
-	# #validity = verifyMessage(address, signedMessage, message)							#getPrivateKey() function call
+	
+	
 
-
-	# """function to retrieve wallet information on RecordsKeeper Blockchain"""
-
-	# def retrieveWalletinfo():
-
-	# 	headers = { 'content-type': 'application/json'}
-
-	# 	payload = [
-	# 	 	{ "method": "getwalletinfo",
-	# 	      "params": [],
-	# 	      "jsonrpc": "2.0",
-	# 	      "id": "curltext",
-	# 	      "chain_name": chain
-	# 	    }]
-
-	# 	response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-	# 	response_json = response.json()
-			
-	# 	balance = response_json[0]['result']['balance']
-	# 	tx_count = response_json[0]['result']['txcount']
-	# 	unspent_tx = response_json[0]['result']['utxocount']
-
-	# 	return balance, tx_count, unspent_tx;												#returns private key
-
-	# #validity = verifyMessage(address, signedMessage, message)							#getPrivateKey() function call

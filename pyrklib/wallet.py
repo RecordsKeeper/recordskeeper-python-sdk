@@ -1,7 +1,8 @@
 """Library to work with RecordsKeeper wallet.
 
-   You can send, retrieve and verify transactions by using transaction class.
-   You just have to pass parameters to invoke the pre-defined functions."""
+   You can create wallet, create multisignature wallet, retrieve wallet's information, retrieve private key of a particular
+   wallet address, sign message verify message, dump wallet file, backup wallet file, import wallet file, encrypt wallet by
+   using wallet class. You just have to pass parameters to invoke the pre-defined functions."""
 
 """ import requests, json, HTTPBasicAuth, yaml, sys and binascii packages"""
 
@@ -44,8 +45,8 @@ class Wallet:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		public_address = response_json[0]['result'][0]['address']				# returns public address of the wallet
-		private_key = response_json[0]['result'][0]['privkey']					# returns private key of the wallet
+		public_address = response_json[0]['result'][0]['address']			# returns public address of the wallet
+		private_key = response_json[0]['result'][0]['privkey']				# returns private key of the wallet
 
 		def importAddress(public_address):							#importAddress() function call
 
@@ -68,7 +69,6 @@ class Wallet:
 		return public_address, private_key;							#returns public and private key
 
 	#public_address, private_key = createWallet()					#call to function createWallet()	
-
 
 
 	"""function to retrieve private key of a wallet on RecordsKeeper Blockchain"""
@@ -95,12 +95,9 @@ class Wallet:
 	#privkey = getPrivateKey(public_address)							#getPrivateKey() function call
 
 
-	privkey = getPrivateKey(public_address)							#getPrivateKey() function call
-
-
 	"""function to sign message on RecordsKeeper Blockchain"""
 
-	def signMessage(private_key, message):
+	def signMessage(private_key, message):						#signMessage() function call
 
 		headers = { 'content-type': 'application/json'}
 
@@ -117,14 +114,14 @@ class Wallet:
 			
 		signedMessage = response_json[0]['result']
 
-		return signedMessage;												#returns private key
+		return signedMessage;									#returns private key
 
-	#privkey = getPrivateKey(public_address)							#getPrivateKey() function call
+	#signedmessage = signMessage(private_key, message)				#signMessage() function call
 
 
 	"""function to verify message on RecordsKeeper Blockchain"""
 
-	def verifyMessage(address, signedMessage, message):
+	def verifyMessage(address, signedMessage, message):			#verifyMessage() function call
 
 		headers = { 'content-type': 'application/json'}
 
@@ -146,14 +143,14 @@ class Wallet:
 		else:
 			validity = "No, signedMessage is not correct"
 
-		return validity;												#returns private key
+		return validity;										#returns validity
 
-	#validity = verifyMessage(address, signedMessage, message)							#getPrivateKey() function call
+	#validity = verifyMessage(address, signedMessage, message)	#verifyMessage() function call
 
 
 	"""function to retrieve wallet information on RecordsKeeper Blockchain"""
 
-	def retrieveWalletinfo():
+	def retrieveWalletinfo():							#retrieveWalletinfo() function call
 
 		headers = { 'content-type': 'application/json'}
 
@@ -172,6 +169,6 @@ class Wallet:
 		tx_count = response_json[0]['result']['txcount']
 		unspent_tx = response_json[0]['result']['utxocount']
 
-		return balance, tx_count, unspent_tx;												#returns private key
+		return balance, tx_count, unspent_tx;					#returns balance, tx count, unspent tx
 
-	#validity = verifyMessage(address, signedMessage, message)							#getPrivateKey() function call
+	#balance, tx_count, unspent_tx = retrieveWalletinfo()		#retrieveWalletinfo() function call

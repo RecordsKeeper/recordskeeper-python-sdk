@@ -11,7 +11,6 @@ from requests.auth import HTTPBasicAuth
 import yaml
 import binascii
 
-
 """ Entry point for accessing Stream class resources.
 
 	Import values from config file."""
@@ -28,11 +27,10 @@ chain = cfg['testnet']['chain']
 """Stream class to access stream related functions"""
 
 class Stream:
-
 	
 	"""function to publish data into the stream"""
 
-	def publish(address, stream, key, data):							#publish function definition
+	def publish(address, stream, key, data):				#publish function definition
 		
 		headers = { 'content-type': 'application/json'}
 
@@ -51,12 +49,12 @@ class Stream:
 		
 		return txid;
 	
-#	txid = publish(address, stream, key, data.encode('utf-8'). hex() )				#variable to store transaction id
+	#txid = publish(address, stream, key, data.encode('utf-8'). hex() )		#variable to store transaction id
 
 	
 	"""function to retrieve data from the stream"""
 
-	def retrieve(stream, txid):							#retrieve() function definition
+	def retrieve(stream, txid):								#retrieve() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -74,12 +72,12 @@ class Stream:
 		
 		return result;
 
-#	result = retrieve(stream, txid)					#call to invoke retrieve function
+	#result = retrieve(stream, txid)						#call to invoke retrieve function
 	
 
 	"""function to retrieve data against a particular publisher address"""
 
-	def retrieveWithAddress(stream, address):					#retrievewithaddress() function definition
+	def retrieveWithAddress(stream, address):				#retrievewithAddress() function definition
 
 		headers = { 'content-type': 'application/json'}
 				
@@ -102,12 +100,12 @@ class Stream:
 
 		return key, raw_data, txid;
 
-#	key, raw_data, txid = retrieveWithAddress(stream, address)				#call to retrieveWithAddress() function
+	#key, raw_data, txid = retrieveWithAddress(stream, address)			#call to retrieveWithAddress() function
 
 
 	"""function to retrieve data against a particular key value"""
 
-	def retrieveWithKey(stream, key):								#retrieveithkey() function definition
+	def retrieveWithKey(stream, key):					#retrieveithkey() function definition
 
 		headers = { 'content-type': 'application/json'}
 				
@@ -130,8 +128,48 @@ class Stream:
 
 		return publisher, raw_data, txid;
 
-#	publisher, raw_data, txid = retrieveWithKey(stream, key)		#call to retrieveWithKey() function
+	#publisher, raw_data, txid = retrieveWithKey(stream, key)		#call to retrieveWithKey() function
 	
 
+	"""function to verify data on RecordsKeeper Blockchain"""
 
+	def verifyData(stream, data, count):				#verifyData() function definition
 
+		headers = { 'content-type': 'application/json'}
+				
+		payload = [
+		{ "method": "liststreamitems",
+		"params": [stream, False , count],
+		"jsonrpc": "2.0",
+		"id": "curltext",
+		"chain_name": chain
+		}]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+
+		raw_data = []											
+
+		for i in range(0, count):	
+			
+			result_data = response_json[0]['result'][i]['data']						#returns hex data
+
+			if type(result_data) is str:
+
+				raw_data.append(binascii.unhexlify(result_data).decode('utf-8'))	#returns raw data
+				
+			else:
+					
+				raw_data.append("No data found")		
+
+		if data in raw_data:
+
+			result = "Data is successfully verified."
+				
+		else:
+
+			result = "Data not found."
+
+		return result;
+
+	#pub = verifyData("root","test data to check", 20 )		#call to verifyData() function

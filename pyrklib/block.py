@@ -1,6 +1,6 @@
 """Library to work with RecordsKeeper streams.
 
-   You can retrieve block information by using block class.
+   You can retrieve complete block information by using block class.
    You just have to pass parameters to invoke the pre-defined functions."""
 
 """ import requests, json and HTTPBasicAuth packages"""

@@ -1,6 +1,7 @@
 """Library to work with RecordsKeeper address class.
 
-   You can send, retrieve and verify transactions by using transaction class.
+   You can generate new address, check all addresses, check address validity, check address permissions, check address balance
+   by using Address class.
    You just have to pass parameters to invoke the pre-defined functions."""
 
 """ import requests, json, HTTPBasicAuth, yaml, sys and binascii packages"""
@@ -11,7 +12,6 @@ from requests.auth import HTTPBasicAuth
 import yaml
 import sys
 import binascii
-
 
 """ Entry point for accessing Address class resources.
 
@@ -29,6 +29,7 @@ chain = cfg['testnet']['chain']
 
 #Address class to access address related functions
 class Address:
+
 
 	"""function to generate new address on the node's wallet"""
 
@@ -50,13 +51,13 @@ class Address:
 
 		return address;							#returns new address
 
-#	newAddress = getAddress()					#getAddress() function call
+	#newAddress = getAddress()					#getAddress() function call
 
 
 	"""function to list all addresses and no of addresses on the node's wallet"""
 
 
-	def getWalletAddresses():					#getWalletAddresses() function call
+	def retrieveAddresses():					#retrieveAddresses() function call
 
 		headers = { 'content-type': 'application/json'}
 
@@ -82,7 +83,7 @@ class Address:
 
 		return address, address_count;						#returns allAddresses and address count
 
-#	allAddresses, address_count = getWalletAddresses()		#getWalletAddresses() function call
+	#allAddresses, address_count = retrieveAddresses()		#retrieveAddresses() function call
 
 
 	"""function to check if given address is valid or not"""
@@ -105,20 +106,20 @@ class Address:
 
 		
 		if validity is True:
-			addressCheck = "Address is valid"					#print if address is valid
+			addressCheck = "Address is valid"				#print if address is valid
 
 		else:
 			addressCheck= "Address is invalid"				#print if address is invalid	
 
-		return addressCheck;							#returns validity of address
+		return addressCheck;								#returns validity of address
 
+	#addressC = checkifValid(address)				#checkifValid() function call
 
-#	addressC = checkifValid(address)			#checkifValid() function call
 
 	"""function to check if given address has mining permission or not"""
 
 
-	def checkifMineAllowed(address):					#checkifMineAllowed() function definition
+	def checkifMineAllowed(address):				#checkifMineAllowed() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -136,18 +137,19 @@ class Address:
 
 
 		if permission is True:
-			permissionCheck = "Address has mining permission"		#print if address has mining permission
+			
+			permissionCheck = "Address has mining permission"			#print if address has mining permission
 
 		else:
+			
 			permissionCheck = "Address has not given mining permission"	#print if address does not have mining permission	
 
 		return permissionCheck;							#returns mining permission
 
-#	permissionCheck = checkifMineAllowed(address)	#checkifMineAllowed() function call
+	#permissionCheck = checkifMineAllowed(address)	#checkifMineAllowed() function call
 	
-	
-	"""function to check node address balance on RecordsKeeper Blockchain"""
 
+	"""function to check node address balance on RecordsKeeper Blockchain"""
 
 	def checkBalance(address):					#checkBalance() function definition
 
@@ -167,5 +169,5 @@ class Address:
 
 		return balance;							#returns balance of a particular node address
 
-#	address_balance = checkBalance(address)		#checkBalance() function call
+	#address_balance = checkBalance(address)		#checkBalance() function call
 	

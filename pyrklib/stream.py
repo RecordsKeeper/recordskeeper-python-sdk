@@ -52,7 +52,7 @@ class Stream:
 	#txid = publish(address, stream, key, data.encode('utf-8'). hex() )		#variable to store transaction id
 
 	
-	"""function to retrieve data from the stream"""
+	"""function to retrieve data against transaction id from the stream"""
 
 	def retrieve(stream, txid):								#retrieve() function definition
 
@@ -68,11 +68,13 @@ class Stream:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		result = response_json[0]['result']
+		data = response_json[0]['result']['data']
 		
-		return result;
+		raw_data = binascii.unhexlify(data).decode('utf-8')		#returns raw data 
+		
+		return raw_data;
 
-	#result = retrieve(stream, txid)						#call to invoke retrieve function
+	#result = retrieve("root", "eef0c0c191e663409169db0972cc75ff91e577a072289ee02511b410bc304d90")						#call to invoke retrieve function
 	
 
 	"""function to retrieve data against a particular publisher address"""
@@ -173,3 +175,33 @@ class Stream:
 		return result;
 
 	#pub = verifyData("root","test data to check", 20 )		#call to verifyData() function
+
+	"""function to list stream items on RecordsKeeper Blockchain"""
+
+	def retrieveItems(stream, count):				#retrieveItems() function definition
+
+		headers = { 'content-type': 'application/json'}
+				
+		payload = [
+		{ "method": "liststreamitems",
+		"params": [stream, False , count],
+		"jsonrpc": "2.0",
+		"id": "curltext",
+		"chain_name": chain
+		}]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()										
+
+		for i in range(0, count):	
+			
+			address = response_json[0]['result'][i]['publishers']			#returns publisher address		
+			key_value = response_json[0]['result'][i]['key']				#returns key value of data
+			data = response_json[0]['result'][i]['data']					#returns hex data
+			raw_data = binascii.unhexlify(result_data).decode('utf-8')  	#returns raw data
+			txid = response_json[0]['result'][i]['txid']					#returns tx id
+				
+
+		return address, key_value, raw_data, txid;
+
+	#result = retrieveItems(stream, count)		#call to retrieveItems() function

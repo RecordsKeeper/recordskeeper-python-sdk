@@ -1,4 +1,4 @@
-"""Library to work with RecordsKeeper streams.
+"""Library to work with RecordsKeeper blocks.
 
    You can retrieve complete block information by using block class.
    You just have to pass parameters to invoke the pre-defined functions."""
@@ -9,6 +9,7 @@ import requests
 import json
 from requests.auth import HTTPBasicAuth
 import yaml
+import sys
 
 
 """ Entry point for accessing Block class resources.
@@ -28,14 +29,13 @@ chain = cfg['testnet']['chain']
 """Block class to access block information"""
 
 class Block:
-
 	
 	"""function to get a particular block"""
 
 	def blockinfo(block_height):											#blockinfo function definition
+		
 		headers = { 'content-type': 'application/json'}
-
-
+		
 		payload = [
 		         { "method": "getblock",
 		          "params": [block_height],
@@ -57,9 +57,7 @@ class Block:
 		blocktime = response_json[0]['result']['time']						#variable returns blocktime
 		difficulty = response_json[0]['result']['difficulty']				#variable returns difficulty
 
-
 		tx = []																#list to store transaction ids
-
 		
 		for i in range(0, tx_count):
 			
@@ -71,3 +69,34 @@ class Block:
 
 	
 	#tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty = blockinfo(block_height)		#call to blockinfo function 
+
+
+	"""function to retrieve blocks on RecordsKeeper Blockchain"""
+
+	def retrieveBlocks(block_range):		#retrieveBlocks() function definition
+		
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		         { "method": "listblocks",
+		          "params": [block_range],
+		          "jsonrpc": "2.0",
+		          "id": "curltext",
+		          "chain_name": chain
+		          }]
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+
+		block_count = len(response_json[0]['result'])
+
+		for i in range(0, block_count):
+
+			blockhash = response_json[0]['result'][i]['hash']
+			miner = response_json[0]['result'][i]['miner']
+			blocktime = response_json[0]['result'][i]['time']
+			tx_count = response_json[0]['result'][i]['txcount']
+		
+		return blockhash, miner, blocktime, tx_count;				
+
+	
+	#result = retrieveBlocks(block_range)	#call to function retrieveBlocks

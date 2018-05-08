@@ -1,8 +1,7 @@
 """Library to work with RecordsKeeper address class.
 
    You can generate new address, check all addresses, check address validity, check address permissions, check address balance
-   by using Address class.
-   You just have to pass parameters to invoke the pre-defined functions."""
+   by using Address class. You just have to pass parameters to invoke the pre-defined functions."""
 
 """ import requests, json, HTTPBasicAuth, yaml, sys and binascii packages"""
 
@@ -53,6 +52,27 @@ class Address:
 
 	#newAddress = getAddress()					#getAddress() function call
 
+	"""function to generate a new multisignature address on the node's wallet"""
+
+	def getMultisigAddress(nrequired, key):							#getAddress() function definition
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "createmultisig",
+		      "params": [nrequired, key],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		address = response_json[0]['result']
+
+		return address;							#returns new address
+
+	#newAddress = getAddress()					#getAddress() function call
 
 	"""function to list all addresses and no of addresses on the node's wallet"""
 
@@ -170,4 +190,30 @@ class Address:
 		return balance;							#returns balance of a particular node address
 
 	#address_balance = checkBalance(address)		#checkBalance() function call
+	
+
+	"""function to import address on RecordsKeeper Blockchain"""
+
+	def importAddress(public_address):							#importAddress() function call
+
+		headers = { 'content-type': 'application/json'}
+		payload = [
+		    { "method": "importaddress",
+		      "params": [public_address, " ", False],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		if result is none:
+			
+			resp = "Address successfully imported."
+
+		return resp;
+
+	#import_address = importAddress(public_address)			#importAddress() function call
 	

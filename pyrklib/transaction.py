@@ -32,7 +32,7 @@ class Transaction:
 	 
 	"""function to send transaction on RecordsKeeper Blockchain"""
 
-	def sendTransaction(sender_address, reciever_address, amount):		#sendTransaction function definition
+	def sendTransaction(sender_address, reciever_address, amount, data):		#sendTransaction function definition
 		
 		headers = { 'content-type': 'application/json'}
 

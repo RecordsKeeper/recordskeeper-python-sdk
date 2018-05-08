@@ -33,8 +33,10 @@ Libraries
    :caption: Libraries: 
  
    address
+   assets
    block
    blockchain
+   permissions
    stream
    transaction
    wallet

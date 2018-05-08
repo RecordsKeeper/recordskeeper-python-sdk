@@ -148,7 +148,7 @@ class Wallet:
 	#validity = verifyMessage(address, signedMessage, message)	#verifyMessage() function call
 
 
-	"""function to retrieve wallet information on RecordsKeeper Blockchain"""
+	"""function to retrieve wallet's information on RecordsKeeper Blockchain"""
 
 	def retrieveWalletinfo():							#retrieveWalletinfo() function call
 
@@ -172,3 +172,146 @@ class Wallet:
 		return balance, tx_count, unspent_tx;					#returns balance, tx count, unspent tx
 
 	#balance, tx_count, unspent_tx = retrieveWalletinfo()		#retrieveWalletinfo() function call
+
+
+	"""function to create wallet's backup on RecordsKeeper Blockchain"""
+
+	def backupWallet(filename):						#backupWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "backupwallet",
+		      "params": [filename],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		return result;								#returns result
+
+	#result = backupWallet(filename)				#backupWallet() function call
+
+
+	"""function to import wallet's backup on RecordsKeeper Blockchain"""
+
+	def importWallet(filename):						#importWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "importwallet",
+		      "params": [filename],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		return result;								#returns result
+
+	#result = importWallet(filename)				#importWallet() function call
+
+
+	"""function to dump wallet on RecordsKeeper Blockchain"""
+
+	def dumpWallet(filename):						#dumpWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "dumpwallet",
+		      "params": [filename],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		return result;								#returns result
+
+	#result = dumpWallet(filename)					#dumpWallet() function call
+
+
+	"""function to lock wallet on RecordsKeeper Blockchain"""
+
+	def locktWallet(password):					#lockWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "encryptwallet",
+		      "params": [password],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		return result;							#returns result
+
+	#result = lockWallet(password)				#lockWallet() function call
+
+	"""function to unlock wallet on RecordsKeeper Blockchain"""
+
+	def unlockWallet(password, unlocktime):				#unlockWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "walletpassphrase",
+		      "params": [password, unlocktime],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		return result;							#returns result
+
+	#result = unlockWallet()					#unlockWallet() function call
+
+
+	"""function to change password for wallet on RecordsKeeper Blockchain"""
+
+	def walletChangePassword(old_password, new_password):		#walletChangePassword() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "walletpassphrasechange",
+		      "params": [old_password, new_password],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		return result;								#returns result
+
+	#result = walletChangePassword(old_password, new_password)			#walletChangePassword() function call

@@ -33,21 +33,22 @@ class StreamTest(unittest.TestCase):
         result = Stream.retrieveWithAddress("root", "mpC8A8Fob9ADZQA7iLrctKtwzyWTx118Q9")
         self.assertEqual(result[1], "5468697320697320746573742064617461")
     
-    def test_verify_with_key(self):
+    def test_retrieve_with_key(self):
 
         result = Stream.retrieveWithKey("root", "test")
         self.assertEqual(result[1], "5468697320697320746573742064617461")
 
     def test_verifyData(self):
 
-        result = Stream.verifyData("root", "test data to check", 5)
-        print(result)
+        result = Stream.verifyData("root", "test", 5)
         self.assertEqual(result, "Data is successfully verified.")
 
     def test_retrieveItems(self):
-        result = Stream.retrieveItems("root", 10)
+        
+        result = Stream.retrieveItems("root", 5)[2][2]
+        self.assertEqual(result, "Test data")
         
 
-
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(StreamTest)
+    unittest.TextTestRunner(verbosity=2).run(suite)

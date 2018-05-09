@@ -56,6 +56,10 @@ class Assets:
 
 	def retrieveAssets():								#retrieveAssets() function definition
 
+		asset_name = []
+		issue_id = []
+		issue_qty = []
+
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
@@ -72,13 +76,14 @@ class Assets:
 
 		for i in range(0, asset_count):
 
-			asset_name = response_json[0]['result'][i]['name']			#returns asset name
-			issue_id = response_json[0]['result'][i]['issuetxid']		#returns issue id
-			issue_qty = response_json[0]['result'][i]['issueraw']		#returns issue quantity
+			asset_name.append(response_json[0]['result'][i]['name'])		#returns asset name
+			issue_id.append (response_json[0]['result'][i]['issuetxid'])	#returns issue id
+			issue_qty.append(response_json[0]['result'][i]['issueraw'])		#returns issue quantity
 		
+
 		return asset_name, issue_id, issue_qty, asset_count;
 
-	#asset_name, issue_id, issue_qty, asset_count = retrieveAssets()	#call to invoke retrieveAssets() function
+	# assetname, issueid, issueqty, assetcount = retrieveAssets()	#call to invoke retrieveAssets() function
 	
 
 	

@@ -46,11 +46,19 @@ class Blockchain:
 		response_json = response.json()
 			
 		result = response_json[0]['result']
-			
-		# add all those params here
-		return result;										#returns chain parameters
 
-	#chain = getChainInfo()				 #call to function getChainInfo()	
+		chain_protocol = result['chain-protocol']
+		chain_description = result['chain-description']
+		root_stream = result['root-stream-name']
+		max_blocksize = result['maximum-block-size']
+		default_networkport = result['default-network-port']
+		default_rpcport = result['default-rpc-port']
+		mining_diversity = result['mining-diversity']
+		chain_name = result['chain-name']
+
+		return chain_protocol, chain_description, root_stream, max_blocksize, default_networkport, default_rpcport, mining_diversity, chain_name;										#returns chain parameters
+
+	#chain = getChainInfo()				 			#call to function getChainInfo()	
 
 
 	"""function to retrieve node's information on RecordsKeeper Blockchain"""
@@ -60,6 +68,7 @@ class Blockchain:
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
+
 		 	{ "method": "getinfo",
 		      "params": [],
 		      "jsonrpc": "2.0",
@@ -148,7 +157,7 @@ class Blockchain:
 		
 		return tx_count, tx;					#returns pending tx and tx count
 
-	#pendingtx = getpendingTransactions()		#getpendingTransactions() function call
+	#pendingtx, pendingtxcount = getpendingTransactions()		#getpendingTransactions() function call
 
 
 	"""function to check node's total balance """

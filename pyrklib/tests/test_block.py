@@ -30,8 +30,18 @@ class BlockTest(unittest.TestCase):
 
     def test_retrieveBlocks(self):
 
-        miner = Block.retrieveBlocks(10-20)[1]
-        self.assertEqual(miner, "")
+        miner = Block.retrieveBlocks("10-20")[1][1]
+        self.assertEqual(miner, "n2gNFB8oz4qfmUKCsfwqLo8ineWfocpNMk")
+
+        blocktime = Block.retrieveBlocks("10-20")[2][2]
+        self.assertEqual(blocktime,1522831624)
+
+        blockhash = Block.retrieveBlocks("10-20")[0][4]
+        self.assertEqual(blockhash, "000002d184165e5c18facde8a5678acd975ba9d315eb440752d83dcd70d4abd5")
+
+        txcount = Block.retrieveBlocks("10-20")[3][1]
+        self.assertEqual(txcount, 1)
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(BlockTest)
+    unittest.TextTestRunner(verbosity=2).run(suite)

@@ -2,51 +2,62 @@ import unittest
 import yaml
 import binascii
 from pyrklib import *
-from pyrklib.address import Address
+from pyrklib.blockchain import Blockchain
 
 import sys
-# sys.path.append('C:\\Users\\Trinayan\\pythonsdk\\scripts')
-
-#from stream import Stream
 
 with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
 
 
-class AddressTest(unittest.TestCase):
+class BlockchainTest(unittest.TestCase):
 
-
-    def test_getaddress(self):
+    def test_getchaininfo(self):
         
-        address = Address.getAddress()
-        address_size = sys.getsizeof(address)
-        self.assertEqual(address_size, 83)
+        chainname = Blockchain.getChainInfo()[7]
+        self.assertEqual(chainname, "recordskeeper-test")
 
-    def test_checkifvalid(self):
+        rootstream = Blockchain.getChainInfo()[2]
+        self.assertEqual(rootstream, "root")
 
-        checkaddress = Address.checkifValid('mwp2SHRUaqA7EvfdNFzZkMf1cMZGSh5d1z')
-        self.assertEqual(checkaddress, 'Address is valid')
+        rpcport = Blockchain.getChainInfo()[5]
+        self.assertEqual(rpcport, 8378)
 
-    def test_checkifvalid(self):
+        networkport = Blockchain.getChainInfo()[4]
+        self.assertEqual(networkport, 8379)
 
-        wrongaddress = Address.checkifValid('1UCjNZmSNJxKNes6SFBfMKCahAPJ7DGHCvfh6E')
-        self.assertEqual(wrongaddress, 'Address is valid')
+    def test_getnodeinfo(self):
 
-    def test_checkifmineallowed(self):
+        info = Blockchain.getNodeInfo()[1]
+        self.assertGreater(info, 60)
 
-        checkaddress = Address.checkifMineAllowed('mwp2SHRUaqA7EvfdNFzZkMf1cMZGSh5d1z')
-        self.assertEqual(checkaddress, 'Address has mining permission')
+        balance = Blockchain.getNodeInfo()[0]
+        self.assertIsNotNone(balance)
 
-    def test_checkifmineallowed(self):
+        difficulty = Blockchain.getNodeInfo()[3]
+        self.assertLess(difficulty, 1)
 
-        wrongaddress = Address.checkifMineAllowed('mmx8H2YZDqsvhTt1YHkJpYKkcD1w8JBTgh')
-        self.assertEqual(wrongaddress, 'Address has mining permission')
 
-    def test_checkbalance(self):
+    def test_permissions(self):
 
-        balance = Address.checkBalance('mmx8H2YZDqsvhTt1YHkJpYKkcD1w8JBTgh')
-        self.assertEqual(balance, 5)
+        permissions = Blockchain.permissions()
+        self.assertListEqual(permissions, ['mine', 'admin', 'activate', 'connect', 'send', 'receive', 'issue', 'create'])
+
+
+    def test_getpendingtransactions(self):
+
+        pendingtx = Blockchain.getpendingTransactions()[1]
+        self.assertListEqual(pendingtx, [])
+
+        pendingtxcount = Blockchain.getpendingTransactions()[0]
+        self.assertGreaterEqual(pendingtxcount, 0)
+
+    def test_checknodebalance(self):
+
+        balance = Blockchain.checkNodeBalance()
+        self.assertGreater(balance, 0)
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(BlockchainTest)
+    unittest.TextTestRunner(verbosity=2).run(suite)

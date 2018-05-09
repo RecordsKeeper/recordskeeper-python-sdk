@@ -25,7 +25,6 @@ password = cfg['testnet']['passwd']
 chain = cfg['testnet']['chain']
 
 
-
 """Block class to access block information"""
 
 class Block:
@@ -68,13 +67,18 @@ class Block:
 		return  tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty;
 
 	
-	#tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty = blockinfo(block_height)		#call to blockinfo function 
+	#tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty = blockinfo("100")		#call to blockinfo function 
 
 
 	"""function to retrieve blocks on RecordsKeeper Blockchain"""
 
 	def retrieveBlocks(block_range):		#retrieveBlocks() function definition
 		
+		blockhash = []
+		miner = []
+		blocktime = []
+		tx_count = []
+
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
@@ -91,12 +95,13 @@ class Block:
 
 		for i in range(0, block_count):
 
-			blockhash = response_json[0]['result'][i]['hash']
-			miner = response_json[0]['result'][i]['miner']
-			blocktime = response_json[0]['result'][i]['time']
-			tx_count = response_json[0]['result'][i]['txcount']
+			blockhash.append(response_json[0]['result'][i]['hash'])
+			miner.append(response_json[0]['result'][i]['miner'])
+			blocktime.append(response_json[0]['result'][i]['time'])
+			tx_count.append(response_json[0]['result'][i]['txcount'])
 		
 		return blockhash, miner, blocktime, tx_count;				
 
 	
-	#result = retrieveBlocks(block_range)	#call to function retrieveBlocks
+	#block_hash, miner_add, block_time, txcount = retrieveBlocks("10-15")	#call to function retrieveBlocks
+

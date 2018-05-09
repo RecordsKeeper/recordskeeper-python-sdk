@@ -193,15 +193,19 @@ class Stream:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()										
 
+		address =[]
+		key_value = []
+		raw_data = []
+		txid = []
+
 		for i in range(0, count):	
 			
-			address = response_json[0]['result'][i]['publishers']			#returns publisher address		
-			key_value = response_json[0]['result'][i]['key']				#returns key value of data
+			address.append(response_json[0]['result'][i]['publishers'])		#returns publisher address		
+			key_value.append(response_json[0]['result'][i]['key'])			#returns key value of data
 			data = response_json[0]['result'][i]['data']					#returns hex data
-			raw_data = binascii.unhexlify(result_data).decode('utf-8')  	#returns raw data
+			raw_data = binascii.unhexlify(data).decode('utf-8')  			#returns raw data
 			txid = response_json[0]['result'][i]['txid']					#returns tx id
-				
 
 		return address, key_value, raw_data, txid;
 
-	#result = retrieveItems(stream, count)		#call to retrieveItems() function
+	#result = retrieveItems("root", 5)		#call to retrieveItems() function

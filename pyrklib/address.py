@@ -32,7 +32,7 @@ class Address:
 
 	"""function to generate new address on the node's wallet"""
 
-	def getAddress():							#getAddress() function definition
+	def getAddress():									#getAddress() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -48,19 +48,21 @@ class Address:
 			
 		address = response_json[0]['result']
 
-		return address;							#returns new address
+		return address;									#returns new address
 
-	#newAddress = getAddress()					#getAddress() function call
+	#newAddress = getAddress()							#getAddress() function call
 
-	"""function to generate a new multisignature address on the node's wallet"""
+	"""function to generate a new multisignature address"""
 
-	def getMultisigAddress(nrequired, key):							#getAddress() function definition
+	def getMultisigAddress(nrequired, key):				#getMultisigAddress() function definition
+
+		key_list = key.split(",")
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "createmultisig",
-		      "params": [nrequired, key],
+		      "params": [nrequired, key_list],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -70,14 +72,56 @@ class Address:
 			
 		address = response_json[0]['result']
 
-		return address;							#returns new address
+		if address is None:
 
-	#newAddress = getAddress()					#getAddress() function call
+			res = response_json[0]['error']['message']
+
+		else:
+
+			res = response_json[0]['result']['address']
+
+		return res;										#returns new multisig address
+
+	#newAddress = getMultisigAddress(nrequired, key)	#getMultisigAddress() function call
+
+
+	"""function to generate a new multisignature address on the node's wallet"""
+
+	def getMultisigWalletAddress(nrequired, key):		#getMultisigWalletAddress() function definition
+
+		key_list = key.split(",")
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "addmultisigaddress",
+		      "params": [nrequired, key_list],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+		
+		address = response_json[0]['result']
+
+		if address is None:
+
+			res = response_json[0]['error']['message']
+
+		else:
+
+			res = response_json[0]['result']
+
+		return res;									#returns new multisig address
+
+	#newAddress = getMultisigWalletAddress(nrequired, key)	#getMultisigWalletAddress() function call
+	
 
 	"""function to list all addresses and no of addresses on the node's wallet"""
 
 
-	def retrieveAddresses():					#retrieveAddresses() function call
+	def retrieveAddresses():						#retrieveAddresses() function call
 
 		headers = { 'content-type': 'application/json'}
 
@@ -101,14 +145,14 @@ class Address:
 			
 			address.append(response_json[0]['result'][i])
 
-		return address, address_count;						#returns allAddresses and address count
+		return address, address_count;					#returns allAddresses and address count
 
-	#allAddresses, address_count = retrieveAddresses()		#retrieveAddresses() function call
+	#allAddresses, address_count = retrieveAddresses()	#retrieveAddresses() function call
 
 
 	"""function to check if given address is valid or not"""
 
-	def checkifValid(address):					#checkifValid() function definition
+	def checkifValid(address):						#checkifValid() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -126,12 +170,12 @@ class Address:
 
 		
 		if validity is True:
-			addressCheck = "Address is valid"				#print if address is valid
+			addressCheck = "Address is valid"		#print if address is valid
 
 		else:
-			addressCheck= "Address is invalid"				#print if address is invalid	
+			addressCheck= "Address is invalid"		#print if address is invalid	
 
-		return addressCheck;								#returns validity of address
+		return addressCheck;						#returns validity of address
 
 	#addressC = checkifValid(address)				#checkifValid() function call
 
@@ -158,7 +202,7 @@ class Address:
 
 		if permission is True:
 			
-			permissionCheck = "Address has mining permission"			#print if address has mining permission
+			permissionCheck = "Address has mining permission"	#print if address has mining permission
 
 		else:
 			
@@ -189,12 +233,12 @@ class Address:
 
 		return balance;							#returns balance of a particular node address
 
-	#address_balance = checkBalance(address)		#checkBalance() function call
+	#address_balance = checkBalance(address)	#checkBalance() function call
 	
 
 	"""function to import address on RecordsKeeper Blockchain"""
 
-	def importAddress(public_address):							#importAddress() function call
+	def importAddress(public_address):				#importAddress() function call
 
 		headers = { 'content-type': 'application/json'}
 		payload = [
@@ -208,12 +252,20 @@ class Address:
 		response_json = response.json()
 			
 		result = response_json[0]['result']
+		error = response_json[0]['error']
 
-		if result is none:
+		if result is None and error is None:
 			
-			resp = "Address successfully imported."
+			resp = "Address successfully imported"
+
+		elif (result is None and error != None):
+
+			resp = response_json[0]['error']['message']			#returns new multisig address
+		
+		else:
+
+			resp = 0
 
 		return resp;
 
-	#import_address = importAddress(public_address)			#importAddress() function call
-	
+	#import_address = importAddress("msCM5qQ32Tjc1ydEN1rpoJy4h3qxNPXU15")	#importAddress() function call

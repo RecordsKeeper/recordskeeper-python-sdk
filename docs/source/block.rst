@@ -24,21 +24,32 @@ Import these python libraries first to get started with the functionality.
 Create Connection
 -----------------
 
-Entry point for accessing Stream class resources.
+Entry point for accessing Block class resources.
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
 .. code-block:: python
-
+    
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-    url = cfg['testnet']['url']
-    chain = cfg['testnet']['chain']
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
 
-Node we have an entry point to get started.
+.. code-block:: python
 
+    network = cfg['testnet']                    #network variable to store the network that you want to access
+
+    if (network==cfg['testnet']):
+
+        url = cfg['testnet']['url']
+        chain = cfg['testnet']['chain']
+        
+    else:
+
+        url = cfg['mainnet']['url']
+        chain = cfg['mainnet']['chain']
+    
 
 Node Authentication
 -------------------
@@ -48,12 +59,25 @@ Import values from config file.
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
+
 .. code-block:: python
     
-    user = cfg['testnet']['rkuser']
-    password = cfg['testnet']['passwd']
+    network = cfg['testnet']                    #network variable to store the network that you want to access
+
+    if (network==cfg['testnet']):
+
+        url = cfg['testnet']['url']
+        chain = cfg['testnet']['chain']
+        
+    else:
+
+        url = cfg['mainnet']['url']
+        chain = cfg['mainnet']['chain']
+
 
 Now we have node authentication credentials.
+
 
 Block Class
 -----------
@@ -63,7 +87,6 @@ Block Class
 **1. Block info to retrieve block information**
 
 Block class is used to call block related function like blockinfo which is used to retrieve block details like block's hash value, size, nonce, transaction ids, transaction count, miner address, previous block hash, next block hash, merkleroot, blocktime and difficulty of the block for which you have made the query.
-
 
 You have to pass these block height as the argument to the blockinfo function call:
 
@@ -89,3 +112,22 @@ You have to pass these block height as the argument to the blockinfo function ca
 It will return transaction ids, transaction count, nonce, size, hash value, previous block's hash value, next block hash value, merkle root, difficulty, blocktime and miner address of the block.
 
 
+**2. Retrieve a range of blocks on RecordsKeeper chain**
+
+You have to pass these block height as the argument to the retrieveBlocks function call:
+
+* Block range: range of the block of which you want to collect info
+
+. code-block:: python
+
+    . code-block:: python
+
+    retrieveBlocks(block_range)
+    block_hash, miner_add, block_time, txcount = retrieveBlocks(block_range)
+
+    print block_hash    # prints hash of the blocks
+    print miner_add     # prints miner of the blocks
+    print block_time    # prints block time of the blocks
+    print txcount       # prints transaction count of the blocks
+
+It will return blockhash, miner address, blocktime and transaction count of the blocks.

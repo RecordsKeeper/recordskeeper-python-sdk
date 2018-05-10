@@ -32,15 +32,26 @@ Entry point for accessing Transaction class resources.
 * Chain-name: chain name
 
 .. code-block:: python
-
+    
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-    url = cfg['testnet']['url']
-    chain = cfg['testnet']['chain']
+Default value of network is **test-net**, you can change its value to select mainnet or testnet
 
-Node we have an entry point to get started.
+.. code-block:: python
 
+    network = cfg['testnet']                    #network variable to store the network that you want to access
+
+    if (network==cfg['testnet']):
+
+        url = cfg['testnet']['url']
+        chain = cfg['testnet']['chain']
+        
+    else:
+
+        url = cfg['mainnet']['url']
+        chain = cfg['mainnet']['chain']
+    
 
 Node Authentication
 -------------------
@@ -50,10 +61,22 @@ Import values from config file.
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
+Default value of network is **test-net**, you can change its value to select mainnet or testnet
+
 .. code-block:: python
     
-    user = cfg['testnet']['rkuser']
-    password = cfg['testnet']['passwd']
+    network = cfg['testnet']                    #network variable to store the network that you want to access
+
+    if (network==cfg['testnet']):
+
+        url = cfg['testnet']['url']
+        chain = cfg['testnet']['chain']
+        
+    else:
+
+        url = cfg['mainnet']['url']
+        chain = cfg['mainnet']['chain']
+
 
 Now we have node authentication credentials.
 
@@ -129,7 +152,7 @@ It will return transaction hex of the raw transaction.
 
 **4. Sign raw transaction**
 
-You have to pass these three arguments to the createRawTransaction function call:
+You have to pass these three arguments to the signRawTransaction function call:
 
 * Transaction hex of the raw transaction
 * Private key to sign raw transaction
@@ -149,7 +172,7 @@ It will return signed transaction hex of the raw transaction.
 
 **5. Send raw transaction**
 
-You have to pass these three arguments to the createRawTransaction function call:
+You have to pass these three arguments to the sendRawTransaction function call:
 
 * Signed transaction hex of the raw transaction 
 

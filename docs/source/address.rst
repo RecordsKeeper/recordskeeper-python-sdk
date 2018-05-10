@@ -25,21 +25,32 @@ Import these python libraries first to get started with the functionality.
 Create Connection
 -----------------
 
-Entry point for accessing Transaction class resources.
+Entry point for accessing Address class resources.
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
 .. code-block:: python
-
+    
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-    url = cfg['testnet']['url']
-    chain = cfg['testnet']['chain']
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
 
-Node we have an entry point to get started.
+.. code-block:: python
 
+    network = cfg['testnet']                    #network variable to store the network that you want to access
+
+    if (network==cfg['testnet']):
+
+        url = cfg['testnet']['url']
+        chain = cfg['testnet']['chain']
+        
+    else:
+
+        url = cfg['mainnet']['url']
+        chain = cfg['mainnet']['chain']
+    
 
 Node Authentication
 -------------------
@@ -49,15 +60,27 @@ Import values from config file.
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
+
 .. code-block:: python
     
-    user = cfg['testnet']['rkuser']
-    password = cfg['testnet']['passwd']
+    network = cfg['testnet']                    #network variable to store the network that you want to access
+
+    if (network==cfg['testnet']):
+
+        url = cfg['testnet']['url']
+        chain = cfg['testnet']['chain']
+        
+    else:
+
+        url = cfg['mainnet']['url']
+        chain = cfg['mainnet']['chain']
+
 
 Now we have node authentication credentials.
 
 Address Class
------------------
+-------------
 
 .. class:: Address
 
@@ -79,7 +102,47 @@ getAddress() function is used to generate a new wallet address.
 It will return a new address of the wallet.
 
 
-**2. List all addresses and no of addresses on the node's wallet**
+**2. Generate a new multisignature address**
+
+You have to pass these two arguments to the getMultisigAddress function call:
+
+* nrequired: to pass the no of signatures that are must to sign a transaction
+* key: pass any no of comma-seperated public addresses that are to be used with this multisig address as a single variable 
+
+getMultisigAddress() function is used to generate a new multisignature address.
+
+.. code-block:: python
+
+    getMultisigAddress(nrequired, key)  
+
+    newAddress = getMultisigAddress(nrequired, key)          #getMultisigAddress() function call   
+
+    print newAddress                           # prints a new address
+
+It will return a new multisignature address on RecordsKeeper Blockchain.
+
+
+**3. Generate a new multisignature address on the node's wallet**
+
+You have to pass these two arguments to the getMultisigWalletAddress function call:
+
+* nrequired: to pass the no of signatures that are must to sign a transaction
+* key: pass any no of comma-seperated public addresses that are to be used with this multisig address as a single variable
+
+getMultisigWalletAddress() function is used to generate a new wallet address.
+
+.. code-block:: python
+
+    getMultisigWalletAddress(nrequired, key)  
+
+    newAddress = getMultisigWalletAddress(nrequired, key)    #getMultisigWalletAddress() function call   
+
+    print newAddress                           #prints a new address
+
+It will return a new multisignature address on the wallet.
+
+
+**4. List all addresses and no of addresses on the node's wallet**
 
 retrieveAddresses() function is used to list all addresses and no of addresses on the node's wallet.
 
@@ -93,7 +156,8 @@ retrieveAddresses() function is used to list all addresses and no of addresses o
 
 It will return all the addresses and the count of the addresses on the wallet.
 
-**3. Check validity of the address**
+
+**5. Check validity of the address**
 
 You have to pass address as argument to the checkifValid function call:
 
@@ -111,7 +175,7 @@ checkifValid() function is used to check validity of a particular address.
 It will return if an address is valid or not.
 
 
-**4. Check if given address has mining permission or not**
+**6. Check if given address has mining permission or not**
 
 You have to pass address as argument to the checkifMineAllowed function call:
 
@@ -129,7 +193,7 @@ checkifMineAllowed() function is used to sign raw transaction by passing transac
 It will return if mining permission is allowed or not.
 
 
-**5. Check address balance on a particular node**
+**7. Check address balance on a particular node**
 
 You have to pass address as argument to the checkifMineAllowed function call:
 
@@ -146,3 +210,20 @@ checkBalance() function is used to check the balance of the address.
 
 It will return the balance of the address on RecordsKeeper Blockchain.
 
+
+**8. Import a non-wallet address on RecordsKeeeper Blockchain**
+
+You have to pass address as argument to the importAddress function call:
+
+* Address: non-wallet address to import on a particular node
+
+importAddress() function is used to check the balance of the address. 
+
+.. code-block:: python
+
+    importAddress(public_address)
+    response = importAddress(public_address)     #importAddress() function call
+  
+    print response    # prints response
+
+It will return the response of the importAddress() function call.

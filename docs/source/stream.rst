@@ -31,15 +31,26 @@ Entry point for accessing Stream class resources.
 * Chain-name: chain name
 
 .. code-block:: python
-
+    
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-    url = cfg['testnet']['url']
-    chain = cfg['testnet']['chain']
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
 
-Node we have an entry point to get started.
+.. code-block:: python
 
+    network = cfg['testnet']                    #network variable to store the network that you want to access
+
+    if (network==cfg['testnet']):
+
+        url = cfg['testnet']['url']
+        chain = cfg['testnet']['chain']
+        
+    else:
+
+        url = cfg['mainnet']['url']
+        chain = cfg['mainnet']['chain']
+    
 
 Node Authentication
 -------------------
@@ -49,10 +60,22 @@ Import values from config file.
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
+
 .. code-block:: python
     
-    user = cfg['testnet']['rkuser']
-    password = cfg['testnet']['passwd']
+    network = cfg['testnet']                    #network variable to store the network that you want to access
+
+    if (network==cfg['testnet']):
+
+        url = cfg['testnet']['url']
+        chain = cfg['testnet']['chain']
+        
+    else:
+
+        url = cfg['mainnet']['url']
+        chain = cfg['mainnet']['chain']
+
 
 Now we have node authentication credentials.
 
@@ -145,7 +168,7 @@ You have to pass these two arguments to the verifyWithKey function call:
 
 It will return the key value, hexdata, raw data and transaction id of the published item.
 
-**5. Verify an item on a particular stream of RecordsKeeper Blockchain**
+**5. Verify an data item on a particular stream of RecordsKeeper Blockchain**
 
 You have to pass these three arguments to the verifyWithKey function call:
 
@@ -161,3 +184,23 @@ You have to pass these three arguments to the verifyWithKey function call:
     print result     #prints if verification is successful or not
 
 It will return the result if verification is successful or not.
+
+
+**6. Retrieve data items on a particular stream of RecordsKeeper Blockchain**
+
+You have to pass these two arguments to the verifyWithKey function call:
+
+* Stream name: which you want to access
+* Count: count of items which will be queried
+
+.. code-block:: python
+
+    retrieveItems(stream, count)
+    address, key_value, raw_data, txid = retrieveItems(stream, count)
+
+    print address     #prints address of the publisher of the item
+    print key_value   #prints key value of the stream itme
+    print raw_data    #prints raw data published
+    print txid        #prints tx id of the item published 
+
+It will return the address, key value, data and transaction id of the stream item published.

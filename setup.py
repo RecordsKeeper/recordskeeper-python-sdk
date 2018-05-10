@@ -12,16 +12,16 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 requires = []
 
 setup(
-      name='pyrklib',
-      version='0.0.1',
-      description='RecordsKeeper Pyhton library',
+      name='recordskeeper_python_lib',
+      version='0.0.2',
+      description='RecordsKeeper Python library',
       long_description=README,
       long_description_content_type='text/markdown',
       classifiers=[
           "Programming Language :: Python"
       ],
       url='https://github.com/RecordsKeeper/recordskeeper-python-sdk',
-      keywords='recordskeeper',
+      keywords='recordskeeper, python',
       packages=find_packages(),
       zip_safe=False,
       install_requires=requires,

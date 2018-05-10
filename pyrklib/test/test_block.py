@@ -1,6 +1,6 @@
 import unittest
 import yaml
-import pyrklib
+from pyrklib import block
 from pyrklib.block import Block
 
 import sys
@@ -9,14 +9,14 @@ import sys
 with open("config.yaml", 'r') as ymlfile:
 	cfg = yaml.load(ymlfile)
 
+net = block.network
 
 class BlockTest(unittest.TestCase):
-
 
     def test_block_info(self):
 
         miner = Block.blockinfo("100")[2]  
-        self.assertEqual(miner,'n2gNFB8oz4qfmUKCsfwqLo8ineWfocpNMk')
+        self.assertEqual(miner, net['mainaddress'])
         
         size = Block.blockinfo("100")[3]
         self.assertEqual(size, 300)
@@ -31,7 +31,7 @@ class BlockTest(unittest.TestCase):
     def test_retrieveBlocks(self):
 
         miner = Block.retrieveBlocks("10-20")[1][1]
-        self.assertEqual(miner, "n2gNFB8oz4qfmUKCsfwqLo8ineWfocpNMk")
+        self.assertEqual(miner, net['mainaddress'])
 
         blocktime = Block.retrieveBlocks("10-20")[2][2]
         self.assertEqual(blocktime,1522831624)

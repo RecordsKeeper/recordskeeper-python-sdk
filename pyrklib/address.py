@@ -19,12 +19,23 @@ import binascii
 with open("config.yaml", 'r') as ymlfile:
 	cfg = yaml.load(ymlfile)
 
+network = cfg['testnet']				#network variable to store the netwrok that you want to access
 
-url = cfg['testnet']['url']
-user = cfg['testnet']['rkuser']
-password = cfg['testnet']['passwd']
-chain = cfg['testnet']['chain']
+if (network==cfg['testnet']):
 
+	url = cfg['testnet']['url']
+	user = cfg['testnet']['rkuser']
+	password = cfg['testnet']['passwd']
+	chain = cfg['testnet']['chain']
+	
+
+else:
+
+	url = cfg['mainnet']['url']
+	user = cfg['mainnet']['rkuser']
+	password = cfg['mainnet']['passwd']
+	chain = cfg['mainnet']['chain']
+	
 
 #Address class to access address related functions
 class Address:

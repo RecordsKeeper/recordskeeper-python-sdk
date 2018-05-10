@@ -1,7 +1,7 @@
 import unittest
 import yaml
 import binascii
-from pyrklib import *
+from pyrklib import assets
 from pyrklib.assets import Assets
 
 import sys
@@ -9,13 +9,14 @@ import sys
 with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
 
+net = assets.network
 
 class AssetsTest(unittest.TestCase):
 
 
     def test_createasset(self):
         
-        txid = Assets.createAsset("mmLF3nuSPpPDiJgUw1gBqNhvoPjZLPMdFu", "xyz", 100)
+        txid = Assets.createAsset(net['validaddress'], "xyz", 100)
         self.assertEqual(txid, None)
 
     def test_retrieveassets(self):

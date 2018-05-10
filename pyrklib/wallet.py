@@ -12,6 +12,9 @@ from requests.auth import HTTPBasicAuth
 import yaml
 import sys
 import binascii
+from pyrklib import *
+from pyrklib.wallet import Wallet
+
 
 """ Entry point for accessing Wallet class resources.
 

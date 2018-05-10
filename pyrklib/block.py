@@ -19,10 +19,25 @@ import sys
 with open("config.yaml", 'r') as ymlfile:
 	cfg = yaml.load(ymlfile)
 
-url = cfg['testnet']['url']
-user = cfg['testnet']['rkuser']
-password = cfg['testnet']['passwd']
-chain = cfg['testnet']['chain']
+"""Default network is assigned to test-network, change its value to select mainnet"""
+
+network = cfg['testnet']					#network variable to store the networrk that you want to access
+
+if (network==cfg['testnet']):
+
+	url = cfg['testnet']['url']
+	user = cfg['testnet']['rkuser']
+	password = cfg['testnet']['passwd']
+	chain = cfg['testnet']['chain']
+	
+
+else:
+
+	url = cfg['mainnet']['url']
+	user = cfg['mainnet']['rkuser']
+	password = cfg['mainnet']['passwd']
+	chain = cfg['mainnet']['chain']
+	
 
 
 """Block class to access block information"""

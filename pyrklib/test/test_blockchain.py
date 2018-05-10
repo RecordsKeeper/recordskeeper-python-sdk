@@ -1,7 +1,7 @@
 import unittest
 import yaml
 import binascii
-from pyrklib import *
+from pyrklib import blockchain
 from pyrklib.blockchain import Blockchain
 
 import sys
@@ -9,19 +9,20 @@ import sys
 with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
 
+net = blockchain.network
 
 class BlockchainTest(unittest.TestCase):
 
     def test_getchaininfo(self):
         
         chainname = Blockchain.getChainInfo()[7]
-        self.assertEqual(chainname, "recordskeeper-test")
+        self.assertEqual(chainname, net['chain'])
 
         rootstream = Blockchain.getChainInfo()[2]
         self.assertEqual(rootstream, "root")
 
         rpcport = Blockchain.getChainInfo()[5]
-        self.assertEqual(rpcport, 8378)
+        self.assertEqual(rpcport, net['port'])
 
         networkport = Blockchain.getChainInfo()[4]
         self.assertEqual(networkport, 8379)

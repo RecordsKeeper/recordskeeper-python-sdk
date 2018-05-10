@@ -67,13 +67,13 @@ Default value of network is **Test-net**, you can change its value to select mai
 
     if (network==cfg['testnet']):
 
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
+        user = cfg['testnet']['rkuser']
+        password = cfg['testnet']['passwd']
         
     else:
 
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
+        user = cfg['mainnet']['rkuser']
+        password = cfg['mainnet']['passwd']
 
 
 Now we have node authentication credentials.

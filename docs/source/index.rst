@@ -13,7 +13,7 @@ package manager for Python.
 
 .. code-block:: bash
 
-    pip install recordskeeper
+    pip install recordskeeper-python-lib
 
 Compatibility
 -------------

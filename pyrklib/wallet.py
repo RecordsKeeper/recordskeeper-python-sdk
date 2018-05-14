@@ -12,9 +12,6 @@ from requests.auth import HTTPBasicAuth
 import yaml
 import sys
 import binascii
-from pyrklib import *
-from pyrklib.wallet import Wallet
-
 
 """ Entry point for accessing Wallet class resources.
 
@@ -23,11 +20,25 @@ from pyrklib.wallet import Wallet
 with open("config.yaml", 'r') as ymlfile:
 	cfg = yaml.load(ymlfile)
 
-url = cfg['testnet']['url']
-user = cfg['testnet']['rkuser']
-password = cfg['testnet']['passwd']
-chain = cfg['testnet']['chain']
+"""Default network is assigned to test-network, change its value to select mainnet"""
 
+network = cfg['testnet']					#network variable to store the networrk that you want to access
+
+if (network==cfg['testnet']):
+
+	url = cfg['testnet']['url']
+	user = cfg['testnet']['rkuser']
+	password = cfg['testnet']['passwd']
+	chain = cfg['testnet']['chain']
+	
+
+else:
+
+	url = cfg['mainnet']['url']
+	user = cfg['mainnet']['rkuser']
+	password = cfg['mainnet']['passwd']
+	chain = cfg['mainnet']['chain']
+	
 
 #Wallet class to access wallet related functions
 class Wallet:
@@ -50,6 +61,7 @@ class Wallet:
 
 		public_address = response_json[0]['result'][0]['address']			# returns public address of the wallet
 		private_key = response_json[0]['result'][0]['privkey']				# returns private key of the wallet
+		public_key = response_json[0]['result'][0]['pubkey']					# returns public key of the wallet
 
 		def importAddress(public_address):							#importAddress() function call
 
@@ -69,9 +81,10 @@ class Wallet:
 			return result;
 
 		import_address = importAddress(public_address)
-		return public_address, private_key;							#returns public and private key
+		
+		return public_address, private_key, public_key;				#returns public and private key
 
-	#public_address, private_key = createWallet()					#call to function createWallet()	
+	#publicaddress, privatekey, publickey = createWallet()					#call to function createWallet()	
 
 
 	"""function to retrieve private key of a wallet on RecordsKeeper Blockchain"""
@@ -90,12 +103,235 @@ class Wallet:
 
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
+		result = response_json[0]['result']
+
+		if result is None:
+			private_key = response_json[0]['error']['message']
+
+		else:
+			private_key = response_json[0]['result']
+
+		return private_key;							#returns private key
+
+	#privkey = getPrivateKey(public_address)		#getPrivateKey() function call
+
+
+	"""function to retrieve wallet's information on RecordsKeeper Blockchain"""
+
+	def retrieveWalletinfo():							#retrieveWalletinfo() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "getwalletinfo",
+		      "params": [],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
 			
-		private_key = response_json[0]['result']
+		balance = response_json[0]['result']['balance']
+		tx_count = response_json[0]['result']['txcount']
+		unspent_tx = response_json[0]['result']['utxocount']
 
-		return private_key;												#returns private key
+		return balance, tx_count, unspent_tx;					#returns balance, tx count, unspent tx
 
-	#privkey = getPrivateKey(public_address)							#getPrivateKey() function call
+	#balance, tx_count, unspent_tx = retrieveWalletinfo()		#retrieveWalletinfo() function call
+
+
+	"""function to create wallet's backup on RecordsKeeper Blockchain"""
+
+	def backupWallet(filename):						#backupWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "backupwallet",
+		      "params": [filename],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		if result is None:
+
+			res = "Backup successful!"
+
+		else:
+
+			res = response_json[0]['error']['message']
+
+		return res;								#returns result
+
+	#result = backupWallet(filename)			#backupWallet() function call
+
+
+	"""function to import wallet's backup on RecordsKeeper Blockchain"""
+
+	def importWallet(filename):					#importWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "importwallet",
+		      "params": [filename],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		if result is None:
+
+			res = "Wallet is successfully imported"
+
+		else:
+
+			res = response_json[0]['error']['message']
+
+		return res;								#returns result
+
+
+	#result = importWallet(filename)			#importWallet() function call
+
+
+	"""function to dump wallet on RecordsKeeper Blockchain"""
+
+	def dumpWallet(filename):					#dumpWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "dumpwallet",
+		      "params": [filename],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		if result is None:
+
+			res = "Wallet is successfully dumped"
+
+		else:
+
+			res = response_json[0]['error']['message']
+
+		return res;								#returns result
+
+	#result = dumpWallet(filename)				#dumpWallet() function call
+
+
+	"""function to lock wallet on RecordsKeeper Blockchain"""
+
+	def lockWallet(password):					#lockWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "encryptwallet",
+		      "params": [password],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		if result is None:
+
+			res = "Wallet is successfully encrypted."
+
+		else:
+
+			res = response_json[0]['error']['message']
+
+		return res;								#returns result
+
+	#result = lockWallet(password)				#lockWallet() function call
+
+	"""function to unlock wallet on RecordsKeeper Blockchain"""
+
+	def unlockWallet(password, unlocktime):				#unlockWallet() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "walletpassphrase",
+		      "params": [password, unlocktime],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		if result is None:
+
+			res = "Wallet is successfully unlocked."
+
+		else:
+
+			res = response_json[0]['error']['message']
+
+		return res;								#returns result
+
+	#result = unlockWallet()					#unlockWallet() function call
+
+
+	"""function to change password for wallet on RecordsKeeper Blockchain"""
+
+	def changeWalletPassword(old_password, new_password):		#changeWalletPassword() function call
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		 	{ "method": "walletpassphrasechange",
+		      "params": [old_password, new_password],
+		      "jsonrpc": "2.0",
+		      "id": "curltext",
+		      "chain_name": chain
+		    }]
+
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+			
+		result = response_json[0]['result']
+
+		if result is None:
+
+			res = "Password successfully changed!"
+
+		else:
+
+			res = response_json[0]['error']['message']
+
+		return res;								#returns result
+
+	#result = changeWalletPassword(old_password, new_password)			#changeWalletPassword() function call
 
 
 	"""function to sign message on RecordsKeeper Blockchain"""
@@ -149,172 +385,3 @@ class Wallet:
 		return validity;										#returns validity
 
 	#validity = verifyMessage(address, signedMessage, message)	#verifyMessage() function call
-
-
-	"""function to retrieve wallet's information on RecordsKeeper Blockchain"""
-
-	def retrieveWalletinfo():							#retrieveWalletinfo() function call
-
-		headers = { 'content-type': 'application/json'}
-
-		payload = [
-		 	{ "method": "getwalletinfo",
-		      "params": [],
-		      "jsonrpc": "2.0",
-		      "id": "curltext",
-		      "chain_name": chain
-		    }]
-
-		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-		response_json = response.json()
-			
-		balance = response_json[0]['result']['balance']
-		tx_count = response_json[0]['result']['txcount']
-		unspent_tx = response_json[0]['result']['utxocount']
-
-		return balance, tx_count, unspent_tx;					#returns balance, tx count, unspent tx
-
-	#balance, tx_count, unspent_tx = retrieveWalletinfo()		#retrieveWalletinfo() function call
-
-
-	"""function to create wallet's backup on RecordsKeeper Blockchain"""
-
-	def backupWallet(filename):						#backupWallet() function call
-
-		headers = { 'content-type': 'application/json'}
-
-		payload = [
-		 	{ "method": "backupwallet",
-		      "params": [filename],
-		      "jsonrpc": "2.0",
-		      "id": "curltext",
-		      "chain_name": chain
-		    }]
-
-		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-		response_json = response.json()
-			
-		result = response_json[0]['result']
-
-		return result;								#returns result
-
-	#result = backupWallet(filename)				#backupWallet() function call
-
-
-	"""function to import wallet's backup on RecordsKeeper Blockchain"""
-
-	def importWallet(filename):						#importWallet() function call
-
-		headers = { 'content-type': 'application/json'}
-
-		payload = [
-		 	{ "method": "importwallet",
-		      "params": [filename],
-		      "jsonrpc": "2.0",
-		      "id": "curltext",
-		      "chain_name": chain
-		    }]
-
-		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-		response_json = response.json()
-			
-		result = response_json[0]['result']
-
-		return result;								#returns result
-
-	#result = importWallet(filename)				#importWallet() function call
-
-
-	"""function to dump wallet on RecordsKeeper Blockchain"""
-
-	def dumpWallet(filename):						#dumpWallet() function call
-
-		headers = { 'content-type': 'application/json'}
-
-		payload = [
-		 	{ "method": "dumpwallet",
-		      "params": [filename],
-		      "jsonrpc": "2.0",
-		      "id": "curltext",
-		      "chain_name": chain
-		    }]
-
-		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-		response_json = response.json()
-			
-		result = response_json[0]['result']
-
-		return result;								#returns result
-
-	#result = dumpWallet(filename)					#dumpWallet() function call
-
-
-	"""function to lock wallet on RecordsKeeper Blockchain"""
-
-	def locktWallet(password):					#lockWallet() function call
-
-		headers = { 'content-type': 'application/json'}
-
-		payload = [
-		 	{ "method": "encryptwallet",
-		      "params": [password],
-		      "jsonrpc": "2.0",
-		      "id": "curltext",
-		      "chain_name": chain
-		    }]
-
-		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-		response_json = response.json()
-			
-		result = response_json[0]['result']
-
-		return result;							#returns result
-
-	#result = lockWallet(password)				#lockWallet() function call
-
-	"""function to unlock wallet on RecordsKeeper Blockchain"""
-
-	def unlockWallet(password, unlocktime):				#unlockWallet() function call
-
-		headers = { 'content-type': 'application/json'}
-
-		payload = [
-		 	{ "method": "walletpassphrase",
-		      "params": [password, unlocktime],
-		      "jsonrpc": "2.0",
-		      "id": "curltext",
-		      "chain_name": chain
-		    }]
-
-		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-		response_json = response.json()
-			
-		result = response_json[0]['result']
-
-		return result;							#returns result
-
-	#result = unlockWallet()					#unlockWallet() function call
-
-
-	"""function to change password for wallet on RecordsKeeper Blockchain"""
-
-	def walletChangePassword(old_password, new_password):		#walletChangePassword() function call
-
-		headers = { 'content-type': 'application/json'}
-
-		payload = [
-		 	{ "method": "walletpassphrasechange",
-		      "params": [old_password, new_password],
-		      "jsonrpc": "2.0",
-		      "id": "curltext",
-		      "chain_name": chain
-		    }]
-
-		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-		response_json = response.json()
-			
-		result = response_json[0]['result']
-
-		return result;								#returns result
-
-	#result = walletChangePassword(old_password, new_password)			#walletChangePassword() function call

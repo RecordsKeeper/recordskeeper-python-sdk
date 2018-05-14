@@ -6,7 +6,7 @@ from pyrklib.blockchain import Blockchain
 
 import sys
 
-with open("config.yaml", 'r') as ymlfile:
+with open("test_config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
 
 net = blockchain.network

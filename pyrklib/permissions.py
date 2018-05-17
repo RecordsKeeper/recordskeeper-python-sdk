@@ -45,17 +45,21 @@ class Permissions:
 
 	"""function to grant permissions on RecordsKeeper Blockchain"""
 
-	def grantPermission(address, permissions):			#grantPermission() function definition
+	def grantPermission(self, address, permissions):			#grantPermission() function definition
+
+		self.address = address
+		self.permissions = permissions
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		         { "method": "grant",
-		          "params": [address, permissions],
+		          "params": [self.address, self.permissions],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
 		          }]
+
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 			
@@ -76,14 +80,17 @@ class Permissions:
 
 	"""function to revoke permissions on RecordsKeeper Blockchain"""
 
-	def revokePermission(address, permissions):		#revokePermission() function definition
+	def revokePermission(self, address, permissions):		#revokePermission() function definition
 
+
+		self.address = address
+		self.permissions = permissions
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "revoke",
-		      "params": [address, permissions],
+		      "params": [self.address, self.permissions],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain

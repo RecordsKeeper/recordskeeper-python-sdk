@@ -45,13 +45,17 @@ class Assets:
 	
 	"""function to create or issue an asset"""
 
-	def createAsset(address, asset_name, asset_qty):		#createAsset() function definition
+	def createAsset(self, address, asset_name, asset_qty):		#createAsset() function definition
 		
+		self.address = address
+		self.asset_name = asset_name
+		self.asset_qty = asset_qty
+
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		         { "method": "issue",
-		          "params": [address, asset_name, asset_qty],
+		          "params": [self.address, self.asset_name, self.asset_qty],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
@@ -69,7 +73,7 @@ class Assets:
 	
 	"""function to retrieve assets information"""
 
-	def retrieveAssets():								#retrieveAssets() function definition
+	def retrieveAssets(self):								#retrieveAssets() function definition
 
 		asset_name = []
 		issue_id = []

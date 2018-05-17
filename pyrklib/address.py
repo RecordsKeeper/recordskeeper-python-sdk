@@ -39,11 +39,10 @@ else:
 
 #Address class to access address related functions
 class Address:
+   		
+   	"""function to generate new address on the node's wallet"""
 
-
-	"""function to generate new address on the node's wallet"""
-
-	def getAddress():									#getAddress() function definition
+	def getAddress(self):									#getAddress() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -65,15 +64,20 @@ class Address:
 
 	"""function to generate a new multisignature address"""
 
-	def getMultisigAddress(nrequired, key):				#getMultisigAddress() function definition
+	def getMultisigAddress(self, nrequired, key):				#getMultisigAddress() function definition
+
+		self.nrequired = nrequired
+		self.key = key 
 
 		key_list = key.split(",")
+
+		self.key_list = key_list
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "createmultisig",
-		      "params": [nrequired, key_list],
+		      "params": [self.nrequired, self.key_list],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -98,15 +102,19 @@ class Address:
 
 	"""function to generate a new multisignature address on the node's wallet"""
 
-	def getMultisigWalletAddress(nrequired, key):		#getMultisigWalletAddress() function definition
+	def getMultisigWalletAddress(self, nrequired, key):		#getMultisigWalletAddress() function definition
+
+		self.nrequired = nrequired
+		self.key = key 
 
 		key_list = key.split(",")
+		self.key_list = key_list
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "addmultisigaddress",
-		      "params": [nrequired, key_list],
+		      "params": [self.nrequired, self.key_list],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -132,7 +140,7 @@ class Address:
 	"""function to list all addresses and no of addresses on the node's wallet"""
 
 
-	def retrieveAddresses():						#retrieveAddresses() function call
+	def retrieveAddresses(self):						#retrieveAddresses() function call
 
 		headers = { 'content-type': 'application/json'}
 
@@ -163,13 +171,15 @@ class Address:
 
 	"""function to check if given address is valid or not"""
 
-	def checkifValid(address):						#checkifValid() function definition
+	def checkifValid(self, address):						#checkifValid() function definition
 
+		self.address = address
+		
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "validateaddress",
-		      "params": [address],
+		      "params": [self.address],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -188,19 +198,20 @@ class Address:
 
 		return addressCheck;						#returns validity of address
 
-	#addressC = checkifValid(address)				#checkifValid() function call
-
-
+	#addressC = checkifValid('self', 'wGUjFtakjkZRNF1sYnDtd5Now6zEWUGcC')				#checkifValid() function call
+	
 	"""function to check if given address has mining permission or not"""
 
 
-	def checkifMineAllowed(address):				#checkifMineAllowed() function definition
+	def checkifMineAllowed(self, address):				#checkifMineAllowed() function definition
 
+		self.address = address
+		
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "validateaddress",
-		      "params": [address],
+		      "params": [self.address],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -226,13 +237,15 @@ class Address:
 
 	"""function to check node address balance on RecordsKeeper Blockchain"""
 
-	def checkBalance(address):					#checkBalance() function definition
+	def checkBalance(self, address):					#checkBalance() function definition
 
+		self.address = address
+		
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "getaddressbalances",
-		      "params": [address],
+		      "params": [self.address],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -249,12 +262,14 @@ class Address:
 
 	"""function to import address on RecordsKeeper Blockchain"""
 
-	def importAddress(public_address):				#importAddress() function call
+	def importAddress(self, public_address):				#importAddress() function call
+
+		self.public_address = public_address 
 
 		headers = { 'content-type': 'application/json'}
 		payload = [
 		    { "method": "importaddress",
-		      "params": [public_address, " ", False],
+		      "params": [self.public_address, " ", False],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -276,7 +291,7 @@ class Address:
 		else:
 
 			resp = 0
-
+			
 		return resp;
 
-	#import_address = importAddress("msCM5qQ32Tjc1ydEN1rpoJy4h3qxNPXU15")	#importAddress() function call
+	#import_address = importAddress(address)	#importAddress() function call

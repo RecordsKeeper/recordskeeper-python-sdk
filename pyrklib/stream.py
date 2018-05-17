@@ -38,20 +38,25 @@ else:
 	chain = cfg['mainnet']['chain']
 	
 
-
 """Stream class to access stream related functions"""
 
 class Stream:
 	
 	"""function to publish data into the stream"""
 
-	def publish(address, stream, key, data):				#publish function definition
+	def publish(self, address, stream, key, data):				#publish function definition
+		
+		datahex = binascii.hexlify(data)
+		self.address = address
+		self.stream = stream
+		self.key = key
+		self.datahex = datahex
 		
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		         { "method": "publishfrom",
-		          "params": [address,stream,key,data.encode('utf-8'). hex()],
+		          "params": [self.address, self.stream, self.key, self.datahex],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
@@ -69,17 +74,21 @@ class Stream:
 	
 	"""function to retrieve data against transaction id from the stream"""
 
-	def retrieve(stream, txid):								#retrieve() function definition
+	def retrieve(self, stream, txid):								#retrieve() function definition
+
+		self.stream = stream
+		self.txid = txid
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		         { "method": "getstreamitem",
-		          "params": [stream, txid],
+		          "params": [self.stream, self.txid],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
 		          }]
+
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
@@ -94,13 +103,16 @@ class Stream:
 
 	"""function to retrieve data against a particular publisher address"""
 
-	def retrieveWithAddress(stream, address):				#retrievewithAddress() function definition
+	def retrieveWithAddress(self, stream, address):				#retrievewithAddress() function definition
+
+		self.stream = stream
+		self.address = address
 
 		headers = { 'content-type': 'application/json'}
 				
 		payload = [
 		{ "method": "liststreampublisheritems",
-		"params": [stream, address],
+		"params": [self.stream, self.address],
 		"jsonrpc": "2.0",
 		"id": "curltext",
 		"chain_name": chain
@@ -122,13 +134,16 @@ class Stream:
 
 	"""function to retrieve data against a particular key value"""
 
-	def retrieveWithKey(stream, key):					#retrieveithkey() function definition
+	def retrieveWithKey(self, stream, key):					#retrieveithkey() function definition
+
+		self.stream = stream
+		self.key = key
 
 		headers = { 'content-type': 'application/json'}
 				
 		payload = [
 		{ "method": "liststreamkeyitems",
-		"params": [stream, key],
+		"params": [self.stream, self.key],
 		"jsonrpc": "2.0",
 		"id": "curltext",
 		"chain_name": chain
@@ -150,13 +165,17 @@ class Stream:
 
 	"""function to verify data on RecordsKeeper Blockchain"""
 
-	def verifyData(stream, data, count):				#verifyData() function definition
+	def verifyData(self, stream, data, count):				#verifyData() function definition
+
+		self.stream = stream
+		self.data = data
+		self.count = count
 
 		headers = { 'content-type': 'application/json'}
 				
 		payload = [
 		{ "method": "liststreamitems",
-		"params": [stream, False , count],
+		"params": [self.stream, False , self.count],
 		"jsonrpc": "2.0",
 		"id": "curltext",
 		"chain_name": chain
@@ -171,7 +190,7 @@ class Stream:
 			
 			result_data = response_json[0]['result'][i]['data']						#returns hex data
 
-			if type(result_data) is str:
+			if type(result_data) is unicode:
 
 				raw_data.append(binascii.unhexlify(result_data).decode('utf-8'))	#returns raw data
 				
@@ -193,13 +212,16 @@ class Stream:
 
 	"""function to list stream items on RecordsKeeper Blockchain"""
 
-	def retrieveItems(stream, count):				#retrieveItems() function definition
+	def retrieveItems(self, stream, count):				#retrieveItems() function definition
+
+		self.stream = stream
+		self.count = count
 
 		headers = { 'content-type': 'application/json'}
 				
 		payload = [
 		{ "method": "liststreamitems",
-		"params": [stream, False , count],
+		"params": [self.stream, False , self.count],
 		"jsonrpc": "2.0",
 		"id": "curltext",
 		"chain_name": chain

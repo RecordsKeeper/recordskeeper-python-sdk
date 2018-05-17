@@ -46,18 +46,24 @@ class Transaction:
 	 
 	"""function to send transaction on RecordsKeeper Blockchain"""
 
-	def sendTransaction(sender_address, reciever_address, data, amount):		#sendTransaction function definition
+	def sendTransaction(self, sender_address, reciever_address, data, amount):		#sendTransaction function definition
 		
-		data_hex = data.encode('utf-8'). hex()
+		data_hex = binascii.hexlify(data)
+
+		self.sender_address = sender_address
+		self.reciever_address = reciever_address
+		self.amount = amount
+		self.data_hex = data_hex
 		
 		headers = { 'content-type': 'application/json'}
 		payload = [
 		         { "method": "createrawsendfrom",
-		          "params": [sender_address, {reciever_address : amount}, [data_hex], "send"],
+		          "params": [self.sender_address, {self.reciever_address : self.amount}, [self.data_hex], "send"],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
 		          }]
+
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
@@ -73,12 +79,16 @@ class Transaction:
 
 	def createRawTransaction(sender_address, reciever_address, amount, data):		#createRawTransaction() function definition
 
-		datahex = data.encode('utf-8'). hex()
+		datahex = binascii.hexlify(data)
+		self.sender_address = sender_address
+		self.reciever_address = reciever_address
+		self.amount = amount
+		self.datahex = datahex
 
 		headers = { 'content-type': 'application/json'}
 		payload = [
 		         { "method": "createrawsendfrom",
-		          "params": [sender_address, {reciever_address : amount}, [datahex], ''],
+		          "params": [self.sender_address, {self.reciever_address : self.amount}, [self.datahex], ''],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
@@ -97,17 +107,20 @@ class Transaction:
 
 	"""function to sign transaction on RecordsKeeper Blockchain"""
 
-	def signRawTransaction(txHex, private_key):							#signRawTransaction() function definition		
+	def signRawTransaction(self, txHex, private_key):							#signRawTransaction() function definition		
 
 		priv_key = []
 
 		priv_key.append(private_key)
 
+		self.txHex = txHex
+		self.priv_key = priv_key
+
 		headers = { 'content-type': 'application/json'}
 		
 		payload = [
 		         { "method": "signrawtransaction",
-		          "params": [txHex, [], priv_key],
+		          "params": [self.txHex, [], self.priv_key],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
@@ -126,11 +139,13 @@ class Transaction:
 
 	def sendRawTransaction(signed_txHex):				#sendRawTransaction function definition
 
+		self.signed_txHex = signed_txHex
+
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		         { "method": "sendrawtransaction",
-		          "params": [signed_txHex],
+		          "params": [self.signed_txHex],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
@@ -155,9 +170,15 @@ class Transaction:
 
 	"""function to send signed transaction on RecordsKeeper Blockchain"""
 
-	def sendSignedTransaction(sender_address, reciever_address, amount, private_key, data):									#sendSignedTransaction function definition
+	def sendSignedTransaction(self, sender_address, reciever_address, amount, private_key, data):									#sendSignedTransaction function definition
 
-		datahex = data.encode('utf-8'). hex()
+		datahex = binascii.hexlify(data)
+
+		self.sender_address = sender_address
+		self.reciever_address = reciever_address
+		self.amount = amount
+		self.private_key = private_key
+		self.datahex = datahex
 
 		def createRawTransaction(sender_address, reciever_address, amount, datahex):
 
@@ -165,7 +186,7 @@ class Transaction:
 
 			payload = [
 			         { "method": "createrawsendfrom",
-			          "params": [sender_address, {reciever_address : amount}, [datahex], ""],
+			          "params": [self.sender_address, {self.reciever_address : self.amount}, [self.datahex], ""],
 			          "jsonrpc": "2.0",
 			          "id": "curltext",
 			          "chain_name": chain
@@ -186,7 +207,7 @@ class Transaction:
 
 			payload = [
 			         { "method": "signrawtransaction",
-			          "params": [txHex, [], [private_key]],
+			          "params": [txHex, [], [self.private_key]],
 			          "jsonrpc": "2.0",
 			          "id": "curltext",
 			          "chain_name": chain
@@ -203,7 +224,6 @@ class Transaction:
 		def sendRawTransaction(signed_tx_hex):							
 
 			headers = { 'content-type': 'application/json'}
-
 
 			payload = [
 			         { "method": "sendrawtransaction",
@@ -227,14 +247,16 @@ class Transaction:
 
 	"""function to retrieve transaction on RecordsKeeper Blockchain"""
 
-	def retrieveTransaction(tx_id):						#retrieveTransaction function definition
+	def retrieveTransaction(self, tx_id):						#retrieveTransaction function definition
 		
+		self.tx_id = tx_id
+
 		headers = { 'content-type': 'application/json'}
 
 
 		payload = [
 		         { "method": "getrawtransaction",
-		          "params": [tx_id, 1],
+		          "params": [self.tx_id, 1],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
@@ -255,14 +277,17 @@ class Transaction:
 	
 	"""function to calculate transaction's fee on RecordsKeeper Blockchain"""
 
-	def getFee(address, tx_id):					#getFee() function definition
+	def getFee(self, address, tx_id):					#getFee() function definition
+
+		self.address = address
+		self.tx_id = tx_id
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 
 		         { "method": "getaddresstransaction",
-		          "params": [address, tx_id, True],
+		          "params": [self.address, self.tx_id, True],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain

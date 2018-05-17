@@ -45,7 +45,7 @@ class Wallet:
 
 	"""function to create wallet on RecordsKeeper Blockchain"""
 
-	def createWallet():										#createWallet() function definition
+	def createWallet(self):										#createWallet() function definition
 		
 		headers = { 'content-type': 'application/json'}
 
@@ -89,13 +89,15 @@ class Wallet:
 
 	"""function to retrieve private key of a wallet on RecordsKeeper Blockchain"""
 
-	def getPrivateKey(public_address):								#getPrivateKey() function definition
+	def getPrivateKey(self, public_address):								#getPrivateKey() function definition
+
+		self.public_address = public_address
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "dumpprivkey",
-		      "params": [public_address],
+		      "params": [self.public_address],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -118,7 +120,7 @@ class Wallet:
 
 	"""function to retrieve wallet's information on RecordsKeeper Blockchain"""
 
-	def retrieveWalletinfo():							#retrieveWalletinfo() function call
+	def retrieveWalletinfo(self):							#retrieveWalletinfo() function call
 
 		headers = { 'content-type': 'application/json'}
 
@@ -144,13 +146,15 @@ class Wallet:
 
 	"""function to create wallet's backup on RecordsKeeper Blockchain"""
 
-	def backupWallet(filename):						#backupWallet() function call
+	def backupWallet(self, filename):						#backupWallet() function call
+
+		self.filename = filename
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "backupwallet",
-		      "params": [filename],
+		      "params": [self.filename],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -176,13 +180,15 @@ class Wallet:
 
 	"""function to import wallet's backup on RecordsKeeper Blockchain"""
 
-	def importWallet(filename):					#importWallet() function call
+	def importWallet(self, filename):					#importWallet() function call
+
+		self.filename = filename
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "importwallet",
-		      "params": [filename],
+		      "params": [self.filename],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -209,13 +215,15 @@ class Wallet:
 
 	"""function to dump wallet on RecordsKeeper Blockchain"""
 
-	def dumpWallet(filename):					#dumpWallet() function call
+	def dumpWallet(self, filename):					#dumpWallet() function call
+
+		self.filename = filename
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "dumpwallet",
-		      "params": [filename],
+		      "params": [self.filename],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -241,13 +249,14 @@ class Wallet:
 
 	"""function to lock wallet on RecordsKeeper Blockchain"""
 
-	def lockWallet(password):					#lockWallet() function call
+	def lockWallet(self, password):					#lockWallet() function call
 
+		self.password = password
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "encryptwallet",
-		      "params": [password],
+		      "params": [self.password],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -272,13 +281,16 @@ class Wallet:
 
 	"""function to unlock wallet on RecordsKeeper Blockchain"""
 
-	def unlockWallet(password, unlocktime):				#unlockWallet() function call
+	def unlockWallet(self, password, unlocktime):				#unlockWallet() function call
+
+		self.password = password
+		self.unlocktime = unlocktime
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "walletpassphrase",
-		      "params": [password, unlocktime],
+		      "params": [self.password, self.unlocktime],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -304,13 +316,16 @@ class Wallet:
 
 	"""function to change password for wallet on RecordsKeeper Blockchain"""
 
-	def changeWalletPassword(old_password, new_password):		#changeWalletPassword() function call
+	def changeWalletPassword(self, old_password, new_password):		#changeWalletPassword() function call
+
+		self.old_password = old_password
+		self.new_password = new_password
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "walletpassphrasechange",
-		      "params": [old_password, new_password],
+		      "params": [self.old_password, self.new_password],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -336,13 +351,16 @@ class Wallet:
 
 	"""function to sign message on RecordsKeeper Blockchain"""
 
-	def signMessage(private_key, message):						#signMessage() function call
+	def signMessage(self, private_key, message):						#signMessage() function call
+
+		self.private_key = private_key
+		self.message = message
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "signmessage",
-		      "params": [private_key, message],
+		      "params": [self.private_key, self.message],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
@@ -360,13 +378,17 @@ class Wallet:
 
 	"""function to verify message on RecordsKeeper Blockchain"""
 
-	def verifyMessage(address, signedMessage, message):			#verifyMessage() function call
+	def verifyMessage(self, address, signedMessage, message):			#verifyMessage() function call
+
+		self.address = address
+		self.signedmessage = signedmessage
+		self.message = message
 
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
 		 	{ "method": "verifymessage",
-		      "params": [address, signedMessage, message],
+		      "params": [self.address, self.signedMessage, self.message],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain

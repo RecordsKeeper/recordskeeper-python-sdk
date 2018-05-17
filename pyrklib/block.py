@@ -46,13 +46,15 @@ class Block:
 	
 	"""function to get a particular block"""
 
-	def blockinfo(block_height):											#blockinfo function definition
+	def blockinfo(self,block_height):											#blockinfo function definition
 		
+		self.block_height = block_height
+
 		headers = { 'content-type': 'application/json'}
 		
 		payload = [
 		         { "method": "getblock",
-		          "params": [block_height],
+		          "params": [self.block_height],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
@@ -87,8 +89,10 @@ class Block:
 
 	"""function to retrieve blocks on RecordsKeeper Blockchain"""
 
-	def retrieveBlocks(block_range):		#retrieveBlocks() function definition
+	def retrieveBlocks(self, block_range):		#retrieveBlocks() function definition
 		
+		self.block_range = block_range
+
 		blockhash = []
 		miner = []
 		blocktime = []
@@ -98,11 +102,12 @@ class Block:
 
 		payload = [
 		         { "method": "listblocks",
-		          "params": [block_range],
+		          "params": [self.block_range],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
 		          }]
+		          
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 

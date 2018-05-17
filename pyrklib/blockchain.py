@@ -47,7 +47,7 @@ class Blockchain:
 
 	"""function to retrieve RecordsKeeper Blockchain parameters"""
 
-	def getChainInfo():								#getChainInfo() function definition
+	def getChainInfo(self):								#getChainInfo() function definition
 		
 		headers = { 'content-type': 'application/json'}
 
@@ -79,7 +79,7 @@ class Blockchain:
 
 	"""function to retrieve node's information on RecordsKeeper Blockchain"""
 
-	def getNodeInfo():								#getNodeInfo() function definition
+	def getNodeInfo(self):								#getNodeInfo() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -107,7 +107,7 @@ class Blockchain:
 
 	"""function to retrieve node's permissions on RecordsKeeper Blockchain"""
 
-	def permissions():							#permissions() function definition
+	def permissions(self):							#permissions() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -136,7 +136,7 @@ class Blockchain:
 
 	"""function to retrieve pending transactions information on RecordsKeeper Blockchain"""
 
-	def getpendingTransactions():						#getpendingTransactions() function call
+	def getpendingTransactions(self):						#getpendingTransactions() function call
 
 		headers = { 'content-type': 'application/json'}
 
@@ -178,7 +178,7 @@ class Blockchain:
 
 	"""function to check node's total balance """
 
-	def checkNodeBalance():							#checkNodeBalance() function definition
+	def checkNodeBalance(self):							#checkNodeBalance() function definition
 
 		headers = { 'content-type': 'application/json'}
 

@@ -44,11 +44,17 @@ Import values from config file.
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-Default value of network is **test-net**, you can change its value to select mainnet or testnet
+.. note::
+    
+    * Set this **network** value to change the network-type
+    * Default network is **Test network**, you can change its value to select mainnet or testnet
+
 
 .. code-block:: python
     
     network = cfg['testnet']                    #network variable to store the network that you want to access
+
+.. code-block:: python 
 
     if (network==cfg['testnet']):
 

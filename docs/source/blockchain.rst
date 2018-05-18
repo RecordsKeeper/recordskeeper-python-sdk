@@ -35,11 +35,17 @@ Entry point for accessing Blockchain class resources.
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-Default value of network is **Test network**, you can change its value to select mainnet or testnet
+.. note::
+    
+    * Set this **network** value to change the network-type
+    * Default network is **Test network**, you can change its value to select mainnet or testnet
+
 
 .. code-block:: python
 
     network = cfg['testnet']                    #network variable to store the network that you want to access
+
+.. code-block:: python 
 
     if (network==cfg['testnet']):
 

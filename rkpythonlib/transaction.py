@@ -12,6 +12,7 @@ from requests.auth import HTTPBasicAuth
 import yaml
 import sys
 import binascii
+import codecs
 
 
 """ Entry point for accessing Transaction class resources.
@@ -47,6 +48,7 @@ class Transaction:
 	"""function to send transaction on RecordsKeeper Blockchain"""
 
 	def sendTransaction(self, sender_address, reciever_address, data, amount):		#sendTransaction function definition
+	
 		
 		data_hex = binascii.hexlify(data)
 

@@ -16,7 +16,6 @@ import codecs
 
 
 """ Entry point for accessing Transaction class resources.
-
 	Import values from config file."""
 
 with open("config.yaml", 'r') as ymlfile:
@@ -50,7 +49,7 @@ class Transaction:
 	def sendTransaction(self, sender_address, reciever_address, data, amount):		#sendTransaction function definition
 	
 		
-		data_hex = binascii.hexlify(data)
+		data_hex = data.encode('utf-8'). hex()
 
 		self.sender_address = sender_address
 		self.reciever_address = reciever_address
@@ -81,7 +80,7 @@ class Transaction:
 
 	def createRawTransaction(sender_address, reciever_address, amount, data):		#createRawTransaction() function definition
 
-		datahex = binascii.hexlify(data)
+		datahex = data.encode('utf-8'). hex()
 		self.sender_address = sender_address
 		self.reciever_address = reciever_address
 		self.amount = amount
@@ -174,8 +173,7 @@ class Transaction:
 
 	def sendSignedTransaction(self, sender_address, reciever_address, amount, private_key, data):									#sendSignedTransaction function definition
 
-		datahex = binascii.hexlify(data)
-
+		datahex = data.encode('utf-8'). hex()
 		self.sender_address = sender_address
 		self.reciever_address = reciever_address
 		self.amount = amount

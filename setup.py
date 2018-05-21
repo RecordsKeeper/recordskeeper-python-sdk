@@ -12,7 +12,7 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 requires = ["requests", "green", "pyyaml"]
 
 setup(
-      name='rkpythonlib',
+      name='rklib3',
       version='0.1.0',
       description='RecordsKeeper Python library',
       long_description=README,

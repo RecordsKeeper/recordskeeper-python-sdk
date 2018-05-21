@@ -46,7 +46,7 @@ class Stream:
 
 	def publish(self, address, stream, key, data):				#publish function definition
 		
-		datahex = binascii.hexlify(data)
+		datahex = data.encode('utf-8'). hex()
 		self.address = address
 		self.stream = stream
 		self.key = key

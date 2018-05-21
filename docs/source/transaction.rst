@@ -106,7 +106,7 @@ sendTransaction() function is used to send transaction by passing reciever's add
 
 .. code-block:: python
 
-    sendTransaction(sender_address, reciever_address, amount)  
+    sendTransaction(sender_address, reciever_address, data, amount)  
 
     txid = sendTransaction(sender_address, reciever_address, amount)   
 
@@ -128,8 +128,8 @@ sendSignedTransaction() function is used to send transaction by passing reciever
 
 .. code-block:: python
 
-    sendSignedTransaction()  
-    transaction_id = sendSignedTransaction() 
+    sendSignedTransaction(sender_address, reciever_address, amount, private_key, data)  
+    transaction_id = sendSignedTransaction(sender_address, reciever_address, amount, private_key, data) 
   
     print transaction_id        # prints transaction id of the signed transaction
 
@@ -148,8 +148,8 @@ createRawTransaction() function is used to create raw transaction by passing rec
 
 .. code-block:: python
 
-    createRawTransaction(sender_address, reciever_address, amount)  
-    tx_hex = createRawTransaction(sender_address, reciever_address, amount) 
+    createRawTransaction(sender_address, reciever_address, amount, data)  
+    tx_hex = createRawTransaction(sender_address, reciever_address, amount, data) 
   
     print tx_hex      # prints transaction hex of the raw transaction
 

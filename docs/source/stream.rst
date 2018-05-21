@@ -107,9 +107,9 @@ The **data.hex()** will convert the data into a hex value
 
 .. code-block:: python
 
-    publish(address, stream, key, dataHex)   
+    publish(address, stream, key, data)   
 
-    txid = publish(address, stream, key, dataHex)    
+    txid = publish(address, stream, key, data)    
 
     print txid  # prints the transaction id of the data published
 
@@ -125,7 +125,7 @@ You have to pass these two arguments to the retrieve function call:
 
 .. code-block:: python
 
-    retrieve(stream, txid)  # call retrieve function with stream and txid as the required parameters
+    retrieve(stream, txid)                  # call retrieve function with stream and txid as the required parameters
     result = retrieve(stream, txid) 
   
     print result    #prints info of the transaction 
@@ -135,15 +135,15 @@ It will return the item's details like publisher address, key value, confirmatio
 
 **3. Retrieve an item against a particular publisher address**
 
-You have to pass these two arguments to the verifyWithAddress function call:
+You have to pass these two arguments to the retrieveWithAddress function call:
 
 * Stream name: which you want to access
 * Publisher address: address of the data publisher you want to verify
 
 .. code-block:: python
 
-    verifyWithKey(stream, address)
-    key,data, txid = verifyWithKey(stream, address)
+    retrieveWithAddress(stream, address)
+    key,data, txid = retrieveWithAddress(stream, address)
 
     raw_data = binascii.unhexlify(data).decode('utf-8')         # convert hex data into raw data
 
@@ -156,15 +156,15 @@ It will return the key value, hexdata, raw data and transaction id of the publis
 
 **4. Retrieve an item against a particular key value**
 
-You have to pass these two arguments to the verifyWithKey function call:
+You have to pass these two arguments to the retrieveWithKey function call:
 
 * Stream name: which you want to access
 * Key: key value of the published data you want to verify
 
 .. code-block:: python
 
-    verifyWithKey(stream, address)
-    publisher,data, txid = verifyWithKey(stream, address)
+    retrieveWithKey(stream, key)
+    publisher,data, txid = retrieveWithKey(stream, key)
 
     raw_data = binascii.unhexlify(data).decode('utf-8')         # convert hex data into raw data
 
@@ -177,7 +177,7 @@ It will return the key value, hexdata, raw data and transaction id of the publis
 
 **5. Verify an data item on a particular stream of RecordsKeeper Blockchain**
 
-You have to pass these three arguments to the verifyWithKey function call:
+You have to pass these three arguments to the retrieveWithKey function call:
 
 * Stream name: which you want to access
 * Data: against which you want to make a query

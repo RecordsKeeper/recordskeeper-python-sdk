@@ -2,14 +2,14 @@
 RecordsKeeper Python SDK
 ========================
 
-Python libraries for recordskeeper. The RecordsKeeper Python SDK provides access to the python libraries of `RecordsKeeper <https://github.com/RecordsKeeper/recordskeeper-core>`_.
+Python libraries for recordskeeper. The RecordsKeeper Python SDK provides access to the python libraries of `RecordsKeeper <https://github.com/RecordsKeeper/recordskeeper-python-sdk>`_.
 
 
 Installation
 ------------
 
 Install from `PyPI <https://pypi.python.org/pypi>`_ using `pip <http://www.pip-installer.org/en/latest/>`_, a
-package manager for Python.
+package manager for Python. There are two different packages for two different versions of python, for python2 version  
 
 .. code-block:: bash
 
@@ -21,8 +21,8 @@ Compatibility
 The SDK has been tested with Python 2.7.
 
 
-Libraries
----------
+Classes
+-------
 
 :ref:`genIndex`,
 :ref:`modindex`,
@@ -30,7 +30,7 @@ Libraries
 
 .. toctree::
    :maxdepth: 2
-   :caption: Libraries: 
+   :caption: Classes: 
  
    address
    assets

@@ -120,8 +120,8 @@ getPrivateKey() function is used to retrieve private key of the given address.
 
 .. code-block:: python
 
-    getPrivateKey()  
-    privkey = getPrivateKey() 
+    getPrivateKey(public_address)  
+    privkey = getPrivateKey(public_address) 
   
     print privkey        # prints private key of the given address
 

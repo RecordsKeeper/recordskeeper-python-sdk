@@ -400,8 +400,11 @@ class Wallet:
 		verifiedMessage = response_json[0]['result']
 
 		if verifiedMessage is True:
+
 			validity = "Yes, message is verified"
+		
 		else:
+			
 			validity = "No, signedMessage is not correct"
 
 		return validity;										#returns validity

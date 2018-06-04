@@ -97,9 +97,9 @@ createAsset() function is used to create or issue an asset.
 
 .. code-block:: python
 
-    createAsset()  
+    createAsset(address, asset_name, asset_qty)  
 
-    txid = createAsset()          #createAsset() function call   
+    txid = createAsset(address, asset_name, asset_qty)          #createAsset() function call   
 
     print txid                  # prints tx id of the issued asset
 

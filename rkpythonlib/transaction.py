@@ -79,7 +79,7 @@ class Transaction:
 
 	"""function to create transaction hex on RecordsKeeper Blockchain"""
 
-	def createRawTransaction(sender_address, reciever_address, amount, data):		#createRawTransaction() function definition
+	def createRawTransaction(self, sender_address, reciever_address, amount, data):		#createRawTransaction() function definition
 
 		datahex = binascii.hexlify(data)
 		self.sender_address = sender_address
@@ -139,7 +139,7 @@ class Transaction:
 
 	"""function to send raw transaction on RecordsKeeper Blockchain"""
 
-	def sendRawTransaction(signed_txHex):				#sendRawTransaction function definition
+	def sendRawTransaction(self, signed_txHex):				#sendRawTransaction function definition
 
 		self.signed_txHex = signed_txHex
 

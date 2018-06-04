@@ -10,6 +10,7 @@ import json
 from requests.auth import HTTPBasicAuth
 import yaml
 import binascii
+import sys
 
 """ Entry point for accessing Stream class resources.
 

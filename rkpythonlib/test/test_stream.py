@@ -16,7 +16,7 @@ class StreamTest(unittest.TestCase):
 
     def test_publish(self):
         
-        txid = Stream.publish(net['miningaddress'], net['stream'], net['testdata'], "This is test data".encode('utf-8'). hex())
+        txid = Stream.publish(net['miningaddress'], net['stream'], net['testdata'], "This is test data")
         tx_size = sys.getsizeof(txid)
         self.assertEqual(tx_size, 113)
 
@@ -28,13 +28,13 @@ class StreamTest(unittest.TestCase):
 
     def test_retrieve_with_id_address(self):
 
-        result = Stream.retrieveWithAddress(net['stream'], net['miningaddress'])
+        result = Stream.retrieveWithAddress(net['stream'], net['miningaddress'], 20)
         self.assertEqual(result[1], "5468697320697320746573742064617461")
     
     def test_retrieve_with_key(self):
 
-        result = Stream.retrieveWithKey(net['stream'], net['testdata'])
-        self.assertEqual(result[1], "5468697320697320746573742064617461")
+        result = Stream.retrieveWithKey(net['stream'], net['testdata'], 20)
+        self.assertEqual(result[1], "test")
 
     def test_verifyData(self):
 

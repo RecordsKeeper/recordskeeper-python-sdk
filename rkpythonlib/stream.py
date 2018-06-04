@@ -69,7 +69,7 @@ class Stream:
 		
 		return txid;
 	
-	#txid = publish(address, stream, key, data.encode('utf-8'). hex() )		#variable to store transaction id
+	#txid = publish(address, stream, key, data)		#variable to store transaction id
 
 	
 	"""function to retrieve data against transaction id from the stream"""
@@ -103,16 +103,17 @@ class Stream:
 
 	"""function to retrieve data against a particular publisher address"""
 
-	def retrieveWithAddress(self, stream, address):				#retrievewithAddress() function definition
+	def retrieveWithAddress(self, stream, address, count):				#retrievewithAddress() function definition
 
 		self.stream = stream
 		self.address = address
+		self.count = count
 
 		headers = { 'content-type': 'application/json'}
 				
 		payload = [
 		{ "method": "liststreampublisheritems",
-		"params": [self.stream, self.address],
+		"params": [self.stream, self.address, False, self.count],
 		"jsonrpc": "2.0",
 		"id": "curltext",
 		"chain_name": chain
@@ -121,29 +122,35 @@ class Stream:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		key = response_json[0]['result'][0]['key']				#returns key value of the published data
-		data = response_json[0]['result'][0]['data']			#returns published data
-		txid = response_json[0]['result'][0]['txid']			#returns transaction id of the published data
+		key = []
+		raw_data = []
+		txid = []
 
-		raw_data = binascii.unhexlify(data).decode('utf-8')		#returns raw data 
+		for i in range(0, count):	
+			
+			key.append(response_json[0]['result'][i]['key'])			#returns key value of the published data	
+			data = response_json[0]['result'][i]['data']				#returns hex data
+			raw_data.append(binascii.unhexlify(data).decode('utf-8'))	#returns raw data
+			txid.append(response_json[0]['result'][i]['txid'])			#returns tx id
 
 		return key, raw_data, txid;
 
-	#key, raw_data, txid = retrieveWithAddress(stream, address)			#call to retrieveWithAddress() function
+	#key, raw_data, txid = retrieveWithAddress(stream, address, count)	#call to retrieveWithAddress() function
 
 
 	"""function to retrieve data against a particular key value"""
 
-	def retrieveWithKey(self, stream, key):					#retrieveithkey() function definition
+	def retrieveWithKey(self, stream, key, count):					#retrieveithkey() function definition
 
 		self.stream = stream
 		self.key = key
+		self.count = count
 
 		headers = { 'content-type': 'application/json'}
 				
 		payload = [
 		{ "method": "liststreamkeyitems",
-		"params": [self.stream, self.key],
+		"params": [self.stream, self.key, False, self.count],
 		"jsonrpc": "2.0",
 		"id": "curltext",
 		"chain_name": chain
@@ -152,15 +159,20 @@ class Stream:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		publisher = response_json[0]['result'][0]['publishers'][0]		#returns publisher's address of published data		
-		data = response_json[0]['result'][0]['data']					#returns published data
-		txid = response_json[0]['result'][0]['txid']					#returns transaction id of published data
+		publisher = []
+		raw_data = []
+		txid = []
 
-		raw_data = binascii.unhexlify(data).decode('utf-8')				#returns data published
+		for i in range(0, count):
+
+			publisher.append(response_json[0]['result'][i]['publishers'][0])	#returns publisher's address of published data		
+			data = response_json[0]['result'][i]['data']						#returns published hex data
+			raw_data.append(binascii.unhexlify(data).decode('utf-8'))			#returns data published
+			txid.append(response_json[0]['result'][i]['txid'])					#returns transaction id of published data
 
 		return publisher, raw_data, txid;
 
-	#publisher, raw_data, txid = retrieveWithKey(stream, key)		#call to retrieveWithKey() function
+	#publisher, raw_data, txid = retrieveWithKey(stream, key, count)		#call to retrieveWithKey() function
 	
 
 	"""function to verify data on RecordsKeeper Blockchain"""
@@ -240,8 +252,8 @@ class Stream:
 			address.append(response_json[0]['result'][i]['publishers'])		#returns publisher address		
 			key_value.append(response_json[0]['result'][i]['key'])			#returns key value of data
 			data = response_json[0]['result'][i]['data']					#returns hex data
-			raw_data = binascii.unhexlify(data).decode('utf-8')  			#returns raw data
-			txid = response_json[0]['result'][i]['txid']					#returns tx id
+			raw_data.append(binascii.unhexlify(data).decode('utf-8'))		#returns raw data
+			txid.append(response_json[0]['result'][i]['txid'])				#returns tx id
 
 		return address, key_value, raw_data, txid;
 

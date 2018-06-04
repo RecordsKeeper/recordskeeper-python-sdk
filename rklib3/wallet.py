@@ -108,9 +108,11 @@ class Wallet:
 		result = response_json[0]['result']
 
 		if result is None:
+
 			private_key = response_json[0]['error']['message']
 
 		else:
+			
 			private_key = response_json[0]['result']
 
 		return private_key;							#returns private key
@@ -371,14 +373,14 @@ class Wallet:
 			
 		signedMessage = response_json[0]['result']
 
-		return signedMessage;									#returns private key
+		return signedMessage;										#returns private key
 
 	#signedmessage = signMessage(private_key, message)				#signMessage() function call
 
 
 	"""function to verify message on RecordsKeeper Blockchain"""
 
-	def verifyMessage(self, address, signedMessage, message):			#verifyMessage() function call
+	def verifyMessage(self, address, signedMessage, message):		#verifyMessage() function call
 
 		self.address = address
 		self.signedmessage = signedmessage
@@ -400,8 +402,11 @@ class Wallet:
 		verifiedMessage = response_json[0]['result']
 
 		if verifiedMessage is True:
+
 			validity = "Yes, message is verified"
+		
 		else:
+
 			validity = "No, signedMessage is not correct"
 
 		return validity;										#returns validity

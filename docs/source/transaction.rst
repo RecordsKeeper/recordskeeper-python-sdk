@@ -108,7 +108,7 @@ sendTransaction() function is used to send transaction by passing reciever's add
 
     sendTransaction(sender_address, reciever_address, data, amount)  
 
-    txid = sendTransaction(sender_address, reciever_address, amount)   
+    txid = sendTransaction(sender_address, reciever_address, data, amount)   
 
     print txid                  # prints transaction id of the sent transaction
 
@@ -205,13 +205,13 @@ retrieveTransaction() function is used to retrieve transaction's information by 
 .. code-block:: python
 
     retrieveTransaction(tx_id)
-    sent_data, sent_amount, reciever_address = retrieveTransaction(tx_id)
+    sent_data, sent_amount = retrieveTransaction(tx_id)
 
     print (sent_data)                   #prints sent data
     print (sent_amount)                 #prints sent amount
-    print (reciever_address)            #prints reciever's address  
+     
 
-It will return the sent data, sent amount and reciever's address of the retrieved transaction.
+It will return the sent data and sent amount of the retrieved transaction.
 
 
 **7. Calculate a particular transaction's fee on RecordsKeeper Blockchain**

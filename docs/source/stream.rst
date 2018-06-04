@@ -135,45 +135,41 @@ It will return the item's details like publisher address, key value, confirmatio
 
 **3. Retrieve an item against a particular publisher address**
 
-You have to pass these two arguments to the retrieveWithAddress function call:
+You have to pass these three arguments to the retrieveWithAddress function call:
 
 * Stream name: which you want to access
 * Publisher address: address of the data publisher you want to verify
+* Count: no of items you want to retrieve
 
 .. code-block:: python
 
-    retrieveWithAddress(stream, address)
-    key,data, txid = retrieveWithAddress(stream, address)
-
-    raw_data = binascii.unhexlify(data).decode('utf-8')         # convert hex data into raw data
+    retrieveWithAddress(stream, address, count)
+    key, raw_data, txid = retrieveWithAddress(stream, address, count)
 
     print key       # prints key value of the data
-    print data      # prints hex data 
     print txid      # prints transaction id of the data
     print raw_data  # prints raw data 
 
-It will return the key value, hexdata, raw data and transaction id of the published item.
+It will return the key value, raw data and transaction id of the published item.
 
 **4. Retrieve an item against a particular key value**
 
-You have to pass these two arguments to the retrieveWithKey function call:
+You have to pass these three arguments to the retrieveWithKey function call:
 
 * Stream name: which you want to access
 * Key: key value of the published data you want to verify
+* Count: no of items you want to retrieve
 
 .. code-block:: python
 
-    retrieveWithKey(stream, key)
-    publisher,data, txid = retrieveWithKey(stream, key)
-
-    raw_data = binascii.unhexlify(data).decode('utf-8')         # convert hex data into raw data
+    retrieveWithKey(stream, key, count)
+    publisher, raw_data, txid = retrieveWithKey(stream, key, count)
 
     print publisher     # prints publisher's address of the published data
-    print data          # prints hex data 
     print txid          # prints transaction id of the data
     print raw_data      # prints raw data 
 
-It will return the key value, hexdata, raw data and transaction id of the published item.
+It will return the key value, raw data and transaction id of the published item.
 
 **5. Verify an data item on a particular stream of RecordsKeeper Blockchain**
 

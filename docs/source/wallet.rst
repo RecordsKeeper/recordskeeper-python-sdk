@@ -21,10 +21,10 @@ Import these python libraries first to get started with the functionality.
     import binascii
 
 
-Create Connection
------------------
+Creating Connection
+-------------------
 
-Entry point for accessing Wallet class resources.
+Entry point for accessing Address class resources.
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
@@ -34,54 +34,31 @@ Entry point for accessing Wallet class resources.
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-.. note::
-    
-    * Set this **network** value to change the network-type
-    * Default network is **Test network**, you can change its value to select mainnet or testnet
-
-
 .. code-block:: python
 
-    network = cfg['testnet']                    #network variable to store the network that you want to access
+    network = cfg['network']                    #network variable to store the network that you want to access
 
 
 .. code-block:: python 
 
-    if (network==cfg['testnet']):
+    url = network['url']
+    chain = network['chain']
 
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-    
 
 Node Authentication
 -------------------
 
-Import values from config file.
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-Default value of network is **test-net**, you can change its value to select mainnet or testnet
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
 
 .. code-block:: python
     
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-    if (network==cfg['testnet']):
-
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-
+    user = network['rkuser']
+    password = network['passwd']
 
 Now we have node authentication credentials.
 
@@ -101,11 +78,11 @@ createWallet() function is used to create wallet on RecordsKeeper blockchain
 
     createWallet()  
 
-    publicaddress, privatekey, publickey = createWallet()   
+    result = createWallet()   
 
-    print publicaddress                 #prints public address of the wallet
-    print privatekey                    #prints private key of the wallet
-    print publickey                     #prints public key of the wallet
+    print result['public address']        #prints public address of the wallet
+    print result['private key']           #prints private key of the wallet
+    print result['public key']            #prints public key of the wallet
 
 It will return the public address, public key and private key.
 
@@ -123,7 +100,7 @@ getPrivateKey() function is used to retrieve private key of the given address.
     getPrivateKey(public_address)  
     privkey = getPrivateKey(public_address) 
   
-    print privkey        # prints private key of the given address
+    print privkey        #prints private key of the given address
 
 It will return private key of the given address.
 
@@ -135,11 +112,11 @@ retrieveWalletinfo() function is used to retrieve node wallet's information.
 .. code-block:: python
 
     retrieveWalletinfo()  
-    balance, tx_count, unspent_tx = retrieveWalletinfo() 
+    result = retrieveWalletinfo() 
   
-    print balance      # prints wallet's balance
-    print tx_count     #prints wallet transaction count
-    print unspent_tx   #prints unspent wallet transactions
+    print result['balance']      #prints wallet's balance
+    print result['tx count']     #prints wallet transaction count
+    print result['unspent tx']   #prints unspent wallet transactions
 
 It will return wallet's balance, transaction count and unspent transactions.
 
@@ -193,7 +170,7 @@ dumpWallet() function is used to retrieve transaction's information by passing t
     dumpWallet(filename)
     result = dumpWallet(filename)
 
-    print (result)                   #prints result
+    print (result)    #prints result
     
 It will return the response of the dump wallet function. Dumps the entire set of private keys in the wallet into a human-readable text format in file filename. Use with caution – any node with access to this file can perform any action restricted to this node’s addresses.
 
@@ -211,7 +188,7 @@ lockWallet() function is used to verify transaction's information by passing tra
     lockWallet(password)
     result = lockWallet(password)
 
-    print (result)                    #prints result
+    print (result)     #prints result
 
 It will return the the response of the lock wallet function. This encrypts the node’s wallet for the first time, using passphrase as the password for unlocking. Once encryption is complete, the wallet’s private keys can no longer be retrieved directly from the wallet.dat file on disk, and chain will stop and need to be restarted. Use with caution – once a wallet has been encrypted it cannot be permanently unencrypted, and must be unlocked for signing transactions with the unlockwallet function.
 
@@ -230,7 +207,7 @@ unlockWallet() function is used to verify transaction's information by passing t
     unlockWallet(password, unlock_time)
     result = unlockWallet(password, unlock_time)
 
-    print (result)                    #prints result
+    print (result)      #prints result
 
 It will return the response of the unlock wallet function. This uses passphrase to unlock the node’s wallet for signing transactions for the next timeout seconds. This will also need to be called before the node can connect to other nodes or sign blocks that it has mined.
 
@@ -249,7 +226,7 @@ changeWalletPassword() function is used to change wallet's password and set new 
     changeWalletPassword(old_password, new_password)
     result = changeWalletPassword(password, new_password)
 
-    print (result)                    #prints result
+    print (result)     #prints result
 
 This changes the wallet’s password from old-password to new-password.
 
@@ -268,7 +245,7 @@ signMessage() function is used to change wallet's password and set new password.
     signMessage(private_key, message)
     signedMessage = signMessage(priavte_key, message)
 
-    print (signedMessage)                 #prints signed message
+    print (signedMessage)   #prints signed message
 
 It will return the signed message.
 
@@ -287,6 +264,6 @@ verifyMessage() function is used to change wallet's password and set new passwor
     verifyMessage(address, signedMessage, message)
     validity = verifyMessage(address, signedMessage, message)
 
-    print (validity)                 #prints validity of the message
+    print (validity)     #prints validity of the message
 
 It will return the validity of the message.

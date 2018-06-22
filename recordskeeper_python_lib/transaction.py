@@ -20,26 +20,14 @@ import codecs
 	Import values from config file."""
 
 with open("config.yaml", 'r') as ymlfile:
-	cfg = yaml.load(ymlfile)
+   cfg = yaml.load(ymlfile)
+   
+   network = cfg['network']
 
-"""Default network is assigned to test-network, change its value to select mainnet"""
-
-network = cfg['testnet']					#network variable to store the networrk that you want to access
-
-if (network==cfg['testnet']):
-
-	url = cfg['testnet']['url']
-	user = cfg['testnet']['rkuser']
-	password = cfg['testnet']['passwd']
-	chain = cfg['testnet']['chain']
-	
-
-else:
-
-	url = cfg['mainnet']['url']
-	user = cfg['mainnet']['rkuser']
-	password = cfg['mainnet']['passwd']
-	chain = cfg['mainnet']['chain']
+   url = network['url']
+   user = network['rkuser']
+   password = network['passwd']
+   chain = network['chain']
 	
 
 #Transaction class to access transaction related functions
@@ -273,7 +261,10 @@ class Transaction:
 
 		sent_amount = response_json[0]['result']['vout'][0]['value']
 
-		return sent_data, sent_amount;					#returns data from retrieved transaction
+		transaction_info = {"sent amount": sent_amount, "sent data": sent_data}
+		transactioninfo = json.dumps(transaction_info)
+
+		return transactioninfo;	#returns data from retrieved transaction
 
 	#sentdata, sentamount = retrieveTransaction(tx_id)	#call to function retrieveTransaction()
 	

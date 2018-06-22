@@ -22,10 +22,10 @@ Import these python libraries first to get started with the functionality.
     import sys
 
 
-Create Connection
------------------
+Creating Connection
+-------------------
 
-Entry point for accessing Stream class resources.
+Entry point for accessing Address class resources.
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
@@ -35,34 +35,21 @@ Entry point for accessing Stream class resources.
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-.. note::
-    
-    * Set this **network** value to change the network-type
-    * Default network is **Test network**, you can change its value to select mainnet or testnet
-
-
 .. code-block:: python
 
-    network = cfg['testnet']                    #network variable to store the network that you want to access
+    network = cfg['network']                    #network variable to store the network that you want to access
 
 
-.. code-block:: python
+.. code-block:: python 
 
-    if (network==cfg['testnet']):
+    url = network['url']
+    chain = network['chain']
 
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-    
 
 Node Authentication
 -------------------
 
-Import values from config file.
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
@@ -71,18 +58,8 @@ Default value of network is **Test-net**, you can change its value to select mai
 
 .. code-block:: python
     
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-    if (network==cfg['testnet']):
-
-        user = cfg['testnet']['rkuser']
-        password = cfg['testnet']['passwd']
-        
-    else:
-
-        user = cfg['mainnet']['rkuser']
-        password = cfg['mainnet']['passwd']
-
+    user = network['rkuser']
+    password = network['passwd']
 
 Now we have node authentication credentials.
 
@@ -111,7 +88,7 @@ The **data.hex()** will convert the data into a hex value
 
     txid = publish(address, stream, key, data)    
 
-    print txid  # prints the transaction id of the data published
+    print txid    #prints the transaction id of the data published
 
 It will return a transaction id of the published data, use this information to retrieve the particular data from the stream.
 
@@ -125,7 +102,7 @@ You have to pass these two arguments to the retrieve function call:
 
 .. code-block:: python
 
-    retrieve(stream, txid)                  # call retrieve function with stream and txid as the required parameters
+    retrieve(stream, txid)          #call retrieve function with stream and txid as the required parameters
     result = retrieve(stream, txid) 
   
     print result    #prints info of the transaction 
@@ -144,11 +121,11 @@ You have to pass these three arguments to the retrieveWithAddress function call:
 .. code-block:: python
 
     retrieveWithAddress(stream, address, count)
-    key, raw_data, txid = retrieveWithAddress(stream, address, count)
+    result = retrieveWithAddress(stream, address, count)
 
-    print key       # prints key value of the data
-    print txid      # prints transaction id of the data
-    print raw_data  # prints raw data 
+    print result['key']      #prints key value of the data
+    print result['txid']     #prints transaction id of the data
+    print result['data']     #prints raw data 
 
 It will return the key value, raw data and transaction id of the published item.
 
@@ -163,11 +140,11 @@ You have to pass these three arguments to the retrieveWithKey function call:
 .. code-block:: python
 
     retrieveWithKey(stream, key, count)
-    publisher, raw_data, txid = retrieveWithKey(stream, key, count)
+    result = retrieveWithKey(stream, key, count)
 
-    print publisher     # prints publisher's address of the published data
-    print txid          # prints transaction id of the data
-    print raw_data      # prints raw data 
+    print result['publisher']    #prints publisher's address of the published data
+    print result['txid']         #prints transaction id of the data
+    print result['data']         #prints raw data 
 
 It will return the key value, raw data and transaction id of the published item.
 
@@ -184,7 +161,7 @@ You have to pass these three arguments to the retrieveWithKey function call:
     verifyData(stream, data, count)
     result = verifyData(stream, data, count)
 
-    print result     #prints if verification is successful or not
+    print result                #prints if verification is successful or not
 
 It will return the result if verification is successful or not.
 
@@ -199,11 +176,11 @@ You have to pass these two arguments to the verifyWithKey function call:
 .. code-block:: python
 
     retrieveItems(stream, count)
-    address, key_value, raw_data, txid = retrieveItems(stream, count)
+    result = retrieveItems(stream, count)
 
-    print address     #prints address of the publisher of the item
-    print key_value   #prints key value of the stream itme
-    print raw_data    #prints raw data published
-    print txid        #prints tx id of the item published 
+    print result['address']    #prints address of the publisher of the item
+    print result['key']        #prints key value of the stream itme
+    print result['data']       #prints raw data published
+    print result['txid']       #prints transaction id of the item published 
 
 It will return the address, key value, data and transaction id of the stream item published.

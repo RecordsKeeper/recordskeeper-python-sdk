@@ -1,12 +1,12 @@
 import unittest
 import yaml
 import binascii
-from pyrklib import permissions
-from pyrklib.permissions import Permissions
+from recordskeeper_python_lib import permissions
+from recordskeeper_python_lib.permissions import Permissions
 
 import sys
 
-with open("test_config.yaml", 'r') as ymlfile:
+with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
 
 net = permissions.network
@@ -16,24 +16,24 @@ class PermissionsTest(unittest.TestCase):
 
     def test_grantpermissions(self):
         
-        txid = Permissions.grantPermission(net['permissionaddress'], "create, connect")
+        txid = Permissions.grantPermission(self, net['permissionaddress'], "create, connect")
         self.assertEqual(txid, 'Invalid permission')
 
     def test_revokepermissions(self):
 
-        txid = Permissions.revokePermission(net['permissionaddress'], "send, admin")
+        txid = Permissions.revokePermission(self, net['permissionaddress'], "send, admin")
         self.assertEqual(txid, 'Invalid permission')
 
 
     def test_failgrantpermissions(self):
 
-    	txid = Permissions.grantPermission(net['permissionaddress'], "create, connect")
+    	txid = Permissions.grantPermission(self, net['permissionaddress'], "create, connect")
     	self.assertEqual(txid, 'e3bba87d1f0a980b65f12388d31c734ea38b08d11d00aaab1004e470ca419556')
 
 
     def test_failrevokepermissions(self):
 
-    	txid = Permissions.revokePermission(net['permissionaddress'], "create, connect")
+    	txid = Permissions.revokePermission(self, net['permissionaddress'], "create, connect")
     	self.assertEqual(txid, 'e3bba87d1f0a980b65f12388d31c734ea38b08d11d00aaab1004e470ca419556')
         
 

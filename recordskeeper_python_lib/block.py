@@ -17,27 +17,14 @@ import sys
 	Import values from config file."""
 
 with open("config.yaml", 'r') as ymlfile:
-	cfg = yaml.load(ymlfile)
+   cfg = yaml.load(ymlfile)
+   
+   network = cfg['network']
 
-"""Default network is assigned to test-network, change its value to select mainnet"""
-
-network = cfg['testnet']					#network variable to store the networrk that you want to access
-
-if (network==cfg['testnet']):
-
-	url = cfg['testnet']['url']
-	user = cfg['testnet']['rkuser']
-	password = cfg['testnet']['passwd']
-	chain = cfg['testnet']['chain']
-	
-
-else:
-
-	url = cfg['mainnet']['url']
-	user = cfg['mainnet']['rkuser']
-	password = cfg['mainnet']['passwd']
-	chain = cfg['mainnet']['chain']
-	
+   url = network['url']
+   user = network['rkuser']
+   password = network['passwd']
+   chain = network['chain']
 
 
 """Block class to access block information"""
@@ -46,15 +33,16 @@ class Block:
 	
 	"""function to get a particular block"""
 
-	def blockinfo(self,block_height):											#blockinfo function definition
+	def blockinfo(self, block_height):											#blockinfo function definition
 		
 		self.block_height = block_height
+		blockheight = str(block_height)
 
 		headers = { 'content-type': 'application/json'}
 		
 		payload = [
 		         { "method": "getblock",
-		          "params": [self.block_height],
+		          "params": [blockheight],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
@@ -78,10 +66,12 @@ class Block:
 		for i in range(0, tx_count):
 			
 			tx.append(response_json[0]['result']['tx'][i])					#appends transaction ids into tx list
+
+			blockinfo_result = {"txcount": tx_count, "miner": miner, "size": size, "nonce": nonce, "blockhash": blockHash, "prevblock": prevblock, "nextblock": nextblock, "merkleroot": merkleroot, "blocktime": blocktime, "difficulty": difficulty, "tx": tx}
+			blockinfo = json.dumps(blockinfo_result)
 			
 
-
-		return  tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty;
+		return  blockinfo;
 
 	
 	#tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty = blockinfo("100")		#call to blockinfo function 
@@ -92,6 +82,7 @@ class Block:
 	def retrieveBlocks(self, block_range):		#retrieveBlocks() function definition
 		
 		self.block_range = block_range
+		blockrange = str(block_range)
 
 		blockhash = []
 		miner = []
@@ -102,7 +93,7 @@ class Block:
 
 		payload = [
 		         { "method": "listblocks",
-		          "params": [self.block_range],
+		          "params": [blockrange],
 		          "jsonrpc": "2.0",
 		          "id": "curltext",
 		          "chain_name": chain
@@ -119,8 +110,11 @@ class Block:
 			miner.append(response_json[0]['result'][i]['miner'])
 			blocktime.append(response_json[0]['result'][i]['time'])
 			tx_count.append(response_json[0]['result'][i]['txcount'])
+
+			blockrange_info = {"blockhash": blockhash, "miner":miner, "blocktime":blocktime, "tx count":tx_count}
+			blockrange = json.dumps(blockrange_info)
 		
-		return blockhash, miner, blocktime, tx_count;				
+		return blockrange;				
 
 	
 	#block_hash, miner_add, block_time, txcount = retrieveBlocks("10-15")	#call to function retrieveBlocks

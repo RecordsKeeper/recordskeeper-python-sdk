@@ -23,10 +23,10 @@ Import these python libraries first to get started with the functionality.
     import binascii
 
 
-Create Connection
------------------
+Creating Connection
+-------------------
 
-Entry point for accessing Transaction class resources.
+Entry point for accessing Address class resources.
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
@@ -36,53 +36,31 @@ Entry point for accessing Transaction class resources.
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-.. note::
-    
-    * Set this **network** value to change the network-type
-    * Default network is **Test network**, you can change its value to select mainnet or testnet
-
 .. code-block:: python
 
-    network = cfg['testnet']                    #network variable to store the network that you want to access
+    network = cfg['network']                    #network variable to store the network that you want to access
 
 
 .. code-block:: python 
 
-    if (network==cfg['testnet']):
+    url = network['url']
+    chain = network['chain']
 
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-    
 
 Node Authentication
 -------------------
 
-Import values from config file.
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-Default value of network is **test-net**, you can change its value to select mainnet or testnet
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
 
 .. code-block:: python
     
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-    if (network==cfg['testnet']):
-
-        user = cfg['testnet']['rkuser']
-        password = cfg['testnet']['passwd']
-        
-    else:
-
-        user = cfg['mainnet']['rkuser']
-        password = cfg['mainnet']['passwd']
-
+    user = network['rkuser']
+    password = network['passwd']
 
 Now we have node authentication credentials.
 
@@ -110,7 +88,7 @@ sendTransaction() function is used to send transaction by passing reciever's add
 
     txid = sendTransaction(sender_address, reciever_address, data, amount)   
 
-    print txid                  # prints transaction id of the sent transaction
+    print txid           #prints transaction id of the sent transaction
 
 It will return the transaction id of the raw transaction.
 
@@ -131,7 +109,7 @@ sendSignedTransaction() function is used to send transaction by passing reciever
     sendSignedTransaction(sender_address, reciever_address, amount, private_key, data)  
     transaction_id = sendSignedTransaction(sender_address, reciever_address, amount, private_key, data) 
   
-    print transaction_id        # prints transaction id of the signed transaction
+    print transaction_id        #prints transaction id of the signed transaction
 
 It will return transaction id of the signed transaction.
 
@@ -151,7 +129,7 @@ createRawTransaction() function is used to create raw transaction by passing rec
     createRawTransaction(sender_address, reciever_address, amount, data)  
     tx_hex = createRawTransaction(sender_address, reciever_address, amount, data) 
   
-    print tx_hex      # prints transaction hex of the raw transaction
+    print tx_hex      #prints transaction hex of the raw transaction
 
 It will return transaction hex of the raw transaction.
 
@@ -171,7 +149,7 @@ signRawTransaction() function is used to sign raw transaction by passing transac
     signRawTransaction(tx_hex, private_key)  
     signed_hex = signRawTransaction(txHex, private_key) 
   
-    print signed_hex      # prints signed transaction hex of the raw transaction
+    print signed_hex      #prints signed transaction hex of the raw transaction
 
 It will return signed transaction hex of the raw transaction.
 
@@ -189,7 +167,7 @@ sendRawTransaction() function is used to send raw transaction by passing signed 
     sendRawTransaction(signed_txHex)  
     tx_id = sendRawTransaction(signed_txHex) 
   
-    print tx_id     # prints transaction id of the raw transaction
+    print tx_id     #prints transaction id of the raw transaction
 
 It will return transaction id of the raw transaction sent on to the Blockchain.
 
@@ -205,10 +183,10 @@ retrieveTransaction() function is used to retrieve transaction's information by 
 .. code-block:: python
 
     retrieveTransaction(tx_id)
-    sent_data, sent_amount = retrieveTransaction(tx_id)
+    result = retrieveTransaction(tx_id)
 
-    print (sent_data)                   #prints sent data
-    print (sent_amount)                 #prints sent amount
+    print (result['sent data'])       #prints sent data
+    print (result['sent amount'])     #prints sent amount
      
 
 It will return the sent data and sent amount of the retrieved transaction.
@@ -228,7 +206,7 @@ getFee() function is used to calculate transaction's fee by passing transaction 
     getFee(address, tx_id)
     Fees = getFee(address, tx_id)
 
-    print (Fees)                    #prints fees consumed in the verified transaction
+    print (Fees)             #prints fees consumed in the verified transaction
     
 It will return the fees consumed in the transaction.
 

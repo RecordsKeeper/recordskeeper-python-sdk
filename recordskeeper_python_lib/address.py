@@ -17,25 +17,14 @@ import binascii
 	Import values from config file."""
 
 with open("config.yaml", 'r') as ymlfile:
-	cfg = yaml.load(ymlfile)
+   cfg = yaml.load(ymlfile)
+   
+   network = cfg['network']
 
-network = cfg['testnet']				#network variable to store the netwrok that you want to access
-
-if (network==cfg['testnet']):
-
-	url = cfg['testnet']['url']
-	user = cfg['testnet']['rkuser']
-	password = cfg['testnet']['passwd']
-	chain = cfg['testnet']['chain']
-	
-
-else:
-
-	url = cfg['mainnet']['url']
-	user = cfg['mainnet']['rkuser']
-	password = cfg['mainnet']['passwd']
-	chain = cfg['mainnet']['chain']
-	
+   url = network['url']
+   user = network['rkuser']
+   password = network['passwd']
+   chain = network['chain']
 
 #Address class to access address related functions
 class Address:
@@ -121,22 +110,27 @@ class Address:
    	
    	def retrieveAddresses(self):						#retrieveAddresses() function call\
 
-   		headers = { 'content-type': 'application/json'}
+         headers = { 'content-type': 'application/json'}
 
-   		payload = [ { "method": "getaddresses", "params": [], "jsonrpc": "2.0", "id": "curltext", "chain_name": chain }]
+         payload = [ { "method": "getaddresses", "params": [], "jsonrpc": "2.0", "id": "curltext", "chain_name": chain }]
 
-   		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-   		response_json = response.json()
+         response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 
-   		address_count = len(response_json[0]['result'])
+         response_json = response.json()
 
-   		address = []
+         address_count = len(response_json[0]['result'])
 
-   		for i in range(0, address_count):
+         address = []
 
-   			address.append(response_json[0]['result'][i])
+         for i in range(0, address_count):
 
-   		return address, address_count;					#returns allAddresses and address count
+            address.append(response_json[0]['result'][i])
+
+         address_response = {"address": address, "address count": address_count}
+
+         addresses = json.dumps(address_response)
+
+         return addresses;					#returns allAddresses and address count
 
    	#allAddresses, address_count = retrieveAddresses()	#retrieveAddresses() function call
 
@@ -170,25 +164,35 @@ class Address:
 
    	def checkifMineAllowed(self, address):				#checkifMineAllowed() function definition
 
-   		self.address = address
+         self.address = address
 
-   		headers = { 'content-type': 'application/json'}
+         headers = { 'content-type': 'application/json'}
 
-   		payload = [ { "method": "validateaddress", "params": [self.address], "jsonrpc": "2.0", "id": "curltext", "chain_name": chain }]
-   		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-   		response_json = response.json()
+         payload = [ { "method": "validateaddress", "params": [self.address], "jsonrpc": "2.0", "id": "curltext", "chain_name": chain }]
 
-   		permission = response_json[0]['result']['ismine']
+         response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 
-   		if permission is True:
+         response_json = response.json()
 
-   			permissionCheck = "Address has mining permission"	#print if address has mining permission
+         check = response_json[0]['result']['isvalid']
 
-   		else:
+         if (check == True):
 
-   			permissionCheck = "Address has not given mining permission"	#print if address does not have mining permission	
+            permission = response_json[0]['result']['ismine']
 
-   		return permissionCheck;							#returns mining permission
+            if permission is True:
+
+               permissionCheck = "Address has mining permission"	#print if address has mining permission
+
+            else:
+
+               permissionCheck = "Address has not given mining permission"	#print if address does not have mining permission	
+
+         else:
+
+            permissionCheck = "Invalid address, please check for valid address"
+
+         return permissionCheck;							#returns mining permission
 
    	#permissionCheck = checkifMineAllowed(address)	#checkifMineAllowed() function call
 

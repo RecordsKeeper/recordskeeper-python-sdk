@@ -18,29 +18,15 @@ import binascii
 	Import values from config file."""
 
 with open("config.yaml", 'r') as ymlfile:
-	cfg = yaml.load(ymlfile)
+   cfg = yaml.load(ymlfile)
+   
+   network = cfg['network']
 
-"""Default network is assigned to test-network, change its value to select mainnet"""
-
-network = cfg['testnet']					#network variable to store the networrk that you want to access
-
-
-if (network==cfg['testnet']):
-
-	url = cfg['testnet']['url']
-	user = cfg['testnet']['rkuser']
-	password = cfg['testnet']['passwd']
-	chain = cfg['testnet']['chain']
+   url = network['url']
+   user = network['rkuser']
+   password = network['passwd']
+   chain = network['chain']
 	
-
-else:
-
-	url = cfg['mainnet']['url']
-	user = cfg['mainnet']['rkuser']
-	password = cfg['mainnet']['passwd']
-	chain = cfg['mainnet']['chain']
-	
-
 
 #Blockchain class to access blockchain related functions
 class Blockchain:
@@ -72,7 +58,10 @@ class Blockchain:
 		mining_diversity = result['mining-diversity']
 		chain_name = result['chain-name']
 
-		return chain_protocol, chain_description, root_stream, max_blocksize, default_networkport, default_rpcport, mining_diversity, chain_name;										#returns chain parameters
+		chaininfo_response = {"chain-description": chain_description, "chain-protocol": chain_protocol, "root-stream-name":root_stream, "maximum-blocksize": max_blocksize, "default-network-port": default_networkport, "default-rpc-port": default_rpcport, "mining-diversity": mining_diversity, "chain-name": chain_name}
+		chaininfo = json.dumps(chaininfo_response)
+
+		return chaininfo;										#returns chain parameters
 
 	#chain = getChainInfo()				 			#call to function getChainInfo()	
 
@@ -100,9 +89,12 @@ class Blockchain:
 		node_address = response_json[0]['result']['nodeaddress']
 		difficulty = response_json[0]['result']['difficulty']
 
-		return node_balance, synced_blocks, node_address, difficulty;			#returns node details
+		node_info = {"node balance": node_balance, "synced blocks": synced_blocks, "node address": node_address, "difficulty": difficulty}
+		nodeinfo = json.dumps(node_info)
 
-	#node = getNodeInfo(public_address)		#getNodeInfo() function call
+		return nodeinfo;	#returns node details
+
+	#node = getNodeInfo(public_address)	#getNodeInfo() function call
 
 
 	"""function to retrieve node's permissions on RecordsKeeper Blockchain"""
@@ -153,9 +145,11 @@ class Blockchain:
 			
 		tx_count = response_json[0]['result']['size']		#store pending tx count
 
-		headers = { 'content-type': 'application/json'}
+		if (tx_count != 0):
 
-		payload = [
+			headers = { 'content-type': 'application/json'}
+
+			payload = [
 		 	{ "method": "getrawmempool",
 		      "params": [],
 		      "jsonrpc": "2.0",
@@ -163,15 +157,22 @@ class Blockchain:
 		      "chain_name": chain
 		    }]
 
-		response2 = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
-		response_json2 = response2.json()
+			response2 = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+			response_json2 = response2.json()
 			
-		tx = []
+			tx = []
 
-		for i in range(0, tx_count):
-			tx.append(response_json2[0]['result'])
+			for i in range(0, tx_count):
+				tx.append(response_json2[0]['result'])
+
+		else:
+
+			tx = "Currently, No Pending Transactions"
 		
-		return tx_count, tx;					#returns pending tx and tx count
+		pending_transactions = {"tx_count": tx_count, "tx": tx}
+		pendingresult = json.dumps(pending_transactions)
+
+		return pendingresult;	#returns pending tx and tx count
 
 	#pendingtx, pendingtxcount = getpendingTransactions()		#getpendingTransactions() function call
 

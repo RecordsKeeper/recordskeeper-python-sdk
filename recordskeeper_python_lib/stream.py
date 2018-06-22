@@ -16,26 +16,14 @@ import binascii
 	Import values from config file."""
 
 with open("config.yaml", 'r') as ymlfile:
-	cfg = yaml.load(ymlfile)
+   cfg = yaml.load(ymlfile)
+   
+   network = cfg['network']
 
-"""Default network is assigned to test-network, change its value to select mainnet"""
-
-network = cfg['testnet']					#network variable to store the networrk that you want to access
-
-if (network==cfg['testnet']):
-
-	url = cfg['testnet']['url']
-	user = cfg['testnet']['rkuser']
-	password = cfg['testnet']['passwd']
-	chain = cfg['testnet']['chain']
-	
-
-else:
-
-	url = cfg['mainnet']['url']
-	user = cfg['mainnet']['rkuser']
-	password = cfg['mainnet']['passwd']
-	chain = cfg['mainnet']['chain']
+   url = network['url']
+   user = network['rkuser']
+   password = network['passwd']
+   chain = network['chain']
 	
 
 """Stream class to access stream related functions"""
@@ -133,7 +121,10 @@ class Stream:
 			raw_data.append(binascii.unhexlify(data).decode('utf-8'))	#returns raw data
 			txid.append(response_json[0]['result'][i]['txid'])			#returns tx id
 
-		return key, raw_data, txid;
+		address_items = {"key": key, "data": raw_data, "txid": txid}
+		addressitems = json.dumps(address_items)
+
+		return addressitems;
 
 	#key, raw_data, txid = retrieveWithAddress(stream, address, count)	#call to retrieveWithAddress() function
 
@@ -170,7 +161,10 @@ class Stream:
 			raw_data.append(binascii.unhexlify(data).decode('utf-8'))			#returns data published
 			txid.append(response_json[0]['result'][i]['txid'])					#returns transaction id of published data
 
-		return publisher, raw_data, txid;
+		keyitems = {"publisher": publisher, "data": raw_data, "txid": txid}
+		key_items = json.dumps(keyitems)
+
+		return key_items;
 
 	#publisher, raw_data, txid = retrieveWithKey(stream, key, count)		#call to retrieveWithKey() function
 	
@@ -255,6 +249,9 @@ class Stream:
 			raw_data.append(binascii.unhexlify(data).decode('utf-8'))		#returns raw data
 			txid.append(response_json[0]['result'][i]['txid'])				#returns tx id
 
-		return address, key_value, raw_data, txid;
+		items = {"address": address, "key": key_value, "data": raw_data, "txid": txid}
+		items_json = json.dumps(items)
+
+		return items_json;
 
 	#result = retrieveItems("root", 5)		#call to retrieveItems() function

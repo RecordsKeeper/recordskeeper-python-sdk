@@ -21,10 +21,10 @@ Import these python libraries first to get started with the functionality.
     import binascii
 
 
-Create Connection
------------------
+Creating Connection
+-------------------
 
-Entry point for accessing Assets class resources.
+Entry point for accessing Address class resources.
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
@@ -34,33 +34,21 @@ Entry point for accessing Assets class resources.
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-.. note::
-    
-    * Set this **network** value to change the network-type
-    * Default network is **Test network**, you can change its value to select mainnet or testnet
-
-
 .. code-block:: python
 
-    network = cfg['testnet']                    #network variable to store the network that you want to access
+    network = cfg['network']                    #network variable to store the network that you want to access
+
 
 .. code-block:: python 
 
-    if (network==cfg['testnet']):
+    url = network['url']
+    chain = network['chain']
 
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-    
 
 Node Authentication
 -------------------
 
-Import values from config file.
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
@@ -69,17 +57,8 @@ Default value of network is **Test-net**, you can change its value to select mai
 
 .. code-block:: python
     
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-    if (network==cfg['testnet']):
-
-        user = cfg['testnet']['rkuser']
-        password = cfg['testnet']['passwd']
-        
-    else:
-
-        user = cfg['mainnet']['rkuser']
-        password = cfg['mainnet']['passwd']
+    user = network['rkuser']
+    password = network['passwd']
 
 Now we have node authentication credentials.
 
@@ -101,24 +80,43 @@ createAsset() function is used to create or issue an asset.
 
     txid = createAsset(address, asset_name, asset_qty)          #createAsset() function call   
 
-    print txid                  # prints tx id of the issued asset
+    print txid                  # prints transaction id of the issued asset
 
 It will return the transaction id of the issued asset.
 
+**2. Send Assets to a particular address on the RecordsKeeper Blockchain**
 
-**2. List all assets on the RecordsKeeper Blockchain**
+You have to pass these three arguments to the createAsset function call:
+
+* address: address which will send the asset
+* asset_name: name of the asset
+* qty: quantity of asset to be sent
+
+sendAsset() function is used to send an asset.
+
+.. code-block:: python
+
+    sendAsset(address, assetname, qty)  
+
+    txid = sendAsset(address, assetname, qty)              #sendAsset() function call   
+
+    print txid                  # prints transaction id of the sent asset
+
+It will return the transaction id of the sent asset.
+
+**3. List all assets on the RecordsKeeper Blockchain**
 
 retrieveAssets() function is used to list all assets, no of assets, issued quantity and issued transaction id of all the assets on RecordsKeeper Blockchain.
 
 .. code-block:: python
 
     retrieveAssets()  
-    asset_name, issue_id, issue_qty, asset_count = retrieveAssets()       #retrieveAssets() function call
+    result = retrieveAssets()       #retrieveAssets() function call
   
-    print asset_name       # prints all the addresses of the wallet
-    print asset_count      # prints the address count
-    print issue_qty        # prints assets issued quantity
-    print issue_id         # prints assets issued transaction id
+    print result['name']            #prints name of all the assets
+    print result['asset count']     #prints total asset count
+    print result['id']              #prints assets issued quantity
+    print result['qty']             #prints assets issued transaction id
 
 It will return all the assets, the count of the assets, issued quantity of assets and issued transaction id of the asset on the RecordsKeeper Blockchain.
 

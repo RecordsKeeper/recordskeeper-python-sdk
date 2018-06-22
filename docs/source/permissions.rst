@@ -6,10 +6,10 @@ Library to work with RecordsKeeper permissions.
 
 You can grant and revoke permissions like connect, send, receive, create, issue, mine, activate, admin by using Assets class. You just have to pass parameters to invoke the pre-defined functions.
 
-Create Connection
------------------
+Creating Connection
+-------------------
 
-Entry point for accessing Stream class resources.
+Entry point for accessing Address class resources.
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
@@ -19,69 +19,31 @@ Entry point for accessing Stream class resources.
     with open("config.yaml", 'r') as ymlfile:
         cfg = yaml.load(ymlfile)
 
-Default value of network is **test-net**, you can change its value to select mainnet or testnet
-
 .. code-block:: python
 
-    network = cfg['testnet']                    #network variable to store the network that you want to access
+    network = cfg['network']                    #network variable to store the network that you want to access
 
-    if (network==cfg['testnet']):
-
-        user = cfg['testnet']['rkuser']
-        password = cfg['testnet']['passwd']
-        
-    else:
-
-        user = cfg['mainnet']['rkuser']
-        password = cfg['mainnet']['passwd']
-    
-
-Node Authentication
--------------------
-
-Import values from config file.
-
-* User name: The rpc user is used to call the APIs.
-* Password: The rpc password is used to authenticate the APIs.
-
-.. note::
-    
-    * Set this **network** value to change the network-type
-    * Default network is **Test network**, you can change its value to select mainnet or testnet
-
-
-.. code-block:: python
-    
-    network = cfg['testnet']                    #network variable to store the network that you want to access
 
 .. code-block:: python 
 
-    if (network==cfg['testnet']):
-
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-
-
-Now we have node authentication credentials.
+    url = network['url']
+    chain = network['chain']
 
 
 Node Authentication
 -------------------
 
-Import values from config file.
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
+
 .. code-block:: python
     
-    user = cfg['testnet']['rkuser']
-    password = cfg['testnet']['passwd']
+    user = network['rkuser']
+    password = network['passwd']
 
 Now we have node authentication credentials.
 
@@ -108,7 +70,7 @@ grantPermission() function is used to grant permissions like connect, send, rece
 
     result = grantPermission(address, permissions)          #grantPermission() function call   
 
-    print txid                  # prints response of the grant permision transaction
+    print txid           # prints response of the grant permision transaction
 
 It will return the transaction id of the permission transaction.
 
@@ -127,6 +89,6 @@ revokePermission() function is used to revoke permissions like connect, send, re
     revokePermission(address, permissions)  
     result = revokePermission(address, permissions)       #revokePermission() function call
   
-    print result                # prints response of the revoke permision transaction
+    print result         # prints response of the revoke permision transaction
 
 It will return the transaction id of the permission transaction.

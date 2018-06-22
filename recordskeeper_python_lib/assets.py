@@ -17,29 +17,16 @@ import sys
 	Import values from config file."""
 
 with open("config.yaml", 'r') as ymlfile:
-	cfg = yaml.load(ymlfile)
+   cfg = yaml.load(ymlfile)
+   
+   network = cfg['network']
 
-"""Default network is assigned to test-network, change its value to select mainnet"""
-
-network = cfg['testnet']					#network variable to store the networrk that you want to access
-
-if (network==cfg['testnet']):
-
-	url = cfg['testnet']['url']
-	user = cfg['testnet']['rkuser']
-	password = cfg['testnet']['passwd']
-	chain = cfg['testnet']['chain']
+   url = network['url']
+   user = network['rkuser']
+   password = network['passwd']
+   chain = network['chain']
 	
-
-else:
-
-	url = cfg['mainnet']['url']
-	user = cfg['mainnet']['rkuser']
-	password = cfg['mainnet']['passwd']
-	chain = cfg['mainnet']['chain']
 	
-
-
 """Assets class to access asset related functions"""
 
 class Assets:
@@ -66,12 +53,42 @@ class Assets:
 		response_json = response.json()
 
 		txid = response_json[0]['result']
+
+		if (txid is None):
+
+			txid = response_json[0]['error']['message']
 		
 		return txid;										#variable to store issue transaction id
 	
 	#txid = createAsset(address, asset_name, asset_qty)		#createAsset() function call	
 
 	
+	"""function to send assets to a particular address"""
+
+	def sendAsset(self, address, assetname, qty):			#sendAsset() function definition
+
+		self.address = address
+		self.assetname = assetname
+		self.qty = qty
+
+		headers = { 'content-type': 'application/json'}
+
+		payload = [
+		         { "method": "sendasset",
+		          "params": [self.address, self.assetname, self.qty],
+		          "jsonrpc": "2.0",
+		          "id": "curltext",
+		          "chain_name": chain
+		          }]
+		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
+		response_json = response.json()
+
+		txid = response_json[0]['result']
+		
+		return txid;										#variable to store transaction id
+
+	#  address, assetname, qty = sendAsset(self, address, assetname, qty) #call to invoke sendAsset() function
+
 	"""function to retrieve assets information"""
 
 	def retrieveAssets(self):								#retrieveAssets() function definition
@@ -99,9 +116,11 @@ class Assets:
 			asset_name.append(response_json[0]['result'][i]['name'])		#returns asset name
 			issue_id.append (response_json[0]['result'][i]['issuetxid'])	#returns issue id
 			issue_qty.append(response_json[0]['result'][i]['issueraw'])		#returns issue quantity
-		
 
-		return asset_name, issue_id, issue_qty, asset_count;
+		asset_list = {'name':asset_name, 'id':issue_id, 'qty':issue_qty, "asset count":asset_count}
+		assets = json.dumps(asset_list)
+		
+		return assets;
 
 	# assetname, issueid, issueqty, assetcount = retrieveAssets()	#call to invoke retrieveAssets() function
 	

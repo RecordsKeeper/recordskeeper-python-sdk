@@ -18,26 +18,15 @@ import binascii
 	Import values from config file."""
 
 with open("config.yaml", 'r') as ymlfile:
-	cfg = yaml.load(ymlfile)
+   cfg = yaml.load(ymlfile)
+   
+   network = cfg['network']
 
-"""Default network is assigned to test-network, change its value to select mainnet"""
-
-network = cfg['testnet']					#network variable to store the networrk that you want to access
-
-if (network==cfg['testnet']):
-
-	url = cfg['testnet']['url']
-	user = cfg['testnet']['rkuser']
-	password = cfg['testnet']['passwd']
-	chain = cfg['testnet']['chain']
+   url = network['url']
+   user = network['rkuser']
+   password = network['passwd']
+   chain = network['chain']
 	
-
-else:
-
-	url = cfg['mainnet']['url']
-	user = cfg['mainnet']['rkuser']
-	password = cfg['mainnet']['passwd']
-	chain = cfg['mainnet']['chain']
 	
 
 #Wallet class to access wallet related functions
@@ -81,8 +70,11 @@ class Wallet:
 			return result;
 
 		import_address = importAddress(public_address)
+
+		walletCredentials = {"public address": public_address, "private key": private_key, "public key": public_key}
+		walletCredentialsjson = json.dumps(walletCredentials)
 		
-		return public_address, private_key, public_key;				#returns public and private key
+		return walletCredentialsjson;				#returns public and private key
 
 	#publicaddress, privatekey, publickey = createWallet()					#call to function createWallet()	
 
@@ -139,7 +131,10 @@ class Wallet:
 		tx_count = response_json[0]['result']['txcount']
 		unspent_tx = response_json[0]['result']['utxocount']
 
-		return balance, tx_count, unspent_tx;					#returns balance, tx count, unspent tx
+		wallet_info = {"balance": balance, "tx count": tx_count, "unspent tx": unspent_tx}
+		walletinfo = json.dumps(wallet_info)
+
+		return walletinfo;	#returns balance, tx count, unspent tx
 
 	#balance, tx_count, unspent_tx = retrieveWalletinfo()		#retrieveWalletinfo() function call
 
@@ -381,7 +376,7 @@ class Wallet:
 	def verifyMessage(self, address, signedMessage, message):			#verifyMessage() function call
 
 		self.address = address
-		self.signedmessage = signedmessage
+		self.signedMessage = signedMessage
 		self.message = message
 
 		headers = { 'content-type': 'application/json'}

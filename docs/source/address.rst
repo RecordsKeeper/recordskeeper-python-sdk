@@ -135,8 +135,8 @@ retrieveAddresses() function is used to list all addresses and no of addresses o
     retrieveAddresses()  
     result = retrieveAddresses()       #retrieveAddresses() function call
   
-    print result['address']       # prints all the addresses of the wallet
-    print result['address count']       # prints the address count
+    print result['address']             #prints all the addresses of the wallet
+    print result['address count']       #prints the address count
 
 It will return all the addresses and the count of the addresses on the wallet.
 

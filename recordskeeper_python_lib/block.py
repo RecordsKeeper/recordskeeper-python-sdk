@@ -67,8 +67,8 @@ class Block:
 			
 			tx.append(response_json[0]['result']['tx'][i])					#appends transaction ids into tx list
 
-			blockinfo_result = {"txcount": tx_count, "miner": miner, "size": size, "nonce": nonce, "blockhash": blockHash, "prevblock": prevblock, "nextblock": nextblock, "merkleroot": merkleroot, "blocktime": blocktime, "difficulty": difficulty, "tx": tx}
-			blockinfo = json.dumps(blockinfo_result)
+		blockinfo_result = {"txcount": tx_count, "miner": miner, "size": size, "nonce": nonce, "blockhash": blockHash, "prevblock": prevblock, "nextblock": nextblock, "merkleroot": merkleroot, "blocktime": blocktime, "difficulty": difficulty, "tx": tx}
+		blockinfo = json.dumps(blockinfo_result)
 			
 
 		return  blockinfo;
@@ -111,8 +111,8 @@ class Block:
 			blocktime.append(response_json[0]['result'][i]['time'])
 			tx_count.append(response_json[0]['result'][i]['txcount'])
 
-			blockrange_info = {"blockhash": blockhash, "miner":miner, "blocktime":blocktime, "tx count":tx_count}
-			blockrange = json.dumps(blockrange_info)
+		blockrange_info = {"blockhash": blockhash, "miner":miner, "blocktime":blocktime, "tx count":tx_count}
+		blockrange = json.dumps(blockrange_info)
 		
 		return blockrange;				
 

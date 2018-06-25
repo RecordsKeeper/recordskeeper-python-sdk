@@ -2,7 +2,7 @@ RecordsKeeper-python-lib3
 =========================
 
 
-It is an infrastructure to build RecordsKeeper blockchain-based applications and products and to work around applications that are built on top of this blockchain.
+It is an infrastructure to build RecordsKeeper blockchain-based applications, products and is used to work around applications that are built on top of this blockchain platform.
 
 **Note:** If you're looking for the RecordsKeeper Python Library please see: [RecordsKeeper Python Library](https://github.com/RecordsKeeper/recordskeeper-python-sdk/tree/python-3.0)
 
@@ -13,7 +13,7 @@ Before you begin you'll need to have python v3 installed. There are several opti
 
 
 ```bash
-pip install -g recordskeeper-python-lib3
+pip install -g recordskeeper_python_lib3
 ```
 
 Import these python libraries first to get started with the library classes and functions.
@@ -71,25 +71,25 @@ Importing user name and password values from config file to authenticate the nod
 
 ## Libraries
 
-- [Addresses](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/master/rkpythonlib/address.py) Library to work with RecordsKeeper addresses. You can generate new address, check all addresses, check address validity, check address permissions, check address balance by using Address class. You just have to pass parameters to invoke the pre-defined functions.
+- [Addresses](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/python-3.0/recordskeeper_python_lib3/address.py) Library to work with RecordsKeeper addresses. You can generate new address, check all addresses, check address validity, check address permissions, check address balance by using Address class. You just have to pass parameters to invoke the pre-defined functions.
 
-- [Assets](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/master/rkpythonlib/assets.py) Library to work with RecordsKeeper assets. You can create new assets and list all assets by using Assets class. You just have to pass parameters to invoke the pre-defined functions.
+- [Assets](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/python-3.0/recordskeeper_python_lib3/assets.py) Library to work with RecordsKeeper assets. You can create new assets and list all assets by using Assets class. You just have to pass parameters to invoke the pre-defined functions.
 
-- [Block](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/master/rkpythonlib/block.py) Library to work with RecordsKeeper block informaion. You can collect block information by using block class. You just have to pass parameters to invoke the pre-defined functions.
+- [Block]((https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/python-3.0/recordskeeper_python_lib3/block.py) Library to work with RecordsKeeper block informaion. You can collect block information by using block class. You just have to pass parameters to invoke the pre-defined functions.
 
-- [Blockchain](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/master/rkpythonlib/blockchain.py) Library to work with RecordsKeeper block informaion. You can collect block information by using block class. You just have to pass parameters to invoke the pre-defined functions.
+- [Blockchain]((https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/python-3.0/recordskeeper_python_lib3/blockchain.py) Library to work with RecordsKeeper block informaion. You can collect block information by using block class. You just have to pass parameters to invoke the pre-defined functions.
 
-- [Permissions](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/master/rkpythonlib/permissions.py) Library to work with RecordsKeeper permissions. You can grant and revoke permissions like connect, send, receive, create, issue, mine, activate, admin by using Assets class. You just have to pass parameters to invoke the pre-defined functions.
+- [Permissions]((https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/python-3.0/recordskeeper_python_lib3/permissions.py) Library to work with RecordsKeeper permissions. You can grant and revoke permissions like connect, send, receive, create, issue, mine, activate, admin by using Assets class. You just have to pass parameters to invoke the pre-defined functions.
 
-- [Stream](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/master/rkpythonlib/stream.py) Library to work with RecordsKeeper streams. You can publish, retrieve and verify stream data by using stream class. You just have to pass parameters to invoke the pre-defined functions.
+- [Stream]((https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/python-3.0/recordskeeper_python_lib3/stream.py) Library to work with RecordsKeeper streams. You can publish, retrieve and verify stream data by using stream class. You just have to pass parameters to invoke the pre-defined functions.
 
-- [Transaction](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/master/rkpythonlib/transaction.py) Library to work with RecordsKeeper transactions. You can send transaction, create raw transaction, sign raw transaction, send raw transaction, send signed transaction, retrieve transaction information and calculate transaction's fees by using transaction class. You just have to pass parameters to invoke the pre-defined functions.
+- [Transaction]((https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/python-3.0/recordskeeper_python_lib3/transaction.py) Library to work with RecordsKeeper transactions. You can send transaction, create raw transaction, sign raw transaction, send raw transaction, send signed transaction, retrieve transaction information and calculate transaction's fees by using transaction class. You just have to pass parameters to invoke the pre-defined functions.
 
-- [Wallet](https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/master/rkpythonlib/wallet.py) Library to work with RecordsKeeper wallet functionalities. You can create wallet, dump wallet into a file, backup wallet into a file, import wallet from a file, lock wallet, unlock wallet, change wallet's password, retrieve private key, retrieve wallet's information, sign and verify message by using wallet class. You just have to pass parameters to invoke the pre-defined functions.
+- [Wallet]((https://github.com/RecordsKeeper/recordskeeper-python-sdk/blob/python-3.0/recordskeeper_python_lib3/wallet.py) Library to work with RecordsKeeper wallet functionalities. You can create wallet, dump wallet into a file, backup wallet into a file, import wallet from a file, lock wallet, unlock wallet, change wallet's password, retrieve private key, retrieve wallet's information, sign and verify message by using wallet class. You just have to pass parameters to invoke the pre-defined functions.
 
 ## Unit Tests
 
-Under recordskeeper-python-lib3/test using test data from config.yaml file. 
+Under recordskeeper_python_lib3/test using test data from config.yaml file. 
 
 - To run all the test cases:
 
@@ -115,7 +115,7 @@ green testname
 The complete docs are here: [RecordsKeeper python library documentation](https://github.com/RecordsKeeper/recordskeeper-python-sdk/tree/python-3.0/docs/source).
 
 - [Read for python version 3 or greater](https://github.com/RecordsKeeper/recordskeeper-python-sdk/tree/python-3.0/docs/source)
-- [Read for python version 2](https://github.com/RecordsKeeper/recordskeeper-python-sdk/tree/master/docs)
+- [Read for python version 2](https://github.com/RecordsKeeper/recordskeeper-python-sdk/tree/master/docs/source)
 
 
 ## License

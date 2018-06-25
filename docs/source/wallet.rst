@@ -21,69 +21,47 @@ Import these python libraries first to get started with the functionality.
     import binascii
 
 
-Create Connection
------------------
+Creating Connection
+-------------------
 
-Entry point for accessing Wallet class resources.
+Entry point for accessing Address class resources.
+
+Config file to import config parameters:
+
+```bash
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+```
+   
+Importing chain url and chain name from config file:
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-.. code-block:: python
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
+```bash
 
-.. note::
-    
-    * Set this **network** value to change the network-type
-    * Default network is **Test network**, you can change its value to select mainnet or testnet
+    url = network['url']
+    chain = network['chain']
 
-
-.. code-block:: python
-
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-
-.. code-block:: python 
-
-    if (network==cfg['testnet']):
-
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-    
+```   
 
 Node Authentication
 -------------------
 
-Import values from config file.
+Importing user name and password values from config file to authenticate the node:
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-Default value of network is **test-net**, you can change its value to select mainnet or testnet
-
-.. code-block:: python
+```bash
     
-    network = cfg['testnet']                    #network variable to store the network that you want to access
+    user = network['rkuser']
+    password = network['passwd']
 
-    if (network==cfg['testnet']):
-
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-
-
+```
 Now we have node authentication credentials.
+
 
 Wallet Class
 ------------
@@ -101,11 +79,11 @@ createWallet() function is used to create wallet on RecordsKeeper blockchain
 
     createWallet()  
 
-    publicaddress, privatekey, publickey = createWallet()   
+    result = createWallet()   
 
-    print publicaddress                 #prints public address of the wallet
-    print privatekey                    #prints private key of the wallet
-    print publickey                     #prints public key of the wallet
+    print result['public address']        #prints public address of the wallet
+    print result['private key']           #prints private key of the wallet
+    print result['public key']            #prints public key of the wallet
 
 It will return the public address, public key and private key.
 
@@ -123,7 +101,7 @@ getPrivateKey() function is used to retrieve private key of the given address.
     getPrivateKey(public_address)  
     privkey = getPrivateKey(public_address) 
   
-    print privkey        # prints private key of the given address
+    print privkey        #prints private key of the given address
 
 It will return private key of the given address.
 
@@ -135,11 +113,11 @@ retrieveWalletinfo() function is used to retrieve node wallet's information.
 .. code-block:: python
 
     retrieveWalletinfo()  
-    balance, tx_count, unspent_tx = retrieveWalletinfo() 
+    result = retrieveWalletinfo() 
   
-    print balance      # prints wallet's balance
-    print tx_count     #prints wallet transaction count
-    print unspent_tx   #prints unspent wallet transactions
+    print result['balance']      #prints wallet's balance
+    print result['tx count']     #prints wallet transaction count
+    print result['unspent tx']   #prints unspent wallet transactions
 
 It will return wallet's balance, transaction count and unspent transactions.
 

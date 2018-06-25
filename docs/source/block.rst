@@ -21,68 +21,45 @@ Import these python libraries first to get started with the functionality.
     import sys
 
 
-Create Connection
------------------
+Creating Connection
+-------------------
 
-Entry point for accessing Block class resources.
+Entry point for accessing Address class resources.
+
+Config file to import config parameters:
+
+```bash
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+```
+   
+Importing chain url and chain name from config file:
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-.. code-block:: python
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
+```bash
 
-Default value of network is **Test-net**, you can change its value to select mainnet or testnet
+    url = network['url']
+    chain = network['chain']
 
-.. code-block:: python
-
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-    if (network==cfg['testnet']):
-
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-    
+```   
 
 Node Authentication
 -------------------
 
-Import values from config file.
+Importing user name and password values from config file to authenticate the node:
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-.. note::
+```bash
     
-    * Set this **network** value to change the network-type
-    * Default network is **Test network**, you can change its value to select mainnet or testnet
+    user = network['rkuser']
+    password = network['passwd']
 
-
-.. code-block:: python
-    
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-    
-.. code-block:: python 
-
-    if (network==cfg['testnet']):
-
-        user = cfg['testnet']['rkuser']
-        password = cfg['testnet']['passwd']
-        
-    else:
-
-        user = cfg['mainnet']['rkuser']
-        password = cfg['mainnet']['passwd']
-
-
+```
 Now we have node authentication credentials.
 
 
@@ -102,19 +79,19 @@ You have to pass these block height as the argument to the blockinfo function ca
 .. code-block:: python
 
     blockinfo(block_height)
-    tx_count, tx, miner, size, nonce, blockHash, prevblock, nextblock, merkleroot, blocktime, difficulty = blockinfo(block_height)
+    result = blockinfo(block_height)
 
-    print tx_count      # prints transaction count of the block
-    print tx            # prints transaction ids of the block
-    print size          # prints size of the block
-    print blockHash     # prints hash value of the block
-    print nonce         # prints nonce of the block
-    print miner         # prints miner's address of the block
-    print nextblock     # prints next block's hash
-    print prevblock     # prints previous block's hash
-    print merkleroot    # prints merkle root of the block
-    print blocktime     # prints time at which block is mined
-    print difficulty    # prints difficulty of the block
+    print result['txcount']      #prints transaction count of the block
+    print result['tx']           #prints transaction ids of the block
+    print result['size']         #prints size of the block
+    print result['blockhash']    #prints hash value of the block
+    print result['nonce']        #prints nonce of the block
+    print result['miner']        #prints miner's address of the block
+    print result['nextblock']    #prints next block's hash
+    print result['prevblock']    #prints previous block's hash
+    print result['merkleroot']   #prints merkle root of the block
+    print result['blocktime']    #prints time at which block is mined
+    print result['difficulty']   #prints difficulty of the block
 
 It will return transaction ids, transaction count, nonce, size, hash value, previous block's hash value, next block hash value, merkle root, difficulty, blocktime and miner address of the block.
 
@@ -130,11 +107,11 @@ You have to pass these block height as the argument to the retrieveBlocks functi
     . code-block:: python
 
     retrieveBlocks(block_range)
-    block_hash, miner_add, block_time, txcount = retrieveBlocks(block_range)
+    result  = retrieveBlocks(block_range)
 
-    print block_hash    # prints hash of the blocks
-    print miner_add     # prints miner of the blocks
-    print block_time    # prints block time of the blocks
-    print txcount       # prints transaction count of the blocks
+    print result['blockhash']    #prints hash of the blocks
+    print result['miner']        #prints miner of the blocks
+    print result['blocktime']    #prints block time of the blocks
+    print result['tx count']     #prints transaction count of the blocks
 
 It will return blockhash, miner address, blocktime and transaction count of the blocks.

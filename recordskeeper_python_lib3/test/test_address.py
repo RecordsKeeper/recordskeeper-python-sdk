@@ -1,7 +1,8 @@
 import unittest
 import yaml
 import binascii
-from rklib3 import address
+from recordskeeper_python_lib3 import address
+from recordskeeper_python_lib3.address import Address
 
 
 import sys
@@ -22,47 +23,47 @@ class AddressTest(unittest.TestCase):
 
     def test_checkifvalid(self):
 
-        checkaddress = Address.checkifValid(net['validaddress'])
+        checkaddress = Address.checkifValid(self, net['validaddress'])
         self.assertEqual(checkaddress, 'Address is valid')
 
     def test_failcheckifvalid(self):
 
-        wrongaddress = Address.checkifValid(net['invalidaddress'])
+        wrongaddress = Address.checkifValid(self, net['invalidaddress'])
         self.assertEqual(wrongaddress, 'Address is valid')
 
     def test_checkifmineallowed(self):
 
-        checkaddress = Address.checkifMineAllowed(net['miningaddress'])
+        checkaddress = Address.checkifMineAllowed(self, net['miningaddress'])
         self.assertEqual(checkaddress, 'Address has mining permission')
 
     def test_failcheckifmineallowed(self):
 
-        wrongaddress = Address.checkifMineAllowed(net['nonminingaddress'])
+        wrongaddress = Address.checkifMineAllowed(self, net['nonminingaddress'])
         self.assertEqual(wrongaddress, 'Address has mining permission')
 
     def test_checkbalance(self):
 
-        balance = Address.checkBalance(net['nonminingaddress'])
+        balance = Address.checkBalance(self, net['nonminingaddress'])
         self.assertEqual(balance, 5)
 
     def test_getmultisigwalletaddress(self):
 
-        address = Address.getMultisigWalletAddress(2, "miygjUPKZNV94t9f8FqNvNG9YjCkp5qqBZ, mwDbTVQcATL263JwpoE8AHCMGM5hE1kd7m, mpC8A8Fob9ADZQA7iLrctKtwzyWTx118Q9")
+        address = Address.getMultisigWalletAddress(self, 2, "miygjUPKZNV94t9f8FqNvNG9YjCkp5qqBZ, mwDbTVQcATL263JwpoE8AHCMGM5hE1kd7m, mpC8A8Fob9ADZQA7iLrctKtwzyWTx118Q9")
         self.assertEqual(address, net['multisigaddress'])
 
     def test_getmultisigaddress(self):
 
-        address = Address.getMultisigAddress(2,  "miygjUPKZNV94t9f8FqNvNG9YjCkp5qqBZ, mwDbTVQcATL263JwpoE8AHCMGM5hE1kd7m, mpC8A8Fob9ADZQA7iLrctKtwzyWTx118Q9" )
+        address = Address.getMultisigAddress(self, 2,  "miygjUPKZNV94t9f8FqNvNG9YjCkp5qqBZ, mwDbTVQcATL263JwpoE8AHCMGM5hE1kd7m, mpC8A8Fob9ADZQA7iLrctKtwzyWTx118Q9" )
         self.assertEqual(address, net['multisigaddress'])
 
     def test_importaddress(self):
 
-        address = Address.importAddress(net['miningaddress'])
+        address = Address.importAddress(self, net['miningaddress'])
         self.assertEqual(address, "Address successfully imported")
 
     def test_wrongimportaddress(self):
 
-        address = Address.importAddress(net['wrongimportaddress'])
+        address = Address.importAddress(self, net['wrongimportaddress'])
         self.assertEqual(address, "Invalid Rk address or script")
 
 

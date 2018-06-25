@@ -6,69 +6,45 @@ Library to work with RecordsKeeper permissions.
 
 You can grant and revoke permissions like connect, send, receive, create, issue, mine, activate, admin by using Assets class. You just have to pass parameters to invoke the pre-defined functions.
 
-Create Connection
------------------
+Libraries
+---------
 
-Entry point for accessing Stream class resources.
+Import these python libraries first to get started with the functionality.
+
+.. code-block:: python
+
+    import requests
+    import json
+    from requests.auth import HTTPBasicAuth
+    import yaml
+    import sys
+    import binascii
+
+
+Creating Connection
+-------------------
+
+Entry point for accessing Address class resources.
+
+Config file to import config parameters:
+
+```bash
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+```
+   
+Importing chain url and chain name from config file:
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-.. code-block:: python
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
+```bash
 
-Default value of network is **test-net**, you can change its value to select mainnet or testnet
+    url = network['url']
+    chain = network['chain']
 
-.. code-block:: python
-
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-    if (network==cfg['testnet']):
-
-        user = cfg['testnet']['rkuser']
-        password = cfg['testnet']['passwd']
-        
-    else:
-
-        user = cfg['mainnet']['rkuser']
-        password = cfg['mainnet']['passwd']
-    
-
-Node Authentication
--------------------
-
-Import values from config file.
-
-* User name: The rpc user is used to call the APIs.
-* Password: The rpc password is used to authenticate the APIs.
-
-.. note::
-    
-    * Set this **network** value to change the network-type
-    * Default network is **Test network**, you can change its value to select mainnet or testnet
-
-
-.. code-block:: python
-    
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-.. code-block:: python 
-
-    if (network==cfg['testnet']):
-
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-
-
-Now we have node authentication credentials.
-
+```   
 
 Node Authentication
 -------------------

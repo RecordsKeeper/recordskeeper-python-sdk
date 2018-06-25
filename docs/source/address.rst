@@ -22,67 +22,45 @@ Import these python libraries first to get started with the functionality.
     import binascii
 
 
-Create Connection
------------------
+Creating Connection
+-------------------
 
 Entry point for accessing Address class resources.
+
+Config file to import config parameters:
+
+```bash
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+```
+   
+Importing chain url and chain name from config file:
 
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-.. code-block:: python
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
+```bash
 
-.. note::
-    
-    * Set this **network** value to change the network-type
-    * Default network is **Test network**, you can change its value to select mainnet or testnet
+    url = network['url']
+    chain = network['chain']
 
-.. code-block:: python
-
-    network = cfg['testnet']                    #network variable to store the network that you want to access
-
-
-.. code-block:: python 
-
-    if (network==cfg['testnet']):
-
-        url = cfg['testnet']['url']
-        chain = cfg['testnet']['chain']
-        
-    else:
-
-        url = cfg['mainnet']['url']
-        chain = cfg['mainnet']['chain']
-    
+```   
 
 Node Authentication
 -------------------
 
-Import values from config file.
+Importing user name and password values from config file to authenticate the node:
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-Default value of network is **Test-net**, you can change its value to select mainnet or testnet
-
-.. code-block:: python
+```bash
     
-    network = cfg['testnet']                    #network variable to store the network that you want to access
+    user = network['rkuser']
+    password = network['passwd']
 
-    if (network==cfg['testnet']):
-
-        user = cfg['testnet']['rkuser']
-        password = cfg['testnet']['passwd']
-        
-    else:
-
-        user = cfg['mainnet']['rkuser']
-        password = cfg['mainnet']['passwd']
-
-
+```
 Now we have node authentication credentials.
 
 Address Class
@@ -123,7 +101,7 @@ getMultisigAddress() function is used to generate a new multisignature address.
 
     newAddress = getMultisigAddress(nrequired, key)          #getMultisigAddress() function call   
 
-    print newAddress                           # prints a new address
+    print newAddress                                         #prints a new address
 
 It will return a new multisignature address on RecordsKeeper Blockchain.
 
@@ -141,9 +119,9 @@ getMultisigWalletAddress() function is used to generate a new wallet address.
 
     getMultisigWalletAddress(nrequired, key)  
 
-    newAddress = getMultisigWalletAddress(nrequired, key)    #getMultisigWalletAddress() function call   
+    newAddress = getMultisigWalletAddress(nrequired, key)   #getMultisigWalletAddress() function call   
 
-    print newAddress                           #prints a new address
+    print newAddress                                        #prints a new address
 
 It will return a new multisignature address on the wallet.
 
@@ -155,10 +133,11 @@ retrieveAddresses() function is used to list all addresses and no of addresses o
 .. code-block:: python
 
     retrieveAddresses()  
-    allAddresses, address_count = retrieveAddresses()       #retrieveAddresses() function call
+    result = retrieveAddresses()       #retrieveAddresses() function call
   
-    print allAddresses       # prints all the addresses of the wallet
-    print address_count      # prints the address count
+    print result['address']             #prints all the addresses of the wallet
+    print result['address count']       #prints the address count
+
 
 It will return all the addresses and the count of the addresses on the wallet.
 
@@ -174,9 +153,9 @@ checkifValid() function is used to check validity of a particular address.
 .. code-block:: python
 
     checkifValid()  
-    addressC = checkifValid(address)                #checkifValid() function call 
+    validity = checkifValid(address)         #checkifValid() function call 
   
-    print addressC      # prints validity
+    print validity                           #prints validity
 
 It will return if an address is valid or not.
 
@@ -194,7 +173,7 @@ checkifMineAllowed() function is used to sign raw transaction by passing transac
     checkifMineAllowed(address) 
     permissionCheck = checkifMineAllowed(address)   #checkifMineAllowed() function call
     
-    print permissionCheck      # prints permission status of the given address
+    print permissionCheck      #prints permission status of the given address
 
 It will return if mining permission is allowed or not.
 
@@ -212,7 +191,7 @@ checkBalance() function is used to check the balance of the address.
     checkBalance(address)
     address_balance = checkBalance(address)     #checkBalance() function call
   
-    print address_balance    # prints balance of the address
+    print address_balance    #prints balance of the address
 
 It will return the balance of the address on RecordsKeeper Blockchain.
 
@@ -230,6 +209,6 @@ importAddress() function is used to check the balance of the address.
     importAddress(public_address)
     response = importAddress(public_address)     #importAddress() function call
   
-    print response    # prints response
+    print response    #prints response
 
 It will return the response of the importAddress() function call.

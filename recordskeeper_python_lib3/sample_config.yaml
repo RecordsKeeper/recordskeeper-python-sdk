@@ -1,15 +1,11 @@
 # config.yaml
-testnet:
+network:
     url: testurl
     rkuser: rkuser
     passwd: rkpwd
     chain: test-chain
 
-mainnet:
-    url: mainurl
-    rkuser: rkuser
-    passwd: rkpwd
-    chain: main-chain
+
 
 
 

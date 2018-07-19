@@ -2,10 +2,9 @@
 Blockchain Class Usage
 ======================
 
-Library to work with Blockchain in RecordsKeeper Blockchain.
+Library to work with Blockchain class in RecordsKeeper Blockchain.
 
-You can generate new address, check all addresses, check address validity, check address permissions, check address balance
-by using Address class. You just have to pass parameters to invoke the pre-defined functions.
+You can get chain information, node information, node's permissions, pending transaction information and node balance by using Blockchain class. You just have to pass parameters to invoke the pre-defined functions of Blockchain class.
 
 Libraries
 ---------
@@ -27,40 +26,38 @@ Creating Connection
 
 Entry point for accessing Address class resources.
 
-Config file to import config parameters:
-
-```bash
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
-```
-   
-Importing chain url and chain name from config file:
-
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-```bash
+.. code-block:: python
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+.. code-block:: python
+
+    network = cfg['network']                    #network variable to store the network that you want to access
+
+
+.. code-block:: python 
 
     url = network['url']
     chain = network['chain']
 
-```   
 
 Node Authentication
 -------------------
 
-Importing user name and password values from config file to authenticate the node:
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-```bash
+.. code-block:: python
     
     user = network['rkuser']
     password = network['passwd']
 
-```
 Now we have node authentication credentials.
 
 Blockchain Class
@@ -68,7 +65,7 @@ Blockchain Class
 
 .. class:: Blockchain
 
-Blockchain class is used to call blockchain related functions like retrieving blockchain parameters, retrieving node's information, retrieving mempool's information, retrieving node's permissions and check node's balance functions which are used on the RecordsKeeeper Blockchain. 
+    Blockchain class is used to call blockchain related functions like retrieving blockchain parameters, retrieving node's information, retrieving mempool's information, retrieving node's permissions and check node's balance functions which are used on the RecordsKeeeper Blockchain. 
 
 
 **1. Retrieve Blockchain parameters of RecordsKeeper Blockchain**
@@ -79,12 +76,12 @@ getChainInfo() function is used to retrieve Blockchain parameters.
 
     getChainInfo()  
 
-    result = getChainInfo()             #getChainInfo() function call   
+    result = getChainInfo()                 #getChainInfo() function call   
 
     print result['chain-protocol']          #prints blockchain's protocol
     print result['chain-description']       #prints blockchain's description
     print result['root-stream-name']        #prints blockchain's root stream
-    print result['maximum-blocksize']       #prints blockchain's maximum block size
+    print result['maximum-blocksize']      #prints blockchain's maximum block size
     print result['default-network-port']    #prints blockchain's default network port
     print result['default-rpc-port']        #prints blockchain's default rpc port
     print result['mining-diversity']        #prints blockchain's mining diversity
@@ -105,7 +102,7 @@ getNodeInfo() function is used to retrieve node's information on RecordsKeeper B
     print result['node balance']      #prints balance of the node
     print result['synced blocks']      #prints no of synced blocks
     print result['node address']      #prints node's address
-    print result['difficulty']      #prints node's difficulty
+    print result['difficulty']      #prints node's difficulty 
 
 It will return node's balance, no of synced blocks, node's address and node's difficulty.
 
@@ -148,7 +145,7 @@ checkNodeBalance() function is used to check the total balance of the node.
     checkNodeBalance()
     node_balance = checkNodeBalance()     #checkNodeBalance() function call
   
-    print node_balance    #prints total balance of the node
+    print node_balance          #prints total balance of the node
 
 It will return the total balance of the node on RecordsKeeper Blockchain.
 

@@ -6,11 +6,27 @@ import json
 from recordskeeper_python_lib3 import wallet
 from recordskeeper_python_lib3.wallet import Wallet
 
-with open("config.yaml", 'r') as ymlfile:
-    cfg = yaml.load(ymlfile)
+import os.path
 
-net = wallet.network
+if (os.path.exists("config.yaml")):
+   with open("config.yaml", 'r') as ymlfile:
+      cfg = yaml.load(ymlfile)
+      
+      network = cfg['network']
 
+      url = network['url']
+      user = network['rkuser']
+      password = network['passwd']
+      chain = network['chain']
+      net = address.network
+else:
+   
+   url = os.environ['url']
+   user = os.environ['rkuser']
+   password = os.environ['passwd']
+   chain = os.environ['chain']
+   net = os.environ 
+   
 class WalletTest(unittest.TestCase):
 
     def test_createwallet(self):

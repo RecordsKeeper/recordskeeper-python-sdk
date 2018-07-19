@@ -9,11 +9,11 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
     README = f.read()
 
-requires = ["requests", "green", "pyyaml", "json", "yaml", "sys", "binascii", "codecs"]
+requires = ["requests", "green", "pyyaml"]
 
 setup(
       name='recordskeeper_python_lib3',
-      version='0.1.0',
+      version='0.1.2',
       description='RecordsKeeper Python library v3',
       long_description=README,
       long_description_content_type='text/markdown',

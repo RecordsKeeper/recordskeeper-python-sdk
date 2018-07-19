@@ -2,9 +2,9 @@
 Permissions Class Usage
 =======================
 
-Library to work with RecordsKeeper permissions.
+Library to work with Permission class in RecordsKeeper Blockchain.
 
-You can grant and revoke permissions like connect, send, receive, create, issue, mine, activate, admin by using Assets class. You just have to pass parameters to invoke the pre-defined functions.
+You can grant or revoke permissions like create, send, recieve, mine, admin, connect, issue and activate by using Permissions class. You just have to pass parameters to invoke the pre-defined functions.
 
 Libraries
 ---------
@@ -26,38 +26,37 @@ Creating Connection
 
 Entry point for accessing Address class resources.
 
-Config file to import config parameters:
-
-```bash
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
-```
-   
-Importing chain url and chain name from config file:
-
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-```bash
+.. code-block:: python
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+.. code-block:: python
+
+    network = cfg['network']                    #network variable to store the network that you want to access
+
+
+.. code-block:: python 
 
     url = network['url']
     chain = network['chain']
 
-```   
 
 Node Authentication
 -------------------
 
-Import values from config file.
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
 .. code-block:: python
     
-    user = cfg['testnet']['rkuser']
-    password = cfg['testnet']['passwd']
+    user = network['rkuser']
+    password = network['passwd']
 
 Now we have node authentication credentials.
 
@@ -66,7 +65,7 @@ Permissions Class
 
 .. class:: Permissions
 
-Permissions class is used to call permissions related functions like grant and revoke permissions for an address functions which are used on the RecordsKeeeper Blockchain. 
+    Permissions class is used to call permissions related functions like grant and revoke permissions for an address functions which are used on the RecordsKeeeper Blockchain. 
 
 
 **1. Grant Permissions to an address on the RecordsKeeper Blockchain**
@@ -84,7 +83,7 @@ grantPermission() function is used to grant permissions like connect, send, rece
 
     result = grantPermission(address, permissions)          #grantPermission() function call   
 
-    print txid                  # prints response of the grant permision transaction
+    print txid           # prints response of the grant permision transaction
 
 It will return the transaction id of the permission transaction.
 
@@ -103,6 +102,6 @@ revokePermission() function is used to revoke permissions like connect, send, re
     revokePermission(address, permissions)  
     result = revokePermission(address, permissions)       #revokePermission() function call
   
-    print result                # prints response of the revoke permision transaction
+    print result         # prints response of the revoke permision transaction
 
 It will return the transaction id of the permission transaction.

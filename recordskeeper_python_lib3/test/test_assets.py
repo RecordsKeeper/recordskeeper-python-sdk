@@ -7,10 +7,26 @@ from recordskeeper_python_lib3.assets import Assets
 
 import sys
 
-with open("config.yaml", 'r') as ymlfile:
-    cfg = yaml.load(ymlfile)
+import os.path
+if (os.path.exists("config.yaml")):
+   with open("config.yaml", 'r') as ymlfile:
+      cfg = yaml.load(ymlfile)
+      
+      network = cfg['network']
 
-net = assets.network
+      url = network['url']
+      user = network['rkuser']
+      password = network['passwd']
+      chain = network['chain']
+      net = address.network
+else:
+   
+   url = os.environ['url']
+   user = os.environ['rkuser']
+   password = os.environ['passwd']
+   chain = os.environ['chain']
+   net = os.environ 
+
 
 class AssetsTest(unittest.TestCase):
 

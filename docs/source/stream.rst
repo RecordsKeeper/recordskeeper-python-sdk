@@ -4,8 +4,7 @@ Stream Class Usage
 
 Library to work with RecordsKeeper streams.
 
-You can publish, retrieve and verify stream data by using stream class.
-You just have to pass parameters to invoke the pre-defined functions.
+You can publish, retrieve and verify stream data by using Stream class. You just have to pass parameters to invoke the pre-defined functions of Stream class.
 
 Libraries
 ---------
@@ -27,49 +26,46 @@ Creating Connection
 
 Entry point for accessing Address class resources.
 
-Config file to import config parameters:
-
-```bash
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
-```
-   
-Importing chain url and chain name from config file:
-
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-```bash
+.. code-block:: python
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+.. code-block:: python
+
+    network = cfg['network']                    #network variable to store the network that you want to access
+
+
+.. code-block:: python 
 
     url = network['url']
     chain = network['chain']
 
-```   
 
 Node Authentication
 -------------------
 
-Importing user name and password values from config file to authenticate the node:
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-```bash
+.. code-block:: python
     
     user = network['rkuser']
     password = network['passwd']
 
-```
 Now we have node authentication credentials.
-
 
 Stream Class
 ------------
 
 .. class:: Stream
 
-Stream class to call stream related functions like publish, retrievewithtxid, retrieveWithAddress, retrieveWithKey and verify data functions which are used to publish data into the stream, retrieve data from the stream and verify data from the stream. 
+    Stream class to call stream related functions like publish, retrievewithtxid, retrieveWithAddress, retrieveWithKey and verify data functions which are used to publish data into the stream, retrieve data from the stream and verify data from the stream. 
 
 **1. Publish**
 
@@ -89,9 +85,9 @@ The **data.hex()** will convert the data into a hex value
 
     txid = publish(address, stream, key, data)    
 
-    print txid  #prints the transaction id of the data published
+    print txid    #prints the transaction id of the data published
 
-It will return a transaction id of the published data, use this information to retrieve the particular data from the stream.
+It will return the transaction id of the published data, use this information to retrieve the particular data from the stream.
 
 
 **2. Retrieve an existing item from a particular stream against a transaction id**
@@ -103,7 +99,7 @@ You have to pass these two arguments to the retrieve function call:
 
 .. code-block:: python
 
-    retrieve(stream, txid)                  # call retrieve function with stream and txid as the required parameters
+    retrieve(stream, txid)          #call retrieve function with stream and txid as the required parameters
     result = retrieve(stream, txid) 
   
     print result    #prints info of the transaction 
@@ -145,7 +141,7 @@ You have to pass these three arguments to the retrieveWithKey function call:
 
     print result['publisher']    #prints publisher's address of the published data
     print result['txid']         #prints transaction id of the data
-    print result['data']         #prints raw data
+    print result['data']         #prints raw data 
 
 It will return the key value, raw data and transaction id of the published item.
 
@@ -162,7 +158,7 @@ You have to pass these three arguments to the retrieveWithKey function call:
     verifyData(stream, data, count)
     result = verifyData(stream, data, count)
 
-    print result     #prints if verification is successful or not
+    print result                #prints if verification is successful or not
 
 It will return the result if verification is successful or not.
 

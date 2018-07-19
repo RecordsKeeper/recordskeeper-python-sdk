@@ -15,17 +15,24 @@ import binascii
 
 	Import values from config file."""
 
-with open("config.yaml", 'r') as ymlfile:
-   cfg = yaml.load(ymlfile)
+import os.path
+if (os.path.exists("config.yaml")):
+   with open("config.yaml", 'r') as ymlfile:
+      cfg = yaml.load(ymlfile)
+      
+      network = cfg['network']
+
+      url = network['url']
+      user = network['rkuser']
+      password = network['passwd']
+      chain = network['chain']
+else:
    
-   network = cfg['network']
-
-   url = network['url']
-   user = network['rkuser']
-   password = network['passwd']
-   chain = network['chain']
-	
-
+   url = os.environ['url']
+   user = os.environ['rkuser']
+   password = os.environ['passwd']
+   chain = os.environ['chain'] 
+   
 """Stream class to access stream related functions"""
 
 class Stream:

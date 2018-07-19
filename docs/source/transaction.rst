@@ -4,9 +4,7 @@ Transaction Class Usage
 
 Library to work with RecordsKeeper transactions.
 
-You can send transaction, create raw transaction, sign raw transaction, send raw transaction, send signed transaction,
-retrieve transaction information and calculate transaction's fees by using transaction class. You just have to pass
-parameters to invoke the pre-defined functions.
+You can send transaction, create raw transaction, sign raw transaction, send raw transaction, send signed transaction, retrieve transaction information and calculate transaction's fees by using transaction class. You just have to pass parameters to invoke the pre-defined functions.
 
 Libraries
 ---------
@@ -28,49 +26,46 @@ Creating Connection
 
 Entry point for accessing Address class resources.
 
-Config file to import config parameters:
-
-```bash
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
-```
-   
-Importing chain url and chain name from config file:
-
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-```bash
+.. code-block:: python
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+.. code-block:: python
+
+    network = cfg['network']                    #network variable to store the network that you want to access
+
+
+.. code-block:: python 
 
     url = network['url']
     chain = network['chain']
 
-```   
 
 Node Authentication
 -------------------
 
-Importing user name and password values from config file to authenticate the node:
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-```bash
+.. code-block:: python
     
     user = network['rkuser']
     password = network['passwd']
 
-```
 Now we have node authentication credentials.
-
 
 Transaction Class
 -----------------
 
 .. class:: Transaction
 
-Transaction class is used to call transaction related functions like create raw transaction, sign transaction, send transaction , retrieve transaction and verify transaction functions which are used to create raw transactions, send transactions, sign transactions, retrieve transactions and verify transactions on the RecordsKeeeper Blockchain. 
+    Transaction class is used to call transaction related functions like create raw transaction, sign transaction, send transaction , retrieve transaction and verify transaction functions which are used to create raw transactions, send transactions, sign transactions, retrieve transactions and verify transactions on the RecordsKeeeper Blockchain. 
 
 
 **1. Send Transaction without signing with private key**
@@ -89,7 +84,7 @@ sendTransaction() function is used to send transaction by passing reciever's add
 
     txid = sendTransaction(sender_address, reciever_address, data, amount)   
 
-    print txid                  #prints transaction id of the sent transaction
+    print txid           #prints transaction id of the sent transaction
 
 It will return the transaction id of the raw transaction.
 
@@ -186,8 +181,8 @@ retrieveTransaction() function is used to retrieve transaction's information by 
     retrieveTransaction(tx_id)
     result = retrieveTransaction(tx_id)
 
-    print result['sent data']       #prints sent data
-    print result['sent amount']     #prints sent amount
+    print (result['sent data'])       #prints sent data
+    print (result['sent amount'])     #prints sent amount
      
 
 It will return the sent data and sent amount of the retrieved transaction.
@@ -207,7 +202,7 @@ getFee() function is used to calculate transaction's fee by passing transaction 
     getFee(address, tx_id)
     Fees = getFee(address, tx_id)
 
-    print (Fees)              #prints fees consumed in the verified transaction
+    print (Fees)             #prints fees consumed in the verified transaction
     
 It will return the fees consumed in the transaction.
 

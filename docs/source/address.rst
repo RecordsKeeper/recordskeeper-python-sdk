@@ -27,40 +27,38 @@ Creating Connection
 
 Entry point for accessing Address class resources.
 
-Config file to import config parameters:
-
-```bash
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
-```
-   
-Importing chain url and chain name from config file:
-
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-```bash
+.. code-block:: python
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+.. code-block:: python
+
+    network = cfg['network']                    #network variable to store the network that you want to access
+
+
+.. code-block:: python 
 
     url = network['url']
     chain = network['chain']
 
-```   
 
 Node Authentication
 -------------------
 
-Importing user name and password values from config file to authenticate the node:
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-```bash
+.. code-block:: python
     
     user = network['rkuser']
     password = network['passwd']
 
-```
 Now we have node authentication credentials.
 
 Address Class
@@ -68,7 +66,7 @@ Address Class
 
 .. class:: Address
 
-Address class is used to call address related functions like generate new address, list all addresses and no of addresses on the node's wallet, check if given address is valid or not, check if given address has mining permission or not and check a particular address balance on the node functions which are used on the RecordsKeeeper Blockchain. 
+    Address class is used to call address related functions like generate new address, list all addresses and no of addresses on the node's wallet, check if given address is valid or not, check if given address has mining permission or not and check a particular address balance on the node functions which are used on the RecordsKeeeper Blockchain. 
 
 
 **1. Generate new address on the node's wallet**
@@ -101,7 +99,7 @@ getMultisigAddress() function is used to generate a new multisignature address.
 
     newAddress = getMultisigAddress(nrequired, key)          #getMultisigAddress() function call   
 
-    print newAddress                                         #prints a new address
+    print newAddress                           # prints a new address
 
 It will return a new multisignature address on RecordsKeeper Blockchain.
 
@@ -119,9 +117,9 @@ getMultisigWalletAddress() function is used to generate a new wallet address.
 
     getMultisigWalletAddress(nrequired, key)  
 
-    newAddress = getMultisigWalletAddress(nrequired, key)   #getMultisigWalletAddress() function call   
+    newAddress = getMultisigWalletAddress(nrequired, key)    #getMultisigWalletAddress() function call   
 
-    print newAddress                                        #prints a new address
+    print newAddress                           #prints a new address
 
 It will return a new multisignature address on the wallet.
 
@@ -138,7 +136,6 @@ retrieveAddresses() function is used to list all addresses and no of addresses o
     print result['address']             #prints all the addresses of the wallet
     print result['address count']       #prints the address count
 
-
 It will return all the addresses and the count of the addresses on the wallet.
 
 
@@ -153,9 +150,9 @@ checkifValid() function is used to check validity of a particular address.
 .. code-block:: python
 
     checkifValid()  
-    validity = checkifValid(address)         #checkifValid() function call 
+    addressCheck = checkifValid(address)  #checkifValid() function call 
   
-    print validity                           #prints validity
+    print addressCheck      # prints validity of the address
 
 It will return if an address is valid or not.
 
@@ -173,7 +170,7 @@ checkifMineAllowed() function is used to sign raw transaction by passing transac
     checkifMineAllowed(address) 
     permissionCheck = checkifMineAllowed(address)   #checkifMineAllowed() function call
     
-    print permissionCheck      #prints permission status of the given address
+    print permissionCheck      # prints permission status of the given address
 
 It will return if mining permission is allowed or not.
 
@@ -191,7 +188,7 @@ checkBalance() function is used to check the balance of the address.
     checkBalance(address)
     address_balance = checkBalance(address)     #checkBalance() function call
   
-    print address_balance    #prints balance of the address
+    print address_balance    # prints balance of the address
 
 It will return the balance of the address on RecordsKeeper Blockchain.
 
@@ -209,6 +206,6 @@ importAddress() function is used to check the balance of the address.
     importAddress(public_address)
     response = importAddress(public_address)     #importAddress() function call
   
-    print response    #prints response
+    print response    # prints response whether address is successfully imported or not
 
 It will return the response of the importAddress() function call.

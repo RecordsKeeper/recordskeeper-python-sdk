@@ -18,16 +18,24 @@ import codecs
 """ Entry point for accessing Transaction class resources.
 	Import values from config file."""
 
-with open("config.yaml", 'r') as ymlfile:
-   cfg = yaml.load(ymlfile)
-   
-   network = cfg['network']
+import os.path
 
-   url = network['url']
-   user = network['rkuser']
-   password = network['passwd']
-   chain = network['chain']
-	
+if (os.path.exists("config.yaml")):
+   with open("config.yaml", 'r') as ymlfile:
+      cfg = yaml.load(ymlfile)
+      
+      network = cfg['network']
+
+      url = network['url']
+      user = network['rkuser']
+      password = network['passwd']
+      chain = network['chain']
+else:
+   
+   url = os.environ['url']
+   user = os.environ['rkuser']
+   password = os.environ['passwd']
+   chain = os.environ['chain'] 
 
 #Transaction class to access transaction related functions
 class Transaction:
@@ -117,7 +125,19 @@ class Transaction:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		signedHex = response_json[0]['result']['hex']
+		tx_status = response_json[0]['result']
+
+		if tx_status is None:
+
+			signedHex = response_json[0]['error']['message']
+
+		else:
+			status = response_json[0]['result']['complete']
+
+			if status == True:
+				signedHex = response_json[0]['result']['hex']
+			else:
+				signedHex = "Transaction has not been signed properly"
 		
 		return signedHex;
 

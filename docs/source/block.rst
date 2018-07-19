@@ -4,8 +4,7 @@ Block Class Usage
 
 Library to work with RecordsKeeper block informaion.
 
-You can collect block information by using block class.
-You just have to pass parameters to invoke the pre-defined functions.
+You can collect block information like block's transaction count, blocktime, blockhash, miner of the block by using block class. You just have to pass parameters to invoke the pre-defined functions of Block class.
 
 Libraries
 ---------
@@ -26,40 +25,40 @@ Creating Connection
 
 Entry point for accessing Address class resources.
 
-Config file to import config parameters:
-
-```bash
-    
-    with open("config.yaml", 'r') as ymlfile:
-        cfg = yaml.load(ymlfile)
-```
-   
-Importing chain url and chain name from config file:
-
 * URL: Url to connect to the chain ([RPC Host]:[RPC Port])
 * Chain-name: chain name
 
-```bash
+.. code-block:: python
+    
+    with open("config.yaml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+.. code-block:: python
+
+    network = cfg['network']                    #network variable to store the network that you want to access
+
+
+.. code-block:: python 
 
     url = network['url']
     chain = network['chain']
 
-```   
 
 Node Authentication
 -------------------
 
-Importing user name and password values from config file to authenticate the node:
+Importing values from config file.
 
 * User name: The rpc user is used to call the APIs.
 * Password: The rpc password is used to authenticate the APIs.
 
-```bash
+Default value of network is **Test-net**, you can change its value to select mainnet or testnet
+
+.. code-block:: python
     
     user = network['rkuser']
     password = network['passwd']
 
-```
 Now we have node authentication credentials.
 
 
@@ -68,9 +67,9 @@ Block Class
 
 .. class:: Block
 
-**1. Block info to retrieve block information**
+    Block class is used to call block related function like blockinfo which is used to retrieve block details like block's hash value, size, nonce, transaction ids, transaction count, miner address, previous block hash, next block hash, merkleroot, blocktime and difficulty of the block for which you have made the query.
 
-Block class is used to call block related function like blockinfo which is used to retrieve block details like block's hash value, size, nonce, transaction ids, transaction count, miner address, previous block hash, next block hash, merkleroot, blocktime and difficulty of the block for which you have made the query.
+**1. Block info to retrieve block information**
 
 You have to pass these block height as the argument to the blockinfo function call:
 
@@ -107,7 +106,7 @@ You have to pass these block height as the argument to the retrieveBlocks functi
     . code-block:: python
 
     retrieveBlocks(block_range)
-    result  = retrieveBlocks(block_range)
+    result = retrieveBlocks(block_range)
 
     print result['blockhash']    #prints hash of the blocks
     print result['miner']        #prints miner of the blocks

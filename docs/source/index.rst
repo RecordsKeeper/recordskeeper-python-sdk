@@ -13,12 +13,12 @@ package manager for Python. There are two different packages for two different v
 
 .. code-block:: bash
 
-    pip install recordskeeper-python-lib
+    pip install recordskeeper_python_lib3
 
 Compatibility
 -------------
 
-The SDK has been tested with Python 2.7.
+The SDK has been tested with Python 3.5.
 
 
 Classes
@@ -30,8 +30,7 @@ Classes
 
 .. toctree::
    :maxdepth: 2
-   :caption: Classes: 
- 
+   
    address
    assets
    block

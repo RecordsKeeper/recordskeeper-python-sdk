@@ -13,7 +13,7 @@ requires = ["requests", "green", "pyyaml"]
 
 setup(
       name='recordskeeper_python_lib3',
-      version='0.1.2',
+      version='0.1.3',
       description='RecordsKeeper Python library v3',
       long_description=README,
       long_description_content_type='text/markdown',

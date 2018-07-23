@@ -1,0 +1,8 @@
+requests==2.14.2
+green==2.12.1
+pyymal==3.13
+json
+sys
+binascii
+codecs
+unittest

@@ -55,7 +55,7 @@ class BlockchainTest(unittest.TestCase):
         pendingtx = Blockchain.getpendingTransactions(self)
         pending_tx = json.loads(pendingtx)
         pendingtxcount = pending_tx['tx_count']
-        self.assertListEqual(pendingtx, "Currently, No Pending Transactions")
+        self.assertListEqual(pendingtx, 0)
 
     def test_checknodebalance(self):
 

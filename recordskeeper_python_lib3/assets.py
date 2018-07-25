@@ -64,7 +64,7 @@ class Assets:
 
 			txid = response_json[0]['error']['message']
 		
-		return txid;										#variable to store issue transaction id
+		return txid										#variable to store issue transaction id
 	
 	#txid = createAsset(address, asset_name, asset_qty)		#createAsset() function call	
 
@@ -91,7 +91,11 @@ class Assets:
 
 		txid = response_json[0]['result']
 		
-		return txid;										#variable to store transaction id
+		if txid is None:
+
+			txid = response_json[0]['error']['message']
+		
+		return txid										#variable to store issue transaction id
 
 	#  address, assetname, qty = sendAsset(self, address, assetname, qty) #call to invoke sendAsset() function
 

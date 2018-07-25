@@ -32,7 +32,7 @@ class AddressTest(unittest.TestCase):
 
     def test_getaddress(self):
         
-        address = Address.getAddress()
+        address = Address.getAddress(self)
         address_size = sys.getsizeof(address)
         self.assertEqual(address_size, 83)
 
@@ -59,16 +59,16 @@ class AddressTest(unittest.TestCase):
     def test_checkbalance(self):
 
         balance = Address.checkBalance(self, net['nonminingaddress'])
-        self.assertEqual(balance, 5)
+        self.assertGreaterEqual(balance, 0)
 
     def test_getmultisigwalletaddress(self):
 
-        address = Address.getMultisigWalletAddress(self, 2, "miygjUPKZNV94t9f8FqNvNG9YjCkp5qqBZ, mwDbTVQcATL263JwpoE8AHCMGM5hE1kd7m, mpC8A8Fob9ADZQA7iLrctKtwzyWTx118Q9")
+        address = Address.getMultisigWalletAddress(self, 2, "1Hz4LNyw29vp1sJvmya2KYR9tEfoNQ1G8bVvP3,1aj3G4tK9JkiD4XgjET3M7bzvfrLXQ5tRJn86R,1MQjnwpg6xVFm2TRfFTwXHVSzMN1g8yjp7CaJg")
         self.assertEqual(address, net['multisigaddress'])
 
     def test_getmultisigaddress(self):
 
-        address = Address.getMultisigAddress(self, 2,  "miygjUPKZNV94t9f8FqNvNG9YjCkp5qqBZ, mwDbTVQcATL263JwpoE8AHCMGM5hE1kd7m, mpC8A8Fob9ADZQA7iLrctKtwzyWTx118Q9" )
+        address = Address.getMultisigAddress(self, 2,  "1Hz4LNyw29vp1sJvmya2KYR9tEfoNQ1G8bVvP3,1aj3G4tK9JkiD4XgjET3M7bzvfrLXQ5tRJn86R,1MQjnwpg6xVFm2TRfFTwXHVSzMN1g8yjp7CaJg" )
         self.assertEqual(address, net['multisigaddress'])
 
     def test_importaddress(self):

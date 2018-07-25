@@ -48,9 +48,8 @@ class Address:
          response_json = response.json()
 
          address = response_json[0]['result']
+         
          return address;                           #returns new address
-
-      #newAddress = getAddress()                   #getAddress() function call
 
       """function to generate a new multisignature address"""
 

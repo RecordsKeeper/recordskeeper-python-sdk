@@ -32,25 +32,29 @@
 
 #     def test_grantpermissions(self):
         
-#         txid = Permissions.grantPermission(self, net['permissionaddress'], "create, connect")
-#         self.assertEqual(txid, 'Invalid permission')
+#         txid = Permissions.grantPermission(self, net['permissionaddress'], "create,connect")
+#         tx_size = sys.getsizeof(txid)
+#         self.assertEqual(tx_size, 113)
 
 #     def test_revokepermissions(self):
 
-#         txid = Permissions.revokePermission(self, net['permissionaddress'], "send, admin")
-#         self.assertEqual(txid, 'Invalid permission')
+#         txid = Permissions.revokePermission(self, net['permissionaddress'], "create,connect")
+#         tx_size = sys.getsizeof(txid)
+#         self.assertEqual(tx_size, 113)
 
 
 #     def test_failgrantpermissions(self):
 
-#     	txid = Permissions.grantPermission(self, net['permissionaddress'], "create, connect")
-#     	self.assertEqual(txid, 'e3bba87d1f0a980b65f12388d31c734ea38b08d11d00aaab1004e470ca419556')
+#     	txid = Permissions.grantPermission(self, net['permissionaddress'], "create,connect")
+#     	tx_size = sys.getsizeof(txid)
+#       self.assertNotEqual(tx_size, 113)
 
 
 #     def test_failrevokepermissions(self):
 
-#     	txid = Permissions.revokePermission(self, net['permissionaddress'], "create, connect")
-#     	self.assertEqual(txid, 'e3bba87d1f0a980b65f12388d31c734ea38b08d11d00aaab1004e470ca419556')
+#     	txid = Permissions.revokePermission(self, net['permissionaddress'], "create,connect")
+#     	tx_size = sys.getsizeof(txid)
+#       self.assertNotEqual(tx_size, 113)
         
 
 # if __name__ == '__main__':

@@ -21,13 +21,11 @@ import os.path
 if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
-      
-      network = cfg['network']
 
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
 else:
    
    url = os.environ['url']
@@ -375,10 +373,12 @@ class Wallet:
 			
 		signedMessage = response_json[0]['result']
 
+		if signedMessage is None:
+			signedMessage = response_json[0]['error']['message']
+
 		return signedMessage;										#returns private key
 
 	#signedmessage = signMessage(private_key, message)				#signMessage() function call
-
 
 	"""function to verify message on RecordsKeeper Blockchain"""
 
@@ -400,6 +400,9 @@ class Wallet:
 
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
+
+		check = response_json[0]['result']
+		error = response_json[0]['error']
 			
 		verifiedMessage = response_json[0]['result']
 
@@ -407,9 +410,13 @@ class Wallet:
 
 			validity = "Yes, message is verified"
 		
-		else:
+		elif error is None:
 
 			validity = "No, signedMessage is not correct"
+
+		else:
+
+			validity = error['message']
 
 		return validity;										#returns validity
 

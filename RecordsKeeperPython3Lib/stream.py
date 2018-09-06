@@ -19,13 +19,11 @@ import os.path
 if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
-      
-      network = cfg['network']
 
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
 else:
    
    url = os.environ['url']
@@ -61,7 +59,10 @@ class Stream:
 		response_json = response.json()
 
 		txid = response_json[0]['result']
-		
+
+		if txid is None:
+			txid = response_json[0]['error']['message']
+
 		return txid;
 	
 	#txid = publish(address, stream, key, data)		#variable to store transaction id
@@ -87,9 +88,17 @@ class Stream:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		data = response_json[0]['result']['data']
-		
-		raw_data = binascii.unhexlify(data).decode('utf-8')		#returns raw data 
+		check = response_json[0]['result']
+
+		if check is None:
+
+			raw_data = response_json[0]['error']['message']
+
+		else:
+
+			data = response_json[0]['result']['data']
+			
+			raw_data = binascii.unhexlify(data).decode('utf-8')		#returns raw data 
 		
 		return raw_data;
 
@@ -117,19 +126,25 @@ class Stream:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		key = []
-		raw_data = []
-		txid = []
+		check = response_json[0]['result']
+		
+		if check is None:
+			addressitems = response_json[0]['error']['message']
 
-		for i in range(0, count):	
-			
-			key.append(response_json[0]['result'][i]['key'])			#returns key value of the published data	
-			data = response_json[0]['result'][i]['data']				#returns hex data
-			raw_data.append(binascii.unhexlify(data).decode('utf-8'))	#returns raw data
-			txid.append(response_json[0]['result'][i]['txid'])			#returns tx id
+		else:
+			key = []
+			raw_data = []
+			txid = []
 
-		address_items = {"key": key, "data": raw_data, "txid": txid}
-		addressitems = json.dumps(address_items)
+			for i in range(0, len(check)):	
+				
+				key.append(response_json[0]['result'][i]['key'])			#returns key value of the published data	
+				data = response_json[0]['result'][i]['data']				#returns hex data
+				raw_data.append(binascii.unhexlify(data).decode('utf-8'))	#returns raw data
+				txid.append(response_json[0]['result'][i]['txid'])			#returns tx id
+
+			address_items = {"key": key, "data": raw_data, "txid": txid}
+			addressitems = json.dumps(address_items)
 		
 		return addressitems;
 
@@ -157,25 +172,32 @@ class Stream:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		publisher = []
-		raw_data = []
-		txid = []
+		check = response_json[0]['result']
 
-		for i in range(0, count):
+		if check is None:
 
-			publisher.append(response_json[0]['result'][i]['publishers'][0])	#returns publisher's address of published data		
-			data = response_json[0]['result'][i]['data']						#returns published hex data
-			raw_data.append(binascii.unhexlify(data).decode('utf-8'))			#returns data published
-			txid.append(response_json[0]['result'][i]['txid'])					#returns transaction id of published data
+			keyitems = response_json[0]['error']['message']
 
-		keyitems = {"publisher": publisher, "data": raw_data, "txid": txid}
-		key_items = json.dumps(keyitems)
+		else:
+
+			publisher = []
+			raw_data = []
+			txid = []
+
+			for i in range(0, len(check)):
+
+				publisher.append(response_json[0]['result'][i]['publishers'][0])	#returns publisher's address of published data		
+				data = response_json[0]['result'][i]['data']						#returns published hex data
+				raw_data.append(binascii.unhexlify(data).decode('utf-8'))			#returns data published
+				txid.append(response_json[0]['result'][i]['txid'])					#returns transaction id of published data
+
+			key_items = {"publisher": publisher, "data": raw_data, "txid": txid}
+			keyitems = json.dumps(key_items)
 		
-		return key_items;
+		return keyitems;
 
 	#publisher, raw_data, txid = retrieveWithKey(stream, key, count)		#call to retrieveWithKey() function
 	
-
 	"""function to verify data on RecordsKeeper Blockchain"""
 
 	def verifyData(self, stream, data, count):				#verifyData() function definition
@@ -197,31 +219,40 @@ class Stream:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		raw_data = []											
+		check = response_json[0]['result']
 
-		for i in range(0, count):	
-			
-			result_data = response_json[0]['result'][i]['data']						#returns hex data
+		if check is None:
 
-			if type(result_data) is str:
+			result = response_json[0]['error']['message']
 
-				raw_data.append(binascii.unhexlify(result_data).decode('utf-8'))	#returns raw data
-				
-			else:
-					
-				raw_data.append("No data found")		
-
-		if data in raw_data:
-
-			result = "Data is successfully verified."
-				
 		else:
 
-			result = "Data not found."
+			raw_data = []											
+
+			for i in range(0, len(check)):	
+				
+				result_data = response_json[0]['result'][i]['data']						#returns hex data
+
+				if type(result_data) is str:
+
+					raw_data.append(binascii.unhexlify(result_data).decode('utf-8'))	#returns raw data
+					
+				else:
+						
+					raw_data.append("No data found")		
+
+			if data in raw_data:
+
+				result = "Data is successfully verified."
+					
+			else:
+
+				result = "Data not found."
 
 		return result;
 
 	#pub = verifyData("root","test data to check", 20 )		#call to verifyData() function
+
 
 	"""function to list stream items on RecordsKeeper Blockchain"""
 
@@ -243,22 +274,30 @@ class Stream:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()										
 
-		address =[]
-		key_value = []
-		raw_data = []
-		txid = []
+		check = response_json[0]['result']
 
-		for i in range(0, count):	
-			
-			address.append(response_json[0]['result'][i]['publishers'])		#returns publisher address		
-			key_value.append(response_json[0]['result'][i]['key'])			#returns key value of data
-			data = response_json[0]['result'][i]['data']					#returns hex data
-			raw_data.append(binascii.unhexlify(data).decode('utf-8'))		#returns raw data
-			txid.append(response_json[0]['result'][i]['txid'])				#returns tx id
+		if check is None:
 
-		items = {"address": address, "key": key_value, "data": raw_data, "txid": txid}
-		items_json = json.dumps(items)
+			items = response_json[0]['error']['message']
 		
-		return items_json;
+		else:
+
+			address =[]
+			key_value = []
+			raw_data = []
+			txid = []
+
+			for i in range(0, len(check)):	
+				
+				address.append(response_json[0]['result'][i]['publishers'])		#returns publisher address		
+				key_value.append(response_json[0]['result'][i]['key'])			#returns key value of data
+				data = response_json[0]['result'][i]['data']					#returns hex data
+				raw_data.append(binascii.unhexlify(data).decode('utf-8'))		#returns raw data
+				txid.append(response_json[0]['result'][i]['txid'])				#returns tx id
+
+			items_json = {"address": address, "key": key_value, "data": raw_data, "txid": txid}
+			items = json.dumps(items_json)
+		
+		return items;
 
 	#result = retrieveItems("root", 5)		#call to retrieveItems() function

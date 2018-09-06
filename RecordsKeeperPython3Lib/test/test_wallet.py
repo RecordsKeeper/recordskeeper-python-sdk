@@ -3,29 +3,27 @@ import yaml
 import binascii
 import sys
 import json
-from recordskeeper_python_lib3 import wallet
-from recordskeeper_python_lib3.wallet import Wallet
+from RecordsKeeperPython3Lib import wallet
+from RecordsKeeperPython3Lib.wallet import Wallet
 
 import os.path
 
 if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
-      
-      network = cfg['network']
 
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
-      net = address.network
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
+
 else:
    
    url = os.environ['url']
    user = os.environ['rkuser']
    password = os.environ['passwd']
    chain = os.environ['chain']
-   net = os.environ 
+
    
 class WalletTest(unittest.TestCase):
 
@@ -39,8 +37,8 @@ class WalletTest(unittest.TestCase):
 
     def test_getprivkey(self):
 
-        checkprivkey = Wallet.getPrivateKey(self, net['miningaddress'])
-        self.assertEqual(checkprivkey, net['privatekey'])
+        checkprivkey = Wallet.getPrivateKey(self, cfg['miningaddress'])
+        self.assertEqual(checkprivkey, cfg['privatekey'])
 
     def test_retrievewalletinfo(self):
 
@@ -51,12 +49,12 @@ class WalletTest(unittest.TestCase):
 
     def test_signmessage(self):
 
-        signedMessage = Wallet.signMessage(self, net['privatekey'], net['testdata'])
-        self.assertEqual(signedMessage, net['signedtestdata'])
+        signedMessage = Wallet.signMessage(self, cfg['privatekey'], cfg['testdata'])
+        self.assertEqual(signedMessage, cfg['signedtestdata'])
 
     def test_verifymessage(self):
 
-        validity = Wallet.verifyMessage(self, net['miningaddress'], net['signedtestdata'], net['testdata'])
+        validity = Wallet.verifyMessage(self, cfg['miningaddress'], cfg['signedtestdata'], cfg['testdata'])
         self.assertEqual(validity, 'Yes, message is verified')
 
 if __name__ == '__main__':

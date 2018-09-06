@@ -20,13 +20,11 @@ import os.path
 if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
-      
-      network = cfg['network']
 
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
 else:
    
    url = os.environ['url']
@@ -206,7 +204,15 @@ class Address:
 
          response_json = response.json()
 
-         balance = response_json[0]['result'][0]['qty']
+         check = balance = response_json[0]['result']
+
+         if check is None:
+
+            balance = response_json[0]['error']['message']
+
+         else:
+
+            balance = response_json[0]['result'][0]['qty']
 
          return balance;                     #returns balance of a particular node address
 

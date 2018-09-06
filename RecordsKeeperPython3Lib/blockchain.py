@@ -26,12 +26,10 @@ if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
       
-      network = cfg['network']
-
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
 else:
    
    url = os.environ['url']
@@ -132,8 +130,10 @@ class Blockchain:
 
 		for i in range(0, pms_count):
 			permissions.append(response_json[0]['result'][i]['type'])
+			permissions_list = set(permissions)
+			permissions_unique = list(permissions_list)
 
-		return permissions;							#returns list of permissions
+		return permissions_unique;							#returns list of permissions
 
 	#result = permissions()							#permissions() function call
 
@@ -197,18 +197,24 @@ class Blockchain:
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
-		 	{ "method": "getmultibalances",
+
+		 	{ "method": "getinfo",
 		      "params": [],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
 		    }]
+
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 			
-		balance = response_json[0]['result']['total'][0]['qty']
+		node_balance = response_json[0]['result']['balance']
 
-		return balance;							#returns balance of complete node
+		node_info = {"node balance": node_balance}
+		
+		nodeinfo = json.dumps(node_info)
+
+		return nodeinfo;			#returns node's balance
 
 	#node_balance = checkNodeBalance()		#checkNodeBalance() function call
 

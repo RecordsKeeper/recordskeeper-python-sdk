@@ -20,12 +20,10 @@ if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
       
-      network = cfg['network']
-
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
 else:
    
    url = os.environ['url']

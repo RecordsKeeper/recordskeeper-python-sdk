@@ -1,8 +1,8 @@
 import unittest
 import yaml
 import json
-from recordskeeper_python_lib3 import block
-from recordskeeper_python_lib3.block import Block
+from RecordsKeeperPython3Lib import block
+from RecordsKeeperPython3Lib.block import Block
 
 import sys
 
@@ -11,21 +11,18 @@ import os.path
 if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
-      
-      network = cfg['network']
 
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
-      net = address.network
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
+
 else:
    
    url = os.environ['url']
    user = os.environ['rkuser']
    password = os.environ['passwd']
    chain = os.environ['chain']
-   net = os.environ 
 
 class BlockTest(unittest.TestCase):
 

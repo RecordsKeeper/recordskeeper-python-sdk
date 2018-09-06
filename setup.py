@@ -12,8 +12,8 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 requires = ["requests", "green", "pyyaml"]
 
 setup(
-      name='recordskeeper_python_lib3',
-      version='0.1.3',
+      name='RecordsKeeperPython3Lib',
+      version='0.1.1',
       description='RecordsKeeper Python library v3',
       long_description=README,
       long_description_content_type='text/markdown',

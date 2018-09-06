@@ -16,21 +16,15 @@ import sys
 
 	Import values from config file."""
 
-""" Entry point for accessing Stream class resources.
-
-	Import values from config file."""
-
 import os.path
 if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
       
-      network = cfg['network']
-
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
 else:
    
    url = os.environ['url']
@@ -63,31 +57,39 @@ class Block:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		tx_count = len(response_json[0]['result']['tx'])					#variable returns block's transaction count
-		miner = response_json[0]['result']['miner']							#variable returns block's miner 
-		size = response_json[0]['result']['size']							#variable returns block's size
-		nonce = response_json[0]['result']['nonce']							#variable returns block's nonce
-		blockHash = response_json[0]['result']['hash']						#variable returns blockhash
-		prevblock = response_json[0]['result']['previousblockhash']			#variable returns prevblockhash
-		nextblock = response_json[0]['result']['nextblockhash']				#variable returns nextblockhash
-		merkleroot = response_json[0]['result']['merkleroot']				#variable returns merkleroot
-		blocktime = response_json[0]['result']['time']						#variable returns blocktime
-		difficulty = response_json[0]['result']['difficulty']				#variable returns difficulty
+		check = response_json[0]['result']
 
-		tx = []																#list to store transaction ids
-		
-		for i in range(0, tx_count):
+		if check is None:
+
+			blockinfo = response_json[0]['error']['message']
+
+		else:
+
+			tx_count = len(response_json[0]['result']['tx'])					#variable returns block's transaction count
+			miner = response_json[0]['result']['miner']							#variable returns block's miner 
+			size = response_json[0]['result']['size']							#variable returns block's size
+			nonce = response_json[0]['result']['nonce']							#variable returns block's nonce
+			blockHash = response_json[0]['result']['hash']						#variable returns blockhash
+			prevblock = response_json[0]['result']['previousblockhash']			#variable returns prevblockhash
+			nextblock = response_json[0]['result']['nextblockhash']				#variable returns nextblockhash
+			merkleroot = response_json[0]['result']['merkleroot']				#variable returns merkleroot
+			blocktime = response_json[0]['result']['time']						#variable returns blocktime
+			difficulty = response_json[0]['result']['difficulty']				#variable returns difficulty
+
+			tx = []																#list to store transaction ids
 			
-			tx.append(response_json[0]['result']['tx'][i])					#appends transaction ids into tx list
+			for i in range(0, tx_count):
+				
+				tx.append(response_json[0]['result']['tx'][i])					#appends transaction ids into tx list
 
-		blockinfo_result = {"txcount": tx_count, "miner": miner, "size": size, "nonce": nonce, "blockhash": blockHash, "prevblock": prevblock, "nextblock": nextblock, "merkleroot": merkleroot, "blocktime": blocktime, "difficulty": difficulty, "tx": tx}
+			blockinfo_result = {"txcount": tx_count, "miner": miner, "size": size, "nonce": nonce, "blockhash": blockHash, "prevblock": prevblock, "nextblock": nextblock, "merkleroot": merkleroot, "blocktime": blocktime, "difficulty": difficulty, "tx": tx}
 
-		blockinfo = json.dumps(blockinfo_result)
+			blockinfo = json.dumps(blockinfo_result)
 
 		return  blockinfo;    #call to blockinfo function 
 
 
-	"""function to retrieve blocks on RecordsKeeper Blockchain"""
+	"""function to retrieve a range of blocks on RecordsKeeper Blockchain"""
 
 	def retrieveBlocks(self, block_range):		#retrieveBlocks() function definition
 		

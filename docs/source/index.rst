@@ -13,7 +13,7 @@ package manager for Python. There are two different packages for two different v
 
 .. code-block:: bash
 
-    pip install recordskeeper_python_lib3
+    pip install RecordsKeeperPython3Lib
 
 Compatibility
 -------------

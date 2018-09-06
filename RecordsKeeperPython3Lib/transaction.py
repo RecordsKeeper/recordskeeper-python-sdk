@@ -23,13 +23,11 @@ import os.path
 if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
-      
-      network = cfg['network']
 
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
 else:
    
    url = os.environ['url']
@@ -66,6 +64,9 @@ class Transaction:
 
 		txid = response_json[0]['result']
 
+		if txid is None:
+			txid = response_json[0]['error']['message']
+
 		return txid;								#return transaction id
 
 
@@ -95,6 +96,9 @@ class Transaction:
 		response_json = response.json()
 
 		txhex = response_json[0]['result']
+
+		if txhex is None:
+			txhex = response_json[0]['error']['message']
 		
 		return txhex;						# return transaction hex of raw transaction
 
@@ -272,15 +276,20 @@ class Transaction:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		
-		sent_hex_data = response_json[0]['result']['data'][0]
-		
-		sent_data = binascii.unhexlify(sent_hex_data).decode('utf-8')
+		check = response_json[0]['result']
 
-		sent_amount = response_json[0]['result']['vout'][0]['value']
+		if check is None:
 
-		transaction_info = {"sent amount": sent_amount, "sent data": sent_data}
-		transactioninfo = json.dumps(transaction_info)
+			transactioninfo = response_json[0]['error']['message']
+
+		else:
+
+			sent_hex_data = response_json[0]['result']['data'][0]
+			sent_data = binascii.unhexlify(sent_hex_data).decode('utf-8')
+			sent_amount = response_json[0]['result']['vout'][0]['value']
+
+			transaction_info = {"sent amount": sent_amount, "sent data": sent_data}
+			transactioninfo = json.dumps(transaction_info)
 
 		return transactioninfo;	 #returns data from retrieved transaction
 
@@ -306,12 +315,20 @@ class Transaction:
 
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
+
+		check = response_json[0]['result']
+
+		if check is None:
+
+			fees = response_json[0]['error']['message']
 		
-		sent_amount = response_json[0]['result']['vout'][0]['amount']
+		else:
+			
+			sent_amount = response_json[0]['result']['vout'][0]['amount']
 
-		balance_amount = response_json[0]['result']['balance']['amount']
+			balance_amount = response_json[0]['result']['balance']['amount']
 
-		fees = (abs(balance_amount) - sent_amount)
+			fees = (abs(balance_amount) - sent_amount)
 		
 		return fees;				#returns fees
 

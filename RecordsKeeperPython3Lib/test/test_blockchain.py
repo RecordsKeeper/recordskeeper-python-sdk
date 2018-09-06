@@ -2,8 +2,8 @@ import unittest
 import yaml
 import binascii
 import json
-from recordskeeper_python_lib3 import blockchain
-from recordskeeper_python_lib3.blockchain import Blockchain
+from RecordsKeeperPython3Lib import blockchain
+from RecordsKeeperPython3Lib.blockchain import Blockchain
 
 import sys
 
@@ -11,21 +11,18 @@ import os.path
 if (os.path.exists("config.yaml")):
    with open("config.yaml", 'r') as ymlfile:
       cfg = yaml.load(ymlfile)
-      
-      network = cfg['network']
 
-      url = network['url']
-      user = network['rkuser']
-      password = network['passwd']
-      chain = network['chain']
-      net = address.network
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
+
 else:
    
    url = os.environ['url']
    user = os.environ['rkuser']
    password = os.environ['passwd']
    chain = os.environ['chain']
-   net = os.environ 
 
 class BlockchainTest(unittest.TestCase):
 
@@ -34,7 +31,7 @@ class BlockchainTest(unittest.TestCase):
         chainname = Blockchain.getChainInfo(self)
         chain_name = json.loads(chainname)
         chainName = chain_name['chain-name']
-        self.assertEqual(chainName, net['chain'])
+        self.assertEqual(chainName, cfg['chain'])
 
     def test_getnodeinfo(self):
 
@@ -55,7 +52,7 @@ class BlockchainTest(unittest.TestCase):
         pendingtx = Blockchain.getpendingTransactions(self)
         pending_tx = json.loads(pendingtx)
         pendingtxcount = pending_tx['tx_count']
-        self.assertListEqual(pendingtx, 0)
+        self.assertEqual(pendingtx, 0)
 
     def test_checknodebalance(self):
 

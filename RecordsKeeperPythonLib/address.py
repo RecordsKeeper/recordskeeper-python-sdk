@@ -16,15 +16,23 @@ import binascii
 
 	Import values from config file."""
 
-with open("config.yaml", 'r') as ymlfile:
-   cfg = yaml.load(ymlfile)
-   
-   network = cfg['network']
+import os.path
 
-   url = network['url']
-   user = network['rkuser']
-   password = network['passwd']
-   chain = network['chain']
+if (os.path.exists("config.yaml")):
+   with open("config.yaml", 'r') as ymlfile:
+      cfg = yaml.load(ymlfile)
+
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
+
+else:
+   
+   url = os.environ['url']
+   user = os.environ['rkuser']
+   password = os.environ['passwd']
+   chain = os.environ['chain']
 
 #Address class to access address related functions
 class Address:
@@ -40,13 +48,13 @@ class Address:
    		response_json = response.json()
 
    		address = response_json[0]['result']
-   		return address;									#returns new address
+   		return address;	#returns new address
 
-   	#newAddress = getAddress()							#getAddress() function call
+   	#newAddress = getAddress()		#getAddress() function call
 
    	"""function to generate a new multisignature address"""
 
-   	def getMultisigAddress(self, nrequired, key):		#getMultisigAddress() function definition
+   	def getMultisigAddress(self, nrequired, key):	#getMultisigAddress() function definition
 
    		self.nrequired = nrequired
    		self.key = key 
@@ -72,13 +80,13 @@ class Address:
 
    			res = response_json[0]['result']['address']
 
-   		return res;										#returns new multisig address
+   		return res;		#returns new multisig address
 
    	#newAddress = getMultisigAddress(nrequired, key)	#getMultisigAddress() function call
 
    	"""function to generate a new multisignature address on the node's wallet"""
 
-   	def getMultisigWalletAddress(self, nrequired, key):
+   	def getMultisigWalletAddress(self, nrequired, key):  #getMultisigWalletAddress() function definition
 
    		self.nrequired = nrequired
    		self.key = key
@@ -102,13 +110,13 @@ class Address:
 
    			res = response_json[0]['result']
 
-   		return res;									#returns new multisig address
+   		return res;		#returns new multisig address
 
-   	#newAddress = getMultisigWalletAddress(nrequired, key)	#getMultisigWalletAddress() function call
+   	#newAddress = getMultisigWalletAddress(nrequired, key)  #getMultisigWalletAddress() function call
 
    	"""function to list all addresses and no of addresses on the node's wallet"""
    	
-   	def retrieveAddresses(self):						#retrieveAddresses() function call\
+   	def retrieveAddresses(self):		#retrieveAddresses() function definition
 
          headers = { 'content-type': 'application/json'}
 
@@ -130,13 +138,13 @@ class Address:
 
          addresses = json.dumps(address_response)
 
-         return addresses;					#returns allAddresses and address count
+         return addresses;		#returns allAddresses and address count
 
-   	#allAddresses, address_count = retrieveAddresses()	#retrieveAddresses() function call
+   	#addressDetails = retrieveAddresses()	#retrieveAddresses() function call
 
    	"""function to check if given address is valid or not"""
 
-   	def checkifValid(self, address):						#checkifValid() function definition
+   	def checkifValid(self, address):		#checkifValid() function definition
    		
    		self.address = address
 
@@ -150,15 +158,15 @@ class Address:
 
    		if validity is True:
 
-   			addressCheck = "Address is valid"		#print if address is valid
+   			addressCheck = "Address is valid"	#print if address is valid
 
    		else:
 
-   			addressCheck= "Address is invalid"		#print if address is invalid	
+   			addressCheck= "Address is invalid"	#print if address is invalid	
 
-   		return addressCheck;						#returns validity of address
+   		return addressCheck;		#returns validity of address
 
-   	#addressC = checkifValid('self', 'wGUjFtakjkZRNF1sYnDtd5Now6zEWUGcC')
+   	#addressCheck = checkifValid(address)
 	
    	"""function to check if given address has mining permission or not"""
 
@@ -192,13 +200,13 @@ class Address:
 
             permissionCheck = "Invalid address, please check for valid address"
 
-         return permissionCheck;							#returns mining permission
+         return permissionCheck;		#returns mining permission
 
    	#permissionCheck = checkifMineAllowed(address)	#checkifMineAllowed() function call
 
    	"""function to check node address balance on RecordsKeeper Blockchain"""
 
-   	def checkBalance(self, address):					#checkBalance() function definition
+   	def checkBalance(self, address):		#checkBalance() function definition
 
    		self.address = address
 
@@ -209,15 +217,23 @@ class Address:
 
    		response_json = response.json()
 
-   		balance = response_json[0]['result'][0]['qty']
+         check = response_json[0]['result']
 
-   		return balance;							#returns balance of a particular node address
+         if check is None:
+            
+            balance = response_json[0]['error']['message']
+
+         else:
+
+            balance = response_json[0]['result'][0]['qty']
+
+   		return balance;	#returns balance of a particular node address
 
    	#address_balance = checkBalance(address)	#checkBalance() function call
 
    	"""function to import address on RecordsKeeper Blockchain"""
 
-   	def importAddress(self, public_address):				#importAddress() function call
+   	def importAddress(self, public_address):	#importAddress() function definition
 
    		self.public_address = public_address 
 
@@ -236,7 +252,7 @@ class Address:
 
    		elif (result is None and error != None):
 
-   			resp = response_json[0]['error']['message']			#returns new multisig address
+   			resp = response_json[0]['error']['message']
 
    		else:
 

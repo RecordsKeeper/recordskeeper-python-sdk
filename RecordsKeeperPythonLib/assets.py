@@ -12,19 +12,27 @@ import yaml
 import binascii
 import sys
 
-""" Entry point for accessing Stream class resources.
+""" Entry point for accessing Assets class resources.
 
 	Import values from config file."""
 
-with open("config.yaml", 'r') as ymlfile:
-   cfg = yaml.load(ymlfile)
-   
-   network = cfg['network']
+import os.path
 
-   url = network['url']
-   user = network['rkuser']
-   password = network['passwd']
-   chain = network['chain']
+if (os.path.exists("config.yaml")):
+   with open("config.yaml", 'r') as ymlfile:
+      cfg = yaml.load(ymlfile)
+
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
+
+else:
+   
+   url = os.environ['url']
+   user = os.environ['rkuser']
+   password = os.environ['passwd']
+   chain = os.environ['chain']
 	
 	
 """Assets class to access asset related functions"""
@@ -33,7 +41,7 @@ class Assets:
 	
 	"""function to create or issue an asset"""
 
-	def createAsset(self, address, asset_name, asset_qty):		#createAsset() function definition
+	def createAsset(self, address, asset_name, asset_qty): #createAsset() function definition
 		
 		self.address = address
 		self.asset_name = asset_name
@@ -58,14 +66,14 @@ class Assets:
 
 			txid = response_json[0]['error']['message']
 		
-		return txid;										#variable to store issue transaction id
+		return txid;	#variable to store issue transaction id
 	
-	#txid = createAsset(address, asset_name, asset_qty)		#createAsset() function call	
+	#txid = createAsset(address, asset_name, asset_qty)	#createAsset() function call	
 
 	
 	"""function to send assets to a particular address"""
 
-	def sendAsset(self, address, assetname, qty):			#sendAsset() function definition
+	def sendAsset(self, address, assetname, qty):	#sendAsset() function definition
 
 		self.address = address
 		self.assetname = assetname
@@ -84,14 +92,18 @@ class Assets:
 		response_json = response.json()
 
 		txid = response_json[0]['result']
-		
-		return txid;										#variable to store transaction id
 
-	#  address, assetname, qty = sendAsset(self, address, assetname, qty) #call to invoke sendAsset() function
+		if txid is None:
+
+			txid = response_json[0]['error']['message']
+		
+		return txid;	#variable to store transaction id
+
+	#  txid = sendAsset(address, assetname, qty)  #call to invoke sendAsset() function
 
 	"""function to retrieve assets information"""
 
-	def retrieveAssets(self):								#retrieveAssets() function definition
+	def retrieveAssets(self):	#retrieveAssets() function definition
 
 		asset_name = []
 		issue_id = []
@@ -109,20 +121,20 @@ class Assets:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 
-		asset_count = len(response_json[0]['result'])					#returns assets count
+		asset_count = len(response_json[0]['result'])	#returns assets count
 
 		for i in range(0, asset_count):
 
-			asset_name.append(response_json[0]['result'][i]['name'])		#returns asset name
-			issue_id.append (response_json[0]['result'][i]['issuetxid'])	#returns issue id
-			issue_qty.append(response_json[0]['result'][i]['issueraw'])		#returns issue quantity
+			asset_name.append(response_json[0]['result'][i]['name'])	 #returns asset name
+			issue_id.append (response_json[0]['result'][i]['issuetxid']) #returns issue id
+			issue_qty.append(response_json[0]['result'][i]['issueraw'])	 #returns issue quantity
 
 		asset_list = {'name':asset_name, 'id':issue_id, 'qty':issue_qty, "asset count":asset_count}
 		assets = json.dumps(asset_list)
 		
 		return assets;
 
-	# assetname, issueid, issueqty, assetcount = retrieveAssets()	#call to invoke retrieveAssets() function
+	# assetDetails = retrieveAssets()	#call to invoke retrieveAssets() function
 	
 
 	

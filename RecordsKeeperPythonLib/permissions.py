@@ -16,24 +16,30 @@ import binascii
 
 	Import values from config file."""
 
-with open("config.yaml", 'r') as ymlfile:
-   cfg = yaml.load(ymlfile)
+import os.path
+
+if (os.path.exists("config.yaml")):
+   with open("config.yaml", 'r') as ymlfile:
+      cfg = yaml.load(ymlfile)
+
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
+
+else:
    
-   network = cfg['network']
-
-   url = network['url']
-   user = network['rkuser']
-   password = network['passwd']
-   chain = network['chain']
-	
-
+   url = os.environ['url']
+   user = os.environ['rkuser']
+   password = os.environ['passwd']
+   chain = os.environ['chain']
 
 #Permissions class to access blockchain related functions
 class Permissions:
 
 	"""function to grant permissions on RecordsKeeper Blockchain"""
 
-	def grantPermission(self, address, permissions):			#grantPermission() function definition
+	def grantPermission(self, address, permissions):	#grantPermission() function definition
 
 		self.address = address
 		self.permissions = permissions
@@ -61,14 +67,14 @@ class Permissions:
 
 			res = response_json[0]['result']
 			
-		return res;									#returns permissions tx id
+		return res;		#returns permissions tx id
 
-	#txid = grantPermission(address, permissions)		#call to function grantPermission()	
+	#txid = grantPermission(address, permissions)	#call to function grantPermission()	
 
 
 	"""function to revoke permissions on RecordsKeeper Blockchain"""
 
-	def revokePermission(self, address, permissions):		#revokePermission() function definition
+	def revokePermission(self, address, permissions):	#revokePermission() function definition
 
 
 		self.address = address
@@ -97,6 +103,6 @@ class Permissions:
 
 			res = response_json[0]['result']
 
-		return res;									#returns revoke permissions tx id
+		return res;		#returns revoke permissions tx id
 
-	#txid = revokePermission(address, permissions)		#revokePermission() function call
+	#txid = revokePermission(address, permissions)	#revokePermission() function call

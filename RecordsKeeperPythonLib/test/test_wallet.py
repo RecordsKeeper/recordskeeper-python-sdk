@@ -3,13 +3,11 @@ import yaml
 import binascii
 import sys
 import json
-from recordskeeper_python_lib import wallet
-from recordskeeper_python_lib.wallet import Wallet
+from RecordsKeeperPythonLib import wallet
+from RecordsKeeperPythonLib.wallet import Wallet
 
 with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
-
-net = wallet.network
 
 class WalletTest(unittest.TestCase):
 
@@ -23,8 +21,8 @@ class WalletTest(unittest.TestCase):
 
     def test_getprivkey(self):
 
-        checkprivkey = Wallet.getPrivateKey(self, net['miningaddress'])
-        self.assertEqual(checkprivkey, net['privatekey'])
+        checkprivkey = Wallet.getPrivateKey(self, cfg['miningaddress'])
+        self.assertEqual(checkprivkey, cfg['privatekey'])
 
     def test_retrievewalletinfo(self):
 
@@ -35,12 +33,12 @@ class WalletTest(unittest.TestCase):
 
     def test_signmessage(self):
 
-        signedMessage = Wallet.signMessage(self, net['privatekey'], net['testdata'])
-        self.assertEqual(signedMessage, net['signedtestdata'])
+        signedMessage = Wallet.signMessage(self, cfg['privatekey'], cfg['testdata'])
+        self.assertEqual(signedMessage, cfg['signedtestdata'])
 
     def test_verifymessage(self):
 
-        validity = Wallet.verifyMessage(self, net['miningaddress'], net['signedtestdata'], net['testdata'])
+        validity = Wallet.verifyMessage(self, cfg['miningaddress'], cfg['signedtestdata'], cfg['testdata'])
         self.assertEqual(validity, 'Yes, message is verified')
 
 if __name__ == '__main__':

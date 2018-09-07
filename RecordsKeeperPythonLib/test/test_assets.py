@@ -2,27 +2,25 @@ import unittest
 import yaml
 import binascii
 import json
-from recordskeeper_python_lib import assets
-from recordskeeper_python_lib.assets import Assets
+from RecordsKeeperPythonLib import assets
+from RecordsKeeperPythonLib.assets import Assets
 
 import sys
 
 with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
 
-net = assets.network
-
 class AssetsTest(unittest.TestCase):
 
 
     def test_createasset(self):
         
-        txid = Assets.createAsset(self, net['validaddress'], "xyz", 100)
+        txid = Assets.createAsset(self, cfg['validaddress'], "xyz", 100)
         self.assertEqual(txid, "This wallet doesn't have keys with issue permission")
 
     def test_sendasset(self):
         
-        txid = Assets.createAsset(self, net['validaddress'], "xyz", 100)
+        txid = Assets.createAsset(self, cfg['validaddress'], "xyz", 100)
         self.assertEqual(txid, "This wallet doesn't have keys with issue permission")
 
     def test_retrieveassets(self):

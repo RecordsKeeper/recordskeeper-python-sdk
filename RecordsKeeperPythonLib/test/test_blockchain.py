@@ -2,15 +2,13 @@ import unittest
 import yaml
 import binascii
 import json
-from recordskeeper_python_lib import blockchain
-from recordskeeper_python_lib.blockchain import Blockchain
+from RecordsKeeperPythonLib import blockchain
+from RecordsKeeperPythonLib.blockchain import Blockchain
 
 import sys
 
 with open("config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile)
-
-net = blockchain.network
 
 class BlockchainTest(unittest.TestCase):
 
@@ -19,7 +17,7 @@ class BlockchainTest(unittest.TestCase):
         chainname = Blockchain.getChainInfo(self)
         chain_name = json.loads(chainname)
         chainName = chain_name['chain-name']
-        self.assertEqual(chainName, net['chain'])
+        self.assertEqual(chainName, cfg['chain'])
 
     def test_getnodeinfo(self):
 

@@ -17,23 +17,31 @@ import binascii
 
 	Import values from config file."""
 
-with open("config.yaml", 'r') as ymlfile:
-   cfg = yaml.load(ymlfile)
-   
-   network = cfg['network']
+import os.path
 
-   url = network['url']
-   user = network['rkuser']
-   password = network['passwd']
-   chain = network['chain']
+if (os.path.exists("config.yaml")):
+   with open("config.yaml", 'r') as ymlfile:
+      cfg = yaml.load(ymlfile)
+
+      url = cfg['url']
+      user = cfg['rkuser']
+      password = cfg['passwd']
+      chain = cfg['chain']
+
+else:
+   
+   url = os.environ['url']
+   user = os.environ['rkuser']
+   password = os.environ['passwd']
+   chain = os.environ['chain']
 	
 
-#Blockchain class to access blockchain related functions
+#Blockchain class to access Blockchain related functions
 class Blockchain:
 
 	"""function to retrieve RecordsKeeper Blockchain parameters"""
 
-	def getChainInfo(self):								#getChainInfo() function definition
+	def getChainInfo(self):		#getChainInfo() function definition
 		
 		headers = { 'content-type': 'application/json'}
 
@@ -61,14 +69,14 @@ class Blockchain:
 		chaininfo_response = {"chain-description": chain_description, "chain-protocol": chain_protocol, "root-stream-name":root_stream, "maximum-blocksize": max_blocksize, "default-network-port": default_networkport, "default-rpc-port": default_rpcport, "mining-diversity": mining_diversity, "chain-name": chain_name}
 		chaininfo = json.dumps(chaininfo_response)
 
-		return chaininfo;										#returns chain parameters
+		return chaininfo;	#returns chain parameters
 
-	#chain = getChainInfo()				 			#call to function getChainInfo()	
+	#chain = getChainInfo()	#call to function getChainInfo()	
 
 
 	"""function to retrieve node's information on RecordsKeeper Blockchain"""
 
-	def getNodeInfo(self):								#getNodeInfo() function definition
+	def getNodeInfo(self):	#getNodeInfo() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -94,12 +102,12 @@ class Blockchain:
 
 		return nodeinfo;	#returns node details
 
-	#node = getNodeInfo(public_address)	#getNodeInfo() function call
+	#node = getNodeInfo()	#getNodeInfo() function call
 
 
 	"""function to retrieve node's permissions on RecordsKeeper Blockchain"""
 
-	def permissions(self):							#permissions() function definition
+	def permissions(self):		#permissions() function definition
 
 		headers = { 'content-type': 'application/json'}
 
@@ -120,15 +128,17 @@ class Blockchain:
 
 		for i in range(0, pms_count):
 			permissions.append(response_json[0]['result'][i]['type'])
+			permissions_list = set(permissions)
+			permissions_unique = list(permissions_list)
 
-		return permissions;							#returns list of permissions
+		return permissions_unique;	#returns list of permissions
 
-	#result = permissions()							#permissions() function call
+	#result = permissions()	 #permissions() function call
 
 
 	"""function to retrieve pending transactions information on RecordsKeeper Blockchain"""
 
-	def getpendingTransactions(self):						#getpendingTransactions() function call
+	def getpendingTransactions(self):	#getpendingTransactions() function call
 
 		headers = { 'content-type': 'application/json'}
 
@@ -143,7 +153,7 @@ class Blockchain:
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 			
-		tx_count = response_json[0]['result']['size']		#store pending tx count
+		tx_count = response_json[0]['result']['size']	#store pending tx count
 
 		if (tx_count != 0):
 
@@ -174,7 +184,7 @@ class Blockchain:
 
 		return pendingresult;	#returns pending tx and tx count
 
-	#pendingtx, pendingtxcount = getpendingTransactions()		#getpendingTransactions() function call
+	#pendingtx = getpendingTransactions()		#getpendingTransactions() function call
 
 
 	"""function to check node's total balance """
@@ -184,18 +194,23 @@ class Blockchain:
 		headers = { 'content-type': 'application/json'}
 
 		payload = [
-		 	{ "method": "getmultibalances",
+
+		 	{ "method": "getinfo",
 		      "params": [],
 		      "jsonrpc": "2.0",
 		      "id": "curltext",
 		      "chain_name": chain
 		    }]
+
 		response = requests.get(url, auth=HTTPBasicAuth(user, password), data = json.dumps(payload), headers=headers)
 		response_json = response.json()
 			
-		balance = response_json[0]['result']['total'][0]['qty']
+		node_balance = response_json[0]['result']['balance']
 
-		return balance;							#returns balance of complete node
+		node_info = {"node balance": node_balance}
+		nodeinfo = json.dumps(node_info)
+
+		return nodeinfo; #returns node's balance
 
 	#node_balance = checkNodeBalance()		#checkNodeBalance() function call
 

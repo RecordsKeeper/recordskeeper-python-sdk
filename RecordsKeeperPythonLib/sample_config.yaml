@@ -1,0 +1,9 @@
+# config.yaml
+
+url: testurl
+rkuser: rkuser
+passwd: rkpwd
+chain: test-chain
+
+
+
